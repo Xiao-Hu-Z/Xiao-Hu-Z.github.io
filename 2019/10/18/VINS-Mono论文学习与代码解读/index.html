@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="/css/main.css?v=7.4.2">
 
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
   <link rel="stylesheet" href="/lib/pace/pace-theme-pace-theme-center-atom.min.css?v=1.0.2">
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
 
@@ -63,12 +63,12 @@
   };
 </script>
 
-  <meta name="description" content="VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍VINS-Mono代码解读——各种数据结构 sensor_msgsVINS-Mono代码解读——视觉跟踪 feature_trackersVINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线">
+  <meta name="description" content="VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍 VINS-Mono代码解读——各种数据结构 sensor_msgs VINS-Mono代码解读——视觉跟踪 feature_trackers VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差） VINS-Mono代码解读——状态估计器流程 estimator 写在初">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VINS-Mono论文学习与代码解读">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;18&#x2F;VINS-Mono%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍VINS-Mono代码解读——各种数据结构 sensor_msgsVINS-Mono代码解读——视觉跟踪 feature_trackersVINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线">
+<meta property="og:description" content="VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍 VINS-Mono代码解读——各种数据结构 sensor_msgs VINS-Mono代码解读——视觉跟踪 feature_trackers VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差） VINS-Mono代码解读——状态估计器流程 estimator 写在初">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-10-21T10:50:10.743Z">
 <meta name="twitter:card" content="summary">
@@ -305,7 +305,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ol><li><a href="https://blog.csdn.net/qq_41839222/article/details/86564879" target="_blank" rel="noopener">VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/86030962" target="_blank" rel="noopener">VINS-Mono代码解读——各种数据结构 sensor_msgs</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/85797156" target="_blank" rel="noopener">VINS-Mono代码解读——视觉跟踪 feature_trackers</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/86290941" target="_blank" rel="noopener">VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/86293038" target="_blank" rel="noopener">VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线性优化前</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/88942414" target="_blank" rel="noopener">VINS-Mono代码解读——视觉惯性联合初始化 initialStructure sfm</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/89106128" target="_blank" rel="noopener">VINS-Mono理论学习——视觉惯性联合初始化与外参标定</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/93593844" target="_blank" rel="noopener">VINS-Mono理论学习——后端非线性优化</a></li><li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li></ol>
+        <ol>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86564879" target="_blank" rel="noopener">VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86030962" target="_blank" rel="noopener">VINS-Mono代码解读——各种数据结构 sensor_msgs</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/85797156" target="_blank" rel="noopener">VINS-Mono代码解读——视觉跟踪 feature_trackers</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86290941" target="_blank" rel="noopener">VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86293038" target="_blank" rel="noopener">VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线性优化前</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/88942414" target="_blank" rel="noopener">VINS-Mono代码解读——视觉惯性联合初始化 initialStructure sfm</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/89106128" target="_blank" rel="noopener">VINS-Mono理论学习——视觉惯性联合初始化与外参标定</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/93593844" target="_blank" rel="noopener">VINS-Mono理论学习——后端非线性优化</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li>
+</ol>
     </div>
 
     
@@ -528,9 +538,9 @@
   
   <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
   <script src="/lib/anime.min.js?v=3.1.0"></script>
-  <script src="true"></script>
-  <script src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
-  <script src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 <script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
 <script src="/js/schemes/pisces.js?v=7.4.2"></script>
 <script src="/js/next-boot.js?v=7.4.2"></script>
