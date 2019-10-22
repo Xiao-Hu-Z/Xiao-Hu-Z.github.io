@@ -50,12 +50,12 @@
   };
 </script>
 
-  <meta name="description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度$$a_m=\frac{f}{m}=a-g$$其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺">
+  <meta name="description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度 a_m=\frac{f}{m}=a-g其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IMU测量模型、运动模型、误差模型">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;22&#x2F;IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度$$a_m=\frac{f}{m}=a-g$$其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺">
+<meta property="og:description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度 a_m=\frac{f}{m}=a-g其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017192448388.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017155511191.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
@@ -262,32 +262,39 @@
 
       
         <h1 id="IMU测量模型"><a href="#IMU测量模型" class="headerlink" title="IMU测量模型"></a>IMU测量模型</h1><ul>
-<li><p>MEMS 加速度计工作原理<br>测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示<br>加速度计测量值$a_m$为弹簧拉力对应的加速度<br>$$a_m=\frac{f}{m}=a-g$$<br>其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。</p>
+<li><p>MEMS 加速度计工作原理<br>测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示<br>加速度计测量值$a_m$为弹簧拉力对应的加速度</p>
+<script type="math/tex; mode=display">a_m=\frac{f}{m}=a-g</script><p>其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。</p>
 </li>
 <li><p>陀螺仪测量原理<br>陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。</p>
 <p>低端 MEMS 陀螺上一般采用振动陀螺原理，通过测量 Coriolisforce 来间接得到角速度。</p>
 <blockquote>
 <p>在旋转坐标系中，运动的物体受到科氏力作用<br>MEMS 陀螺仪：一个主动运动轴 + 一个敏感轴<br><img src="https://img-blog.csdnimg.cn/20191017192448388.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-</blockquote>
-<h1 id="IMU运动模型"><a href="#IMU运动模型" class="headerlink" title="IMU运动模型"></a>IMU运动模型</h1><h2 id="旋转量求导"><a href="#旋转量求导" class="headerlink" title="旋转量求导"></a>旋转量求导</h2><p>首先，如下图所示，考虑一个从原点出发的向量 r 绕单位轴 u 旋转，角速度大小为 θ˙。<br><img src="https://img-blog.csdnimg.cn/20191017155511191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>角速度矢量可以表示为${\boldsymbol \omega}=\dot{\theta}u$，易得向量 r 末端点 P 的速度矢量，即 r的时间一阶导为<br>$$\frac{d{r}}{dt} = {\boldsymbol \omega} \times {r}$$<br>坐标系 {B} 绕单位轴 u 旋转，如上所述，其三个轴的时间一阶导同样为<br>$$\frac{d{\bf i}_B}{dt} = {\boldsymbol \omega} \times {\bf i}_B, \frac{d{\bf j}_B}{dt} = {\boldsymbol \omega} \times {\bf j}_B, \frac{d{\bf k}_B}{dt} = {\boldsymbol \omega} \times {\bf k}_B$$<br>$[ {\bf i}_B \quad {\bf j}_B \quad {\bf k}_B ]$ 实际上就是坐标系 {B} 相对于参考坐标系的旋转矩阵 R，R的时间一阶导为<br>$$\dot{\bf R} =  [ {\boldsymbol \omega} \times {\bf i}_B \quad {\boldsymbol \omega} \times {\bf j}_B \quad {\boldsymbol \omega} \times {\bf k}_B ] = {\boldsymbol \omega} \times {\bf R} $$<br>叉乘运算可以转化为负对称矩阵的乘法：<br>$$\dot{\bf R} = {\boldsymbol \omega}^{\land} {\bf R} $$<br>其中负对称矩阵${\boldsymbol \omega}^{\land}$为<br>$$% <![CDATA[
-\quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]>$$<br>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：<br>$$\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land} $$</p>
+<h1 id="IMU运动模型"><a href="#IMU运动模型" class="headerlink" title="IMU运动模型"></a>IMU运动模型</h1><h2 id="旋转量求导"><a href="#旋转量求导" class="headerlink" title="旋转量求导"></a>旋转量求导</h2><p>首先，如下图所示，考虑一个从原点出发的向量 r 绕单位轴 u 旋转，角速度大小为 θ˙。<br><img src="https://img-blog.csdnimg.cn/20191017155511191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>角速度矢量可以表示为${\boldsymbol \omega}=\dot{\theta}u$，易得向量 r 末端点 P 的速度矢量，即 r的时间一阶导为</p>
+<script type="math/tex; mode=display">\frac{d{r}}{dt} = {\boldsymbol \omega} \times {r}</script><p>坐标系 {B} 绕单位轴 u 旋转，如上所述，其三个轴的时间一阶导同样为</p>
+<script type="math/tex; mode=display">\frac{d{\bf i}_B}{dt} = {\boldsymbol \omega} \times {\bf i}_B, \frac{d{\bf j}_B}{dt} = {\boldsymbol \omega} \times {\bf j}_B, \frac{d{\bf k}_B}{dt} = {\boldsymbol \omega} \times {\bf k}_B</script><p>$[ {\bf i}_B \quad {\bf j}_B \quad {\bf k}_B ]$ 实际上就是坐标系 {B} 相对于参考坐标系的旋转矩阵 R，R的时间一阶导为</p>
+<script type="math/tex; mode=display">\dot{\bf R} =  [ {\boldsymbol \omega} \times {\bf i}_B \quad {\boldsymbol \omega} \times {\bf j}_B \quad {\boldsymbol \omega} \times {\bf k}_B ] = {\boldsymbol \omega} \times {\bf R}</script><p>叉乘运算可以转化为负对称矩阵的乘法：</p>
+<script type="math/tex; mode=display">\dot{\bf R} = {\boldsymbol \omega}^{\land} {\bf R}</script><p>其中负对称矩阵${\boldsymbol \omega}^{\land}$为</p>
+<script type="math/tex; mode=display">% <![CDATA[
+\quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
+<script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
 </li>
 </ul>
 <blockquote>
-<p>证：对任意旋转矩阵 R 和三维向量 v，都有$({\bf R v})^{\land} = {\bf Rv^{\land}R}^T$<br><img src="https://img-blog.csdnimg.cn/20191017160718789.png#pic_center" alt="在这里插入图片描述"><br>最后一式利用向量叉乘的旋转变换不变性可证，即，对于任意${\bf v,u}\in \mathbb{R}^3$永远有<br>$$({\bf Rv})\times({\bf Ru})={\bf R(v\times u)}$$<br>从三维几何的角度来理解：v,u 是任意两个三维向量，(v×u) 是一个和 v,u 都垂直、大小为 |v||u|sin(u,v) 的三维向量；将 v,u,v×u 三个向量都经过同一个旋转，它们的相对位姿和模长都不会改变，所以 (Rv) 和 (Ru) 的叉乘仍是 R(v×u)。</p>
+<p>证：对任意旋转矩阵 R 和三维向量 v，都有$({\bf R v})^{\land} = {\bf Rv^{\land}R}^T$<br><img src="https://img-blog.csdnimg.cn/20191017160718789.png#pic_center" alt="在这里插入图片描述"><br>最后一式利用向量叉乘的旋转变换不变性可证，即，对于任意${\bf v,u}\in \mathbb{R}^3$永远有</p>
+<script type="math/tex; mode=display">({\bf Rv})\times({\bf Ru})={\bf R(v\times u)}</script><p>从三维几何的角度来理解：v,u 是任意两个三维向量，(v×u) 是一个和 v,u 都垂直、大小为 |v||u|sin(u,v) 的三维向量；将 v,u,v×u 三个向量都经过同一个旋转，它们的相对位姿和模长都不会改变，所以 (Rv) 和 (Ru) 的叉乘仍是 R(v×u)。</p>
 </blockquote>
-<h2 id="科氏加速度"><a href="#科氏加速度" class="headerlink" title="科氏加速度"></a>科氏加速度</h2><p>这次把绕惯性系 {A} 中固定单位轴 u 旋转的 {B} 作为参考坐标系。考虑下图， 点 P 相对于 {B} 运动，记 ${}^Br$ 分别为 P 在 {B} 下的坐标，r 为 P 的绝对坐标（即 {A} 下坐标）， R 仍为 {B} 相对于 {A} 的旋转矩阵，易知 $r=R{}^Br$。<br><img src="https://img-blog.csdnimg.cn/20191017163839187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>$r=R{}^Br$求一阶时间导<br>$${\bf v} = \dot{\bf r} = \dot{\bf R} {}^B{\bf r} + {\bf R}^B\dot{\bf r} = {\boldsymbol \omega}^{\land}{\bf R}{}^B{\bf r}+ {\bf R}^B\dot{\bf r}$$<br>记P在 {B}下速度为 ${}^Bv$，于是</p>
-<p>$$v = w^{\land}r+ {R}^B{}= w \times r+ v_r$$</p>
-<p>${\bf v}_r$来表达「相对速度」的概念，准确定义为 P 相对于 {B} 的速度，在惯性系 {A} 下的表达<br>再对求时间导：</p>
+<h2 id="科氏加速度"><a href="#科氏加速度" class="headerlink" title="科氏加速度"></a>科氏加速度</h2><p>这次把绕惯性系 {A} 中固定单位轴 u 旋转的 {B} 作为参考坐标系。考虑下图， 点 P 相对于 {B} 运动，记 ${}^Br$ 分别为 P 在 {B} 下的坐标，r 为 P 的绝对坐标（即 {A} 下坐标）， R 仍为 {B} 相对于 {A} 的旋转矩阵，易知 $r=R{}^Br$。<br><img src="https://img-blog.csdnimg.cn/20191017163839187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>$r=R{}^Br$求一阶时间导</p>
+<script type="math/tex; mode=display">{\bf v} = \dot{\bf r} = \dot{\bf R} {}^B{\bf r} + {\bf R}^B\dot{\bf r} = {\boldsymbol \omega}^{\land}{\bf R}{}^B{\bf r}+ {\bf R}^B\dot{\bf r}</script><p>记P在 {B}下速度为 ${}^Bv$，于是</p>
+<script type="math/tex; mode=display">v = w^{\land}r+ {R}^B{}= w \times r+ v_r</script><p>${\bf v}_r$来表达「相对速度」的概念，准确定义为 P 相对于 {B} 的速度，在惯性系 {A} 下的表达<br>再对求时间导：</p>
 <blockquote>
 <p><img src="https://img-blog.csdnimg.cn/20191017165037235.png#pic_center" alt="在这里插入图片描述"><br>在旋转坐标系下观察，运动的物体（运动方向和旋转轴不为同一个轴时）会受到科氏力的作用。</p>
-</blockquote>
 <ul>
 <li>第一项中${\boldsymbol \alpha}$为 {B} 的角加速度，所以第一项的物理意义是 {B} 旋转所造成的 P 的切向加速度</li>
 <li>第二项是 {B} 旋转所造成的向心加速度</li>
 <li>第三项比较特殊，为 {B} 的旋转运动与 P 相对 {B} 的平移运动耦合产生的加速度，称为科氏加速度</li>
 <li>第四项为 P 相对于 {B} 的加速度，但在惯性系{A}下表达，类似于${\bf v}_r$</li>
 </ul>
+</blockquote>
 <h1 id="IMU-误差模型"><a href="#IMU-误差模型" class="headerlink" title="IMU 误差模型"></a>IMU 误差模型</h1><p>加速度计和陀螺仪的误差可以分为：确定性误差，随机误差。</p>
 <ul>
 <li>确定性误差可以事先标定确定，包括： bias, scale …</li>
@@ -297,10 +304,10 @@
 <li>Bias ，Scale<br>理论上，当没有外部作用时， IMU 传感器的输出应该为 0，但实际数据存在一个偏置 b。</li>
 </ol>
 <ul>
-<li>加速度计 bias 对位姿估计的影响：<br>$$v_err=b_at，p_err=\frac{1}{2}b_at^2$$</li>
+<li>加速度计 bias 对位姿估计的影响：<script type="math/tex; mode=display">v_err=b_at，p_err=\frac{1}{2}b_at^2</script></li>
 <li>scale 可以看成是实际数值和传感器输出值之间的比值</li>
 </ul>
-<ol start="2">
+<ol>
 <li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt=""> </li>
 <li>其他确定性误差<blockquote>
 <ul>
@@ -318,8 +325,6 @@
 <p><strong>（Nonorthogonality/Misalignment Errors)</strong></p>
 <blockquote>
 <p>多轴 IMU 传感器制作的时候，由于制作工艺的问题，会使得 xyz 轴可能不垂直，如下图所示。</p>
-</blockquote>
-<blockquote>
 <p>考虑轴间误差的时候，实际加速度和测量值之间的关系为：<br><img src="https://img-blog.csdnimg.cn/20191017172240109.png#pic_center" alt="在这里插入图片描述"><br>水平静止放置 6 面的时候，加速度的理论值为<br><img src="https://img-blog.csdnimg.cn/20191017172303634.png#pic_center" alt="在这里插入图片描述"><br>对应的测量值矩阵 L ：<br><img src="https://img-blog.csdnimg.cn/20191017172326866.png#pic_center" alt="在这里插入图片描述"><br>利用最小二乘就能够把12个变量求出来。</p>
 </blockquote>
 <h4 id="六面法标定陀螺仪"><a href="#六面法标定陀螺仪" class="headerlink" title="六面法标定陀螺仪"></a>六面法标定陀螺仪</h4><blockquote>
@@ -335,18 +340,27 @@
 </li>
 </ul>
 <h2 id="随机误差"><a href="#随机误差" class="headerlink" title="随机误差"></a>随机误差</h2><h3 id="高斯白噪声与随机游走"><a href="#高斯白噪声与随机游走" class="headerlink" title="高斯白噪声与随机游走"></a>高斯白噪声与随机游走</h3><h4 id="高斯白噪声"><a href="#高斯白噪声" class="headerlink" title="高斯白噪声"></a>高斯白噪声</h4><p>高斯白噪声的高斯指的是概率分布为正态分布，白噪声指的是其二阶矩不相关，一阶矩为常数。故把瞬时值的概率分布服从高斯分布，功率谱密度服从均匀分布的噪声称为高斯白噪声</p>
-<p>IMU 数据连续时间上受到一个均值为 0，方差为 $σ^2$，各时刻之间相互独立的高斯过程 n(t)：<br>$$E[n(t)]=0$$<br>$$E[n(t_1​)n(t_2​)]=σ^2δ(t_1​−t_2​)$$</p>
-<p>自相关函数的数学定义：$R(τ)=∫^{−∞}_∞　x(t)x(t−τ)dt$</p>
+<p>IMU 数据连续时间上受到一个均值为 0，方差为 $σ^2$，各时刻之间相互独立的高斯过程 n(t)：</p>
+<script type="math/tex; mode=display">E[n(t)]=0</script><script type="math/tex; mode=display">E[n(t_1​)n(t_2​)]=σ^2δ(t_1​−t_2​)</script><p>自相关函数的数学定义：$R(τ)=∫^{−∞}_∞　x(t)x(t−τ)dt$</p>
 <p>其中 $δ()$ 表示狄拉克函数<br><img src="https://img-blog.csdnimg.cn/20190929113450104.png#pic_center" alt="在这里插入图片描述"><br><strong>白噪声的离散化</strong><br>实际上， IMU 传感器获取的数据为离散采样，离散和连续高斯白噪声的方差之间存在如下转换关系：</p>
-<p>$$n_d[k] \triangleq n(t_0+\Delta t)\simeq\frac{1}{\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)dt$$</p>
-<p>$$<br> \begin{aligned}<br>E(n_d[k]^2) &amp; = E(\frac{1}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)n(t)d \tau dt) \<br>&amp;= E( \frac{\sigma^2}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\<br>&amp;= E(\frac{\sigma^2}{\Delta t})<br>\end{aligned}$$</p>
-<p>即:<br>$$nd[k] = σ_dw[k]$$<br>其中：$w[k] ∼ N(0, 1)$，$\sigma_d=\sigma \frac{1}{\sqrt{\bigtriangleup t}}$<br>也就是说高斯白噪声的连续时间到离散时间之间差一个 $\frac{1}{\sqrt{\bigtriangleup t}}$ ，√∆t 是传感器的采样时间。</p>
+<script type="math/tex; mode=display">n_d[k] \triangleq n(t_0+\Delta t)\simeq\frac{1}{\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)dt</script><script type="math/tex; mode=display">
+ \begin{aligned}
+E(n_d[k]^2) & = E(\frac{1}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)n(t)d \tau dt) \\
+&= E( \frac{\sigma^2}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\\
+&= E(\frac{\sigma^2}{\Delta t})
+\end{aligned}</script><p>即:</p>
+<script type="math/tex; mode=display">nd[k] = σ_dw[k]</script><p>其中：$w[k] ∼ N(0, 1)$，$\sigma_d=\sigma \frac{1}{\sqrt{\bigtriangleup t}}$<br>也就是说高斯白噪声的连续时间到离散时间之间差一个 $\frac{1}{\sqrt{\bigtriangleup t}}$ ，√∆t 是传感器的采样时间。</p>
 <h4 id="Bias-随机游走"><a href="#Bias-随机游走" class="headerlink" title="Bias 随机游走"></a>Bias 随机游走</h4><p>通常用维纳过程 (wiener process) 来建模 bias 随时间连续变化的过程，离散时间下称之为随机游走</p>
-<p>$$\dot{b}_{(t)}=n(t)=\sigma_bw(t)$$</p>
-<p>其中 w 是方差为 1 的白噪声</p>
+<script type="math/tex; mode=display">\dot{b}_{(t)}=n(t)=\sigma_bw(t)</script><p>其中 w 是方差为 1 的白噪声</p>
 <p>离散和连续之间的转换：</p>
-<p>$$b_d[k] \triangleq b(t_0) + \int_{t_0}^{t_0+\Delta t}n(t)dt$$$$\begin{aligned}<br>E((b_d[k]-b_d[k-1])^2)<br>&amp;=E(\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(t)n(\tau)d \tau dt)\<br>&amp;= E({\sigma_{b}^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\<br>&amp;= E(\sigma_{b}^2\Delta t)<br>\end{aligned}$$</p>
-<p>即：<br>$$b_d[k] = b_d[k − 1] + σ<em>{bd}w[k]$$<br>其中：<br>$$ w[k] ∼ N(0, 1),σ</em>{bd} = σ_b\sqrt{\bigtriangleup t}$$<br>bias 随机游走的噪声方差从连续时间到离散之间需要乘以 $\sqrt{\bigtriangleup t}$ </p>
+<script type="math/tex; mode=display">b_d[k] \triangleq b(t_0) + \int_{t_0}^{t_0+\Delta t}n(t)dt$$$$\begin{aligned}
+E((b_d[k]-b_d[k-1])^2) 
+&=E(\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(t)n(\tau)d \tau dt)\\
+&= E({\sigma_{b}^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\\
+&= E(\sigma_{b}^2\Delta t)
+\end{aligned}</script><p>即：</p>
+<script type="math/tex; mode=display">b_d[k] = b_d[k − 1] + σ_{bd}w[k]</script><p>其中：</p>
+<script type="math/tex; mode=display">w[k] ∼ N(0, 1),σ_{bd} = σ_b\sqrt{\bigtriangleup t}</script><p>bias 随机游走的噪声方差从连续时间到离散之间需要乘以 $\sqrt{\bigtriangleup t}$ </p>
 <h3 id="随机误差的标定"><a href="#随机误差的标定" class="headerlink" title="随机误差的标定"></a>随机误差的标定</h3><h4 id="艾伦方差标定"><a href="#艾伦方差标定" class="headerlink" title="艾伦方差标定"></a>艾伦方差标定</h4><p>Allan 方差法是 20 世纪 60 年代由美国国家标准局的 David Allan 提出的，它是一种基于时域的分析方法。</p>
 <blockquote>
 <p>具体的流程如下：</p>
@@ -358,9 +372,18 @@
 </ol>
 </blockquote>
 <h2 id="IMU-数学模型"><a href="#IMU-数学模型" class="headerlink" title="IMU 数学模型"></a>IMU 数学模型</h2><p>以 ECI 为参考坐标系（由于 ECI 为惯性系，不需要考虑地球自转）：<br>忽略 scale 的影响，只考虑白噪声和 bias 随机游走：<br>IMU的真实值：$w^b,a^b$<br>IMU的测量值：$\widetilde{w},\widetilde{a}^b$<br>IMU机体系即b系，w系表示世界坐标系。</p>
-<p>$$\begin{aligned}<br> \widetilde{w}&amp;=w^b +b^g+n^g\<br> \widetilde{a}^b&amp;=a^b+b^a+n^a\&amp;=q_{bw}(a^w+g^w)+b^a+n^a<br> \end{aligned}$$</p>
-<p>考虑高斯白噪声项，有：<br>$$\begin{aligned}<br> &amp;w^b=\widetilde{w} -b^g-n^g\<br> &amp;a^w=q_{wb}(\widetilde{a}^b-b^a-n^a)-g^w<br> \end{aligned}$$<br>不考虑高斯白噪声项，有：<br>$$\begin{aligned}<br> &amp;w^b=\widetilde{w} -b^g\<br> &amp;a^w=q_{wb}(\widetilde{a}^b-b^a)-g^w<br> \end{aligned}$$</p>
-<p>参考：<a href="https://fzheng.me/2016/11/20/imu_model_eq/#1-2-%E5%89%8D%E7%BD%AE2-%E5%9B%9B%E5%85%83%E6%95%B0" target="_blank" rel="noopener">从零开始的 IMU 状态模型推导</a></p>
+<script type="math/tex; mode=display">\begin{aligned}
+ \widetilde{w}&=w^b +b^g+n^g\\
+ \widetilde{a}^b&=a^b+b^a+n^a\\&=q_{bw}(a^w+g^w)+b^a+n^a
+ \end{aligned}</script><p>考虑高斯白噪声项，有：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ &w^b=\widetilde{w} -b^g-n^g\\
+ &a^w=q_{wb}(\widetilde{a}^b-b^a-n^a)-g^w
+ \end{aligned}</script><p>不考虑高斯白噪声项，有：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ &w^b=\widetilde{w} -b^g\\
+ &a^w=q_{wb}(\widetilde{a}^b-b^a)-g^w
+ \end{aligned}</script><p>参考：<a href="https://fzheng.me/2016/11/20/imu_model_eq/#1-2-%E5%89%8D%E7%BD%AE2-%E5%9B%9B%E5%85%83%E6%95%B0" target="_blank" rel="noopener">从零开始的 IMU 状态模型推导</a></p>
 
     </div>
 
@@ -534,6 +557,58 @@
 
 
   
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
