@@ -20,7 +20,7 @@
 \quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
 <script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
 </li>
-</ul>
+</ul><a id="more"></a>
 <blockquote>
 <p>证：对任意旋转矩阵 R 和三维向量 v，都有$({\bf R v})^{\land} = {\bf Rv^{\land}R}^T$<br><img src="https://img-blog.csdnimg.cn/20191017160718789.png#pic_center" alt="在这里插入图片描述"><br>最后一式利用向量叉乘的旋转变换不变性可证，即，对于任意${\bf v,u}\in \mathbb{R}^3$永远有</p>
 <script type="math/tex; mode=display">({\bf Rv})\times({\bf Ru})={\bf R(v\times u)}</script><p>从三维几何的角度来理解：v,u 是任意两个三维向量，(v×u) 是一个和 v,u 都垂直、大小为 |v||u|sin(u,v) 的三维向量；将 v,u,v×u 三个向量都经过同一个旋转，它们的相对位姿和模长都不会改变，所以 (Rv) 和 (Ru) 的叉乘仍是 R(v×u)。</p>
@@ -50,7 +50,7 @@
 <li>scale 可以看成是实际数值和传感器输出值之间的比值</li>
 </ul>
 <ol>
-<li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt=""> </li>
+<li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt> </li>
 <li>其他确定性误差<blockquote>
 <ul>
 <li>Run-to-Run Bias/Scale Facto</li>
@@ -134,7 +134,7 @@ E((b_d[k]-b_d[k-1])^2)
   <entry>
     <title>随机抽样一致RANSAC-Random-Sample-Consensus</title>
     <url>/2019/10/22/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/</url>
-    <content><![CDATA[<h1 id="算法简介："><a href="#算法简介：" class="headerlink" title="算法简介："></a>算法简介：</h1><p>随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算等产生的。同时RANSAC也假设，给定一组正确的数据，存在可以计算出符合这些数据的模型参数的方法。</p>
+    <content><![CDATA[<h1 id="算法简介："><a href="#算法简介：" class="headerlink" title="算法简介："></a>算法简介：</h1><p>随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算等产生的。同时RANSAC也假设，给定一组正确的数据，存在可以计算出符合这些数据的模型参数的方法。</p><a id="more"></a>
 <h1 id="RANSAC的基本假设："><a href="#RANSAC的基本假设：" class="headerlink" title="RANSAC的基本假设："></a>RANSAC的基本假设：</h1><p>“内群”数据可以通过几组模型的参数来叙述其分布，而“离群”数据则是不适合模型化的数据。<br>数据会受噪声影响，噪声指的是离群，例如从极端的噪声或错误解释有关数据的测量或不正确的假设。<br>RANSAC假定，给定一组（通常很小）的内群，存在一个程序，这个程序可以估算最佳解释或最适用于这一数据模型的参数。</p>
 <h1 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h1><p>这里用一个简单的例子来说明，在一组数据点中找到一条最适合的线。假设，此有一组集合包含了内群以及离群，其中内群为可以被拟合到线段上的点，而离群则是无法被拟合的点。如果我们用简单的最小二乘法来找此线，我们将无法得到一条适合于内群的线，因为最小二乘法会受离群影响而影响其结果。而RANSAC，可以只由内群来计算出模型，而且概率还够高。然而，RANSAC无法保证结果一定最好，所以必须小心选择参数，使其能有足够的概率。<br><img src="https://img-blog.csdnimg.cn/20191020160728989.png#pic_center" alt="在这里插入图片描述"><br>包含许多离群的一组数据，要找一条最适合的线。<br><img src="https://img-blog.csdnimg.cn/201910201607364.png#pic_center" alt="在这里插入图片描述"><br>RANSAC找到的线，离群值对结果没影响（蓝色点为内群，红色点为离群）</p>
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RANSAC算法的输入是一组观测数据（往往含有较大的噪声或无效点），一个用于解释观测数据的参数化模型以及一些可信的参数。RANSAC通过反复选择数据中的一组随机子集来达成目标。被选取的子集被假设为局内点，并用下述方法进行验证： </p>
@@ -209,7 +209,7 @@ E((b_d[k]-b_d[k-1])^2)
   <entry>
     <title>Hello World</title>
     <url>/2019/10/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -228,10 +228,7 @@ E((b_d[k]-b_d[k-1])^2)
   <entry>
     <title>KLT 光流算法</title>
     <url>/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>
-]]></content>
+    <content><![CDATA[<h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><p><img src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>]]></content>
       <categories>
         <category>VINS</category>
       </categories>
@@ -239,15 +236,15 @@ E((b_d[k]-b_d[k-1])^2)
   <entry>
     <title>Harris角点检测</title>
     <url>/2019/10/20/Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/</url>
-    <content><![CDATA[<h1 id="何为角点"><a href="#何为角点" class="headerlink" title="何为角点"></a>何为角点</h1><p>下面有两幅不同视角的图像，通过找出对应的角点进行匹配。<br><img src="https://img-blog.csdnimg.cn/20191020095257386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>再看下图所示，放大图像的两处角点区域：<br><img src="https://img-blog.csdnimg.cn/20191020095313814.png#pic_center" alt="在这里插入图片描述"><br>角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。</p>
-<p>我们可以直观的概括下角点所具有的特征：</p>
-<ul>
+    <content><![CDATA[<h1 id="何为角点"><a href="#何为角点" class="headerlink" title="何为角点"></a>何为角点</h1><p>下面有两幅不同视角的图像，通过找出对应的角点进行匹配。<br><img src="https://img-blog.csdnimg.cn/20191020095257386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>再看下图所示，放大图像的两处角点区域：<br><img src="https://img-blog.csdnimg.cn/20191020095313814.png#pic_center" alt="在这里插入图片描述"><br>角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。</p><p>我们可以直观的概括下角点所具有的特征：</p><ul>
 <li>轮廓之间的交点；</li>
 <li>对于同一场景，即使视角发生变化，通常具备稳定性质的特征；<ul>
 <li>该点附近区域的像素点无论在梯度方向上还是其梯度幅值上有着较大变化；<h1 id="角点检测算法基本思想"><a href="#角点检测算法基本思想" class="headerlink" title="角点检测算法基本思想"></a>角点检测算法基本思想</h1>算法基本思想是使用一个固定窗口在图像上进行任意方向上的滑动，比较滑动前与滑动后两种情况，窗口中的像素灰度变化程度，如果存在任意方向上的滑动，都有着较大灰度变化，那么我们可以认为该窗口中存在角点。<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1></li>
 </ul>
 </li>
-</ul>
+</ul><a id="more"></a>
+
+
 <p>当窗口发生[u,v]移动时，那么滑动前与滑动后对应的窗口中的像素点灰度变化描述如下：</p>
 <script type="math/tex; mode=display">E(u, v)=\sum_{x_{s}, y} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}</script><p>[u,v]是窗口的偏移量<br>(x,y)是窗口内所对应的像素坐标位置，窗口有多大，就有多少个位置<br>w(x,y)是窗口函数，最简单情形就是窗口内的所有像素所对应的w权重系数均为1。但有时候，我们会将w(x,y)函数设定为以窗口中心为原点的二元正态分布。如果窗口中心点是角点时，移动前与移动后，该点的灰度变化应该最为剧烈，所以该点权重系数可以设定大些，表示窗口移动时，该点在灰度变化贡献较大；而离窗口中心(角点)较远的点，这些点的灰度变化几近平缓，这些点的权重系数，可以设定小点，以示该点对灰度变化贡献较小，那么我们自然想到使用二元高斯函数来表示窗口函数，所以通常窗口函数有如下两种形式：<br><img src="https://img-blog.csdnimg.cn/20191020095759748.png#pic_center" alt="在这里插入图片描述"><br>根据上述表达式，当窗口处在平坦区域上滑动，可以想象的到，灰度不会发生变化，那么E(u,v) = 0；如果窗口处在比纹理比较丰富的区域上滑动，那么灰度变化会很大。算法最终思想就是计算灰度发生较大变化时所对应的位置，当然这个较大是指针任意方向上的滑动，并非单指某个方向。</p>
 <p>$I(x+u, y+v)$泰勒展开可得：</p>
@@ -310,9 +307,9 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
   <entry>
     <title>【VINS-Mono】A Robust and Versatile Monocular Visual-Inertial State Estimator</title>
     <url>/2019/10/19/%E3%80%90VINS%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%E3%80%91VINS-Mono-A-Robust-and-Versatile-Monocular-Visual-Inertial-State-Estimator/</url>
-    <content><![CDATA[<font color=gray size=10><center>VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器</center></font>
+    <content><![CDATA[<font color="gray" size="10"><center>VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器</center></font><p><strong>摘要</strong>：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢复的鲁棒的程序开始。采用一种基于紧耦合、非线性优化的方法，通过融合预积分后的IMU测量值和特征观测值，获得高精度的视觉惯性里程计。结合紧耦合方法，回环检测模块能够以最小的计算代价实现重定位。此外，我们还进行四自由度位姿图优化，以加强全局一致性。我们验证了该系统在公共数据集和真实环境实验的性能，并与其他最先进的算法进行了比较。我们还在MAV平台上执行机载闭环自主飞行，并将算法移植到基于iOS的demo中。特别强调的是，本文提出的工作是一个可靠、完整和通用的系统，适用于需要高精度定位的不同应用。我们为PC和iOS移动设备开源了我们的实现方法。<br>关键词：单目视觉惯性系统，状态估计，传感器融合，SLAM</p><a id="more"></a>
 
-<p><strong>摘要</strong>：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢复的鲁棒的程序开始。采用一种基于紧耦合、非线性优化的方法，通过融合预积分后的IMU测量值和特征观测值，获得高精度的视觉惯性里程计。结合紧耦合方法，回环检测模块能够以最小的计算代价实现重定位。此外，我们还进行四自由度位姿图优化，以加强全局一致性。我们验证了该系统在公共数据集和真实环境实验的性能，并与其他最先进的算法进行了比较。我们还在MAV平台上执行机载闭环自主飞行，并将算法移植到基于iOS的demo中。特别强调的是，本文提出的工作是一个可靠、完整和通用的系统，适用于需要高精度定位的不同应用。我们为PC和iOS移动设备开源了我们的实现方法。<br>关键词：单目视觉惯性系统，状态估计，传感器融合，SLAM</p>
+
 <h1 id="I-引言"><a href="#I-引言" class="headerlink" title="I. 引言"></a>I. 引言</h1><p>状态估计无疑是机器人导航、自主驾驶、虚拟现实(VR)和增强现实(AR)等广泛应用中最基本的模块。仅使用单目摄像机的方法由于其体积小、成本低和硬件设置简单而获得了社会的极大兴趣[1]-[5]。然而，单目视觉系统无法恢复度量尺度，因此限制了它们在实际机器人中的应用。近年来，我们看到了一种发展趋势，即用低成本惯性测量单元(IMU)辅助单目视觉系统。这种单目视觉-惯性系统(VINS)的主要优点是具有可观测的度量尺度，以及翻滚角(roll)和俯仰角(pitch)。这让需要有尺度的状态估计的导航任务成为可能。此外，==对IMU测量值的积分可以显著提高运动跟踪性能，弥补光照变化、缺少纹理的区域或运动模糊的视觉轨迹损失的差距==。事实上，单目VINS不仅广泛应用于移动机器人、无人机和移动设备上，还是满足充分自我感知和环境感知的最小传感器。</p>
 <p>然而，所有这些优点都是有代价的。对于单目VINS，众所周知，需要加速度激励以测量尺度。这意味着==单目VIN估计器不能从静止状态启动，而是从未知的移动状态发动==。同时要认识到视觉惯性系统高度非线性的事实，在估计器初始化方面还有重大挑战。两个传感器的存在也使得摄像机-IMU的外部校准至关重要。最后，为了消除在可接受的处理窗口内的长期漂移，提出了一个完整的系统，包括视觉惯性里程计、回环检测、重定位和全局优化。</p>
 <p>为了解决所有这些问题，我们提出了VINS-Mono，一个鲁棒且通用的单目视觉惯性状态估计器。我们的解决方案开始于即时估计初始化。这个初始化模块也用于故障恢复。我们的解决方案的核心是一个鲁棒的基于紧耦合的滑动窗非线性优化的单目视觉惯性里程计(VIO)。==单目VIO模块不仅提供精确的局部姿态、速度和方位估计，而且还以在线方式执行摄像机IMU外部校准和IMU偏置校正==。使用DBoW2[6]进行回环检测。==重新定位是在对单目VIO进行特征级别融合的紧耦合设置中完成==。这使得重新定位具有鲁棒性和精确性且有最小的计算代价。最后，几何验证的回环被添加到位姿图中，并且由于来自单目VIO的可观测的翻滚角和俯仰角，生成四自由度(DOF)位姿图以确保全局一致性。</p>
@@ -416,8 +413,7 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 <li><a href="https://blog.csdn.net/qq_41839222/article/details/89106128" target="_blank" rel="noopener">VINS-Mono理论学习——视觉惯性联合初始化与外参标定</a></li>
 <li><a href="https://blog.csdn.net/qq_41839222/article/details/93593844" target="_blank" rel="noopener">VINS-Mono理论学习——后端非线性优化</a></li>
 <li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li>
-</ol>
-]]></content>
+</ol>]]></content>
       <categories>
         <category>VIO</category>
       </categories>

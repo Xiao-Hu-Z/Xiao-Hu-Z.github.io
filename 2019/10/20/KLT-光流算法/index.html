@@ -40,7 +40,7 @@
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
     path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
@@ -52,12 +52,12 @@
   };
 </script>
 
-  <meta name="description" content="Optical Flow KLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。 参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
+  <meta name="description" content="Optical FlowKLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="KLT 光流算法">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="Optical Flow KLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。 参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
+<meta property="og:description" content="Optical FlowKLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132123717.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132137931.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
@@ -171,9 +171,34 @@
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 
 </nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
 </div>
     </header>
 
@@ -267,10 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>
-
+        <h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><p><img src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>
     </div>
 
     
@@ -452,6 +474,8 @@
 
 
 
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
 
 
 

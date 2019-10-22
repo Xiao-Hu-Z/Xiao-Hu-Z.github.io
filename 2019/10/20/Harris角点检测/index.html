@@ -40,7 +40,7 @@
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
     path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
@@ -52,12 +52,12 @@
   };
 </script>
 
-  <meta name="description" content="何为角点下面有两幅不同视角的图像，通过找出对应的角点进行匹配。再看下图所示，放大图像的两处角点区域：角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。 我们可以直观的概括下角点所具有的特征：  轮廓之间的交点； 对于同一场景，即使视角发生变化，通常具备稳定性质的特征； 该点附近区域的像素点无论在梯度">
+  <meta name="description" content="何为角点下面有两幅不同视角的图像，通过找出对应的角点进行匹配。再看下图所示，放大图像的两处角点区域：角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。我们可以直观的概括下角点所具有的特征： 轮廓之间的交点； 对于同一场景，即使视角发生变化，通常具备稳定性质的特征； 该点附近区域的像素点无论在梯度方向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Harris角点检测">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="何为角点下面有两幅不同视角的图像，通过找出对应的角点进行匹配。再看下图所示，放大图像的两处角点区域：角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。 我们可以直观的概括下角点所具有的特征：  轮廓之间的交点； 对于同一场景，即使视角发生变化，通常具备稳定性质的特征； 该点附近区域的像素点无论在梯度">
+<meta property="og:description" content="何为角点下面有两幅不同视角的图像，通过找出对应的角点进行匹配。再看下图所示，放大图像的两处角点区域：角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。我们可以直观的概括下角点所具有的特征： 轮廓之间的交点； 对于同一场景，即使视角发生变化，通常具备稳定性质的特征； 该点附近区域的像素点无论在梯度方向">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020095257386.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020095313814.png#pic_center">
@@ -179,9 +179,34 @@
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 
 </nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
 </div>
     </header>
 
@@ -275,15 +300,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="何为角点"><a href="#何为角点" class="headerlink" title="何为角点"></a>何为角点</h1><p>下面有两幅不同视角的图像，通过找出对应的角点进行匹配。<br><img src="https://img-blog.csdnimg.cn/20191020095257386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>再看下图所示，放大图像的两处角点区域：<br><img src="https://img-blog.csdnimg.cn/20191020095313814.png#pic_center" alt="在这里插入图片描述"><br>角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。</p>
-<p>我们可以直观的概括下角点所具有的特征：</p>
-<ul>
+        <h1 id="何为角点"><a href="#何为角点" class="headerlink" title="何为角点"></a>何为角点</h1><p>下面有两幅不同视角的图像，通过找出对应的角点进行匹配。<br><img src="https://img-blog.csdnimg.cn/20191020095257386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>再看下图所示，放大图像的两处角点区域：<br><img src="https://img-blog.csdnimg.cn/20191020095313814.png#pic_center" alt="在这里插入图片描述"><br>角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。</p><p>我们可以直观的概括下角点所具有的特征：</p><ul>
 <li>轮廓之间的交点；</li>
 <li>对于同一场景，即使视角发生变化，通常具备稳定性质的特征；<ul>
 <li>该点附近区域的像素点无论在梯度方向上还是其梯度幅值上有着较大变化；<h1 id="角点检测算法基本思想"><a href="#角点检测算法基本思想" class="headerlink" title="角点检测算法基本思想"></a>角点检测算法基本思想</h1>算法基本思想是使用一个固定窗口在图像上进行任意方向上的滑动，比较滑动前与滑动后两种情况，窗口中的像素灰度变化程度，如果存在任意方向上的滑动，都有着较大灰度变化，那么我们可以认为该窗口中存在角点。<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1></li>
 </ul>
 </li>
-</ul>
+</ul><a id="more"></a>
+
+
 <p>当窗口发生[u,v]移动时，那么滑动前与滑动后对应的窗口中的像素点灰度变化描述如下：</p>
 <script type="math/tex; mode=display">E(u, v)=\sum_{x_{s}, y} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}</script><p>[u,v]是窗口的偏移量<br>(x,y)是窗口内所对应的像素坐标位置，窗口有多大，就有多少个位置<br>w(x,y)是窗口函数，最简单情形就是窗口内的所有像素所对应的w权重系数均为1。但有时候，我们会将w(x,y)函数设定为以窗口中心为原点的二元正态分布。如果窗口中心点是角点时，移动前与移动后，该点的灰度变化应该最为剧烈，所以该点权重系数可以设定大些，表示窗口移动时，该点在灰度变化贡献较大；而离窗口中心(角点)较远的点，这些点的灰度变化几近平缓，这些点的权重系数，可以设定小点，以示该点对灰度变化贡献较小，那么我们自然想到使用二元高斯函数来表示窗口函数，所以通常窗口函数有如下两种形式：<br><img src="https://img-blog.csdnimg.cn/20191020095759748.png#pic_center" alt="在这里插入图片描述"><br>根据上述表达式，当窗口处在平坦区域上滑动，可以想象的到，灰度不会发生变化，那么E(u,v) = 0；如果窗口处在比纹理比较丰富的区域上滑动，那么灰度变化会很大。算法最终思想就是计算灰度发生较大变化时所对应的位置，当然这个较大是指针任意方向上的滑动，并非单指某个方向。</p>
 <p>$I(x+u, y+v)$泰勒展开可得：</p>
@@ -520,6 +545,8 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 
 
 
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
 
 
 

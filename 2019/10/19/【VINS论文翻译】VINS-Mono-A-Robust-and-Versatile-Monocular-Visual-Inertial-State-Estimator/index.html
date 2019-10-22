@@ -40,7 +40,7 @@
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
     path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
@@ -52,13 +52,13 @@
   };
 </script>
 
-  <meta name="description" content="VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器  摘要：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故">
+  <meta name="description" content="VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器摘要：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢">
 <meta name="keywords" content="VINS-Mono,VSLAM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【VINS-Mono】A Robust and Versatile Monocular Visual-Inertial State Estimator">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;19&#x2F;%E3%80%90VINS%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%E3%80%91VINS-Mono-A-Robust-and-Versatile-Monocular-Visual-Inertial-State-Estimator&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器  摘要：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故">
+<meta property="og:description" content="VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器摘要：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191019194830365.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019101920013857.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
@@ -218,9 +218,34 @@
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 
 </nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
 </div>
     </header>
 
@@ -314,9 +339,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <font color=gray size=10><center>VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器</center></font>
+        <font color="gray" size="10"><center>VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器</center></font><p><strong>摘要</strong>：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢复的鲁棒的程序开始。采用一种基于紧耦合、非线性优化的方法，通过融合预积分后的IMU测量值和特征观测值，获得高精度的视觉惯性里程计。结合紧耦合方法，回环检测模块能够以最小的计算代价实现重定位。此外，我们还进行四自由度位姿图优化，以加强全局一致性。我们验证了该系统在公共数据集和真实环境实验的性能，并与其他最先进的算法进行了比较。我们还在MAV平台上执行机载闭环自主飞行，并将算法移植到基于iOS的demo中。特别强调的是，本文提出的工作是一个可靠、完整和通用的系统，适用于需要高精度定位的不同应用。我们为PC和iOS移动设备开源了我们的实现方法。<br>关键词：单目视觉惯性系统，状态估计，传感器融合，SLAM</p><a id="more"></a>
 
-<p><strong>摘要</strong>：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢复的鲁棒的程序开始。采用一种基于紧耦合、非线性优化的方法，通过融合预积分后的IMU测量值和特征观测值，获得高精度的视觉惯性里程计。结合紧耦合方法，回环检测模块能够以最小的计算代价实现重定位。此外，我们还进行四自由度位姿图优化，以加强全局一致性。我们验证了该系统在公共数据集和真实环境实验的性能，并与其他最先进的算法进行了比较。我们还在MAV平台上执行机载闭环自主飞行，并将算法移植到基于iOS的demo中。特别强调的是，本文提出的工作是一个可靠、完整和通用的系统，适用于需要高精度定位的不同应用。我们为PC和iOS移动设备开源了我们的实现方法。<br>关键词：单目视觉惯性系统，状态估计，传感器融合，SLAM</p>
+
 <h1 id="I-引言"><a href="#I-引言" class="headerlink" title="I. 引言"></a>I. 引言</h1><p>状态估计无疑是机器人导航、自主驾驶、虚拟现实(VR)和增强现实(AR)等广泛应用中最基本的模块。仅使用单目摄像机的方法由于其体积小、成本低和硬件设置简单而获得了社会的极大兴趣[1]-[5]。然而，单目视觉系统无法恢复度量尺度，因此限制了它们在实际机器人中的应用。近年来，我们看到了一种发展趋势，即用低成本惯性测量单元(IMU)辅助单目视觉系统。这种单目视觉-惯性系统(VINS)的主要优点是具有可观测的度量尺度，以及翻滚角(roll)和俯仰角(pitch)。这让需要有尺度的状态估计的导航任务成为可能。此外，==对IMU测量值的积分可以显著提高运动跟踪性能，弥补光照变化、缺少纹理的区域或运动模糊的视觉轨迹损失的差距==。事实上，单目VINS不仅广泛应用于移动机器人、无人机和移动设备上，还是满足充分自我感知和环境感知的最小传感器。</p>
 <p>然而，所有这些优点都是有代价的。对于单目VINS，众所周知，需要加速度激励以测量尺度。这意味着==单目VIN估计器不能从静止状态启动，而是从未知的移动状态发动==。同时要认识到视觉惯性系统高度非线性的事实，在估计器初始化方面还有重大挑战。两个传感器的存在也使得摄像机-IMU的外部校准至关重要。最后，为了消除在可接受的处理窗口内的长期漂移，提出了一个完整的系统，包括视觉惯性里程计、回环检测、重定位和全局优化。</p>
 <p>为了解决所有这些问题，我们提出了VINS-Mono，一个鲁棒且通用的单目视觉惯性状态估计器。我们的解决方案开始于即时估计初始化。这个初始化模块也用于故障恢复。我们的解决方案的核心是一个鲁棒的基于紧耦合的滑动窗非线性优化的单目视觉惯性里程计(VIO)。==单目VIO模块不仅提供精确的局部姿态、速度和方位估计，而且还以在线方式执行摄像机IMU外部校准和IMU偏置校正==。使用DBoW2[6]进行回环检测。==重新定位是在对单目VIO进行特征级别融合的紧耦合设置中完成==。这使得重新定位具有鲁棒性和精确性且有最小的计算代价。最后，几何验证的回环被添加到位姿图中，并且由于来自单目VIO的可观测的翻滚角和俯仰角，生成四自由度(DOF)位姿图以确保全局一致性。</p>
@@ -585,6 +610,8 @@
 
 
 
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
 
 
 

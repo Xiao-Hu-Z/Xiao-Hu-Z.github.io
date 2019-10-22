@@ -40,7 +40,7 @@
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
     path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
@@ -182,9 +182,34 @@
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 
 </nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
 </div>
     </header>
 
@@ -295,7 +320,7 @@
 \quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
 <script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
 </li>
-</ul>
+</ul><a id="more"></a>
 <blockquote>
 <p>证：对任意旋转矩阵 R 和三维向量 v，都有$({\bf R v})^{\land} = {\bf Rv^{\land}R}^T$<br><img src="https://img-blog.csdnimg.cn/20191017160718789.png#pic_center" alt="在这里插入图片描述"><br>最后一式利用向量叉乘的旋转变换不变性可证，即，对于任意${\bf v,u}\in \mathbb{R}^3$永远有</p>
 <script type="math/tex; mode=display">({\bf Rv})\times({\bf Ru})={\bf R(v\times u)}</script><p>从三维几何的角度来理解：v,u 是任意两个三维向量，(v×u) 是一个和 v,u 都垂直、大小为 |v||u|sin(u,v) 的三维向量；将 v,u,v×u 三个向量都经过同一个旋转，它们的相对位姿和模长都不会改变，所以 (Rv) 和 (Ru) 的叉乘仍是 R(v×u)。</p>
@@ -325,7 +350,7 @@
 <li>scale 可以看成是实际数值和传感器输出值之间的比值</li>
 </ul>
 <ol>
-<li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt=""> </li>
+<li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70" alt> </li>
 <li>其他确定性误差<blockquote>
 <ul>
 <li>Run-to-Run Bias/Scale Facto</li>
@@ -580,6 +605,8 @@ E((b_d[k]-b_d[k-1])^2)
 
 
 
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
 
 
 
