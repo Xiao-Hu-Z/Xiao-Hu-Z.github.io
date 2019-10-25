@@ -63,22 +63,18 @@
   };
 </script>
 
-  <meta name="description" content="Optical FlowKLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
+  <meta name="description" content="博客网址==https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;==安装git、nodejs123sudo apt-get install gitsudo apt-get install nodejssudo apt-get install npm升级nodejs版本，目前的最新版本v10.6.0参考：Ubuntu16 升级nodejs版本123sudo npm install n -gsudo n">
+<meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="KLT 光流算法">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95&#x2F;index.html">
+<meta property="og:title" content="VINS-Mono——视觉前段处理">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;23&#x2F;Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="Optical FlowKLTKLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。参考：总结：光流—LK光流—基于金字塔分层的LK光流—中值流KLT 光流算法详解KLT角点跟踪算法(LK)学习（一）——算法原理">
+<meta property="og:description" content="博客网址==https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;==安装git、nodejs123sudo apt-get install gitsudo apt-get install nodejssudo apt-get install npm升级nodejs版本，目前的最新版本v10.6.0参考：Ubuntu16 升级nodejs版本123sudo npm install n -gsudo n">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132123717.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132137931.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019102013215737.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132228980.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-21T12:02:22.517Z">
+<meta property="og:updated_time" content="2019-10-25T06:57:52.482Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020132123717.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/">
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/">
 
 
 <script id="page-configurations">
@@ -92,7 +88,7 @@
   };
 </script>
 
-  <title>KLT 光流算法 | xiaohu博客</title>
+  <title>VINS-Mono——视觉前段处理 | xiaohu博客</title>
   
 
 
@@ -235,7 +231,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -248,7 +244,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          KLT 光流算法
+          VINS-Mono——视觉前段处理
         </h1>
 
         <div class="post-meta">
@@ -258,14 +254,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-20 13:29:52" itemprop="dateCreated datePublished" datetime="2019-10-20T13:29:52+08:00">2019-10-20</time>
+              <time title="创建时间：2019-10-23 22:15:34" itemprop="dateCreated datePublished" datetime="2019-10-23T22:15:34+08:00">2019-10-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-21 20:02:22" itemprop="dateModified" datetime="2019-10-21T20:02:22+08:00">2019-10-21</time>
+                <time title="修改时间：2019-10-25 14:57:52" itemprop="dateModified" datetime="2019-10-25T14:57:52+08:00">2019-10-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -273,8 +269,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS</span>
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
                   </a>
                 </span>
             </span>
@@ -292,7 +288,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>142</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -311,7 +307,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>
+        <p>﻿博客网址</p><p>==<a href="https://xiao-hu.com.cn/">https://xiao-hu.com.cn/</a>==</p><h1 id="安装git、nodejs"><a href="#安装git、nodejs" class="headerlink" title="安装git、nodejs"></a>安装git、nodejs</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure><p>升级nodejs版本，目前的最新版本v10.6.0<br>参考：<a href="https://blog.csdn.net/u010277553/article/details/80938829" target="_blank" rel="noopener">Ubuntu16 升级nodejs版本</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install n -g</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br></pre></td></tr></table></figure><br>加速下载：<a href="https://blog.csdn.net/ibmall/article/details/81390639" target="_blank" rel="noopener">npm 安装 hexo 卡住问题解决</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p><a id="more"></a>
+
+
+
+<h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo hexo init xiaohu</span><br><span class="line"><span class="built_in">cd</span> xiaohu </span><br><span class="line"><span class="comment"># 安装依赖包</span></span><br><span class="line">sudo npm install</span><br></pre></td></tr></table></figure>
+<p>新建完成后，指定文件夹目录下有：</p>
+<blockquote>
+<p>   node_modules: 依赖包<br>public：存放生成的页面<br>scaffolds：生成文章的一些模板<br>source：用来存放你的文章<br>themes：主题<br>_config.yml: 博客的配置文件</p>
+</blockquote>
+<p>再次输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo hexo g <span class="comment">#生成静态页面</span></span><br><span class="line">sudo hexo server <span class="comment">#启动服务器</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：这时候就可以用浏览器打开网址： <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a> 来进行预览了。</p>
+<h1 id="github创建"><a href="#github创建" class="headerlink" title="github创建"></a>github创建</h1><p>以前创好了：<a href="https://mp.csdn.net/mdeditor/94998475#" target="_blank" rel="noopener">Ubuntu16.04 git安装与配置</a></p>
+<h1 id="创建repo"><a href="#创建repo" class="headerlink" title="创建repo"></a>创建repo</h1><p>在github上面创建一个项目，名为Xiao-Hu-Z+github.io </p>
+<h1 id="将hexo部署到github"><a href="#将hexo部署到github" class="headerlink" title="将hexo部署到github"></a>将hexo部署到github</h1><p>打开站点配置文件_config.yml，翻到最后，进行修改。其中YourgithubName就是你的GitHub账户。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/Xiao-Hu-Z/Xiao-Hu-Z.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>这个时候需要先安装deploy-git ，也就是部署的命令,这样你才能用命令部署到GitHub。<br>deploy时要你输入username和password。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在站点目录下输入下面的插件安装</span></span><br><span class="line">sudo npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line">sudo hexo clean</span><br><span class="line">sudo hexo generate</span><br><span class="line">sudo hexo deploy</span><br></pre></td></tr></table></figure>
+<p>其中 hexo clean清除了你之前生成的东西，也可以不加。<br>hexo generate顾名思义，生成静态文章，可以用 hexo g缩写<br>hexo deploy 部署文章，可以用hexo d缩写</p>
+<p>输入：<a href="https://Xiao-Hu-Z.github.io/看到自己的博客" target="_blank" rel="noopener">https://Xiao-Hu-Z.github.io/看到自己的博客</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://Xiao-Hu-Z.github.io/</span><br></pre></td></tr></table></figure>
+<h1 id="绑定域名："><a href="#绑定域名：" class="headerlink" title="绑定域名："></a>绑定域名：</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping Xiao-Hu-Z.github.io</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参考：<a href="https://www.jianshu.com/p/e3169b681038" target="_blank" rel="noopener">[Hexo个人博客]域名绑定 简明教程（小白篇）</a></p>
+</blockquote>
+<p>参考：<a href="https://blog.csdn.net/zxwsbg/article/details/97487666" target="_blank" rel="noopener">Ubuntu18下Github+Hexo搭建博客教程</a><br><a href="https://blog.csdn.net/wang_da_bing/article/details/82818445" target="_blank" rel="noopener">Ubuntu18下Github+Hexo搭建博客教程</a><br><a href="https://www.cnblogs.com/yangzhaonan/p/9351838.html" target="_blank" rel="noopener">使用GitHub+Hexo建立个人网站，并绑定自己的域名（Ubuntu环境下）</a></p>
+
     </div>
 
     
@@ -336,7 +360,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://xiao-hu.com.cn/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/" title="KLT 光流算法">https://xiao-hu.com.cn/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/</a>
+    <a href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" title="VINS-Mono——视觉前段处理">https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -346,20 +370,24 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/10/20/Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/" rel="next" title="Harris角点检测">
-                  <i class="fa fa-chevron-left"></i> Harris角点检测
+                <a href="/2019/10/23/hexo4.0%20-%20Next7.2.4%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE/" rel="next" title="VINS-Mono——视觉前段处理">
+                  <i class="fa fa-chevron-left"></i> VINS-Mono——视觉前段处理
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/10/23/hexo4.0%20-%20Next7.2.4%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE/" rel="prev" title="VINS-Mono——视觉前段处理">
+                <a href="/2019/10/23/VINS-Mono%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E5%89%8D%E6%AE%B5%E5%A4%84%E7%90%86/" rel="prev" title="VINS-Mono——视觉前段处理">
                   VINS-Mono——视觉前段处理 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -407,7 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Optical-Flow"><span class="nav-number">1.</span> <span class="nav-text">Optical Flow</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KLT"><span class="nav-number">2.</span> <span class="nav-text">KLT</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装git、nodejs"><span class="nav-number">1.</span> <span class="nav-text">安装git、nodejs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Hexo"><span class="nav-number">2.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#github创建"><span class="nav-number">3.</span> <span class="nav-text">github创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建repo"><span class="nav-number">4.</span> <span class="nav-text">创建repo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将hexo部署到github"><span class="nav-number">5.</span> <span class="nav-text">将hexo部署到github</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#绑定域名："><span class="nav-number">6.</span> <span class="nav-text">绑定域名：</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -583,56 +611,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
