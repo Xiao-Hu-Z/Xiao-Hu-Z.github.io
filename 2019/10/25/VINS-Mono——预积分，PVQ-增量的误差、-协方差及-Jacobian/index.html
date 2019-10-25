@@ -63,20 +63,26 @@
   };
 </script>
 
-  <meta name="description" content="算法简介：随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算">
+  <meta name="description" content="为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。想写博客记录下，但懒敲公式。预积分连续形式下 PVQ 增量的误差、 协方差及 Jacobian离散形式下 PVQ 增量的误差、 协方差及 Jacobian">
 <meta property="og:type" content="article">
-<meta property="og:title" content="随机抽样一致RANSAC-Random-Sample-Consensus">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;24&#x2F;%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus&#x2F;index.html">
+<meta property="og:title" content="VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;25&#x2F;VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="算法简介：随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算">
+<meta property="og:description" content="为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。想写博客记录下，但懒敲公式。预积分连续形式下 PVQ 增量的误差、 协方差及 Jacobian离散形式下 PVQ 增量的误差、 协方差及 Jacobian">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020160728989.png#pic_center">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;201910201607364.png#pic_center">
-<meta property="og:updated_time" content="2019-10-24T08:42:42.520Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025181407525.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025181521323.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center =30x30">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025181458844.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019102521325497.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019102521324273.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213150727.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213209259.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025215804453.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-10-25T13:59:20.636Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020160728989.png#pic_center">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025181407525.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/">
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/">
 
 
 <script id="page-configurations">
@@ -90,7 +96,7 @@
   };
 </script>
 
-  <title>随机抽样一致RANSAC-Random-Sample-Consensus | xiaohu博客</title>
+  <title>VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian | xiaohu博客</title>
   
 
 
@@ -233,7 +239,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -246,7 +252,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          随机抽样一致RANSAC-Random-Sample-Consensus
+          VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian
         </h1>
 
         <div class="post-meta">
@@ -257,7 +263,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-24 16:40:49 / 修改时间：16:42:42" itemprop="dateCreated datePublished" datetime="2019-10-24T16:40:49+08:00">2019-10-24</time>
+              <time title="创建时间：2019-10-25 21:49:20 / 修改时间：21:59:20" itemprop="dateCreated datePublished" datetime="2019-10-25T21:49:20+08:00">2019-10-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -265,8 +271,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VIO/" itemprop="url" rel="index">
-                    <span itemprop="name">VIO</span>
+                  <a href="/categories/VINS/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS</span>
                   </a>
                 </span>
             </span>
@@ -284,14 +290,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>108</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -303,77 +309,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="算法简介："><a href="#算法简介：" class="headerlink" title="算法简介："></a>算法简介：</h1><p>随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算等产生的。同时RANSAC也假设，给定一组正确的数据，存在可以计算出符合这些数据的模型参数的方法。</p><a id="more"></a>
-<h1 id="RANSAC的基本假设："><a href="#RANSAC的基本假设：" class="headerlink" title="RANSAC的基本假设："></a>RANSAC的基本假设：</h1><p>“内群”数据可以通过几组模型的参数来叙述其分布，而“离群”数据则是不适合模型化的数据。<br>数据会受噪声影响，噪声指的是离群，例如从极端的噪声或错误解释有关数据的测量或不正确的假设。<br>RANSAC假定，给定一组（通常很小）的内群，存在一个程序，这个程序可以估算最佳解释或最适用于这一数据模型的参数。</p>
-<h1 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h1><p>这里用一个简单的例子来说明，在一组数据点中找到一条最适合的线。假设，此有一组集合包含了内群以及离群，其中内群为可以被拟合到线段上的点，而离群则是无法被拟合的点。如果我们用简单的最小二乘法来找此线，我们将无法得到一条适合于内群的线，因为最小二乘法会受离群影响而影响其结果。而RANSAC，可以只由内群来计算出模型，而且概率还够高。然而，RANSAC无法保证结果一定最好，所以必须小心选择参数，使其能有足够的概率。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020160728989.png#pic_center"><br>包含许多离群的一组数据，要找一条最适合的线。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/201910201607364.png#pic_center"><br>RANSAC找到的线，离群值对结果没影响（蓝色点为内群，红色点为离群）</p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RANSAC算法的输入是一组观测数据（往往含有较大的噪声或无效点），一个用于解释观测数据的参数化模型以及一些可信的参数。RANSAC通过反复选择数据中的一组随机子集来达成目标。被选取的子集被假设为局内点，并用下述方法进行验证： </p>
-<ol>
-<li>有一个模型适应于假设的局内点，即所有的未知参数都能从假设的局内点计算得出。</li>
-<li>用1中得到的模型去测试所有的其它数据，如果某个点适用于估计的模型，认为它也是局内点。</li>
-<li>如果有足够多的点被归类为假设的局内点，那么估计的模型就足够合理。</li>
-<li>然后，用所有假设的局内点去重新估计模型（譬如使用最小二乘法），因为它仅仅被初始的假设局内点估计过。</li>
-<li>最后，通过估计局内点与模型的错误率来评估模型。</li>
-<li>上述过程被重复执行固定的次数，每次产生的模型要么因为局内点太少而被舍弃，要么因为比现有的模型更好而被选用。<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1>伪码形式的算法如下所示：</li>
-</ol>
-<ul>
-<li><p>输入：</p>
-<blockquote>
-<p>data —— 一组观测数据<br>model —— 适应于数据的模型<br>n —— 适用于模型的最少数据个数<br>k —— 算法的迭代次数<br>t —— 用于决定数据是否适应于模型的阀值<br>d —— 判定模型是否适用于数据集的数据数目</p>
-</blockquote>
-</li>
-<li><p>输出：</p>
-<blockquote>
-<p>best_model —— 跟数据最匹配的模型参数（如果没有找到好的模型，返回null）<br>best_consensus_set —— 估计出模型的数据点<br>best_error —— 跟数据相关的估计出的模型错误</p>
-</blockquote>
-<ul>
-<li>iterations = 0<blockquote>
-<p>best_model = null<br>best_consensus_set = null<br>best_error = 无穷大<br>while ( iterations &lt; k )<br>maybe_inliers = 从数据集中随机选择n个点<br>maybe_model = 适合于maybe_inliers的模型参数<br>consensus_set = maybe_inliers</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>估计的模型就足够合理</p>
-<blockquote>
-<p>for ( 每个数据集中不属于maybe_inliers的点 ）<br>if ( 如果点适合于maybe_model，且错误小于t ）<br>将点添加到consensus_set<br>if （ consensus_set中的元素数目大于d ）<br>已经找到了好的模型，</p>
-</blockquote>
-</li>
-<li><p>现在测试该模型到底有多好</p>
-<blockquote>
-<p>better_model = 适合于consensus_set中所有点的模型参数<br>this_error = better_model究竟如何适合这些点的度量<br>if ( this_error &lt; best_error )<br>我们发现了比以前好的模型，保存该模型直到更好的模型出现<br>best_model =  better_model<br>best_consensus_set = consensus_set<br>best_error =  this_error</p>
-</blockquote>
-</li>
-<li><p>迭代</p>
-<blockquote>
-<p>增加迭代次数<br>返回 best_model, best_consensus_set, best_error</p>
-</blockquote>
-<p> RANSAC算法的可能变化包括以下几种：</p>
-<ol>
-<li><p>如果发现了一种足够好的模型（该模型有足够小的错误率），则跳出主循环。这样可能会节约计算额外参数的时间。</p>
-<ol>
-<li>直接从maybe_model计算this_error，而不从consensus_set重新估计模型。这样可能会节约比较两种模型错误的时间，但可能会对噪声更敏感。</li>
-</ol>
-<p>其实核心就是随机性和假设性。随机性用于减少计算了，那个循环次数就是利用正确数据出现的概率。所谓的假设性，就是说随机抽出来的数据我都认为是正确的，并以此去计算其他点，获得其他满足变换关系的点，然后利用投票机制，选出获票最多的那一个变换。</p>
-</li>
-</ol>
-</li>
-</ul>
-<h1 id="参数决定"><a href="#参数决定" class="headerlink" title="参数决定"></a>参数决定</h1><p>假设每个点是真正内群的几率是w，则：</p>
-<ul>
-<li>w = 真正内群的数目 / 数据总共的数量</li>
-</ul>
-<p>通常我们不知道w 是多少，$w^{n}$是所选择的n 个点都是内群的几率，$1-w^{n}$ 是所选择的 n 个点至少有一个不是内群的几率， ${(1-w^{n})^{k}}$是表示重复k 次都没有全部的 {\displaystyle n} n 个点都是内群的几率，假设算法跑 k 次以后成功的几率是p，那么：</p>
-<script type="math/tex; mode=display">{1-p=(1-w^{n})^{k}}</script><script type="math/tex; mode=display">{p=1-(1-w^{n})^{k}}</script><p>所以如果希望成功几率高， ${\displaystyle p=0.99}$， 当n 不变时，k 越大， {\displaystyle p} p 越大， 当w 不变时，n 越大，所需的k 就越大， 通常w 未知，所以 n 选小一点比较好。</p>
-<h1 id="优点与缺点"><a href="#优点与缺点" class="headerlink" title="优点与缺点"></a>优点与缺点</h1><ul>
-<li>RANSAC的优点是它能鲁棒的估计模型参数。例如，它能从包含大量局外点的数据集中估计出高精度的参数。</li>
-<li>RANSAC的缺点是它计算参数的迭代次数没有上限；如果设置迭代次数的上限，得到的结果可能不是最优的结果，甚至可能得到错误的结果。</li>
-<li>RANSAC只有一定的概率得到可信的模型，概率与迭代次数成正比。RANSAC的另一个缺点是它要求设置跟问题相关的阀值。</li>
-<li>RANSAC只能从特定的数据集中估计出一个模型，如果存在两个（或多个）模型，RANSAC不能找到别的模型。</li>
-</ul>
-<p>参考：</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/pi9nc/article/details/26596519" target="_blank" rel="noopener">RANSAC</a><br><a href="https://zh.wikipedia.org/wiki/%E9%9A%A8%E6%A9%9F%E6%8A%BD%E6%A8%A3%E4%B8%80%E8%87%B4" target="_blank" rel="noopener">随机抽样一致</a></p>
-</blockquote>
-
+        <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。<br>想写博客记录下，但懒敲公式。</p><h1 id="预积分"><a href="#预积分" class="headerlink" title="预积分"></a>预积分</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181407525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181521323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center =30x30"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181458844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521325497.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="连续形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#连续形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="连续形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>连续形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521324273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="离散形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#离散形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="离散形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>离散形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213150727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213209259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025215804453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
     </div>
 
     
@@ -398,7 +334,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://xiao-hu.com.cn/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" title="随机抽样一致RANSAC-Random-Sample-Consensus">https://xiao-hu.com.cn/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/</a>
+    <a href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/" title="VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian">https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -413,17 +349,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" rel="next" title="IMU测量模型、运动模型、误差模型">
-                  <i class="fa fa-chevron-left"></i> IMU测量模型、运动模型、误差模型
+                <a href="/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" rel="next" title="随机抽样一致RANSAC-Random-Sample-Consensus">
+                  <i class="fa fa-chevron-left"></i> 随机抽样一致RANSAC-Random-Sample-Consensus
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/" rel="prev" title="VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian">
-                  VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -469,7 +402,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#算法简介："><span class="nav-number">1.</span> <span class="nav-text">算法简介：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RANSAC的基本假设："><span class="nav-number">2.</span> <span class="nav-text">RANSAC的基本假设：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#范例"><span class="nav-number">3.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">4.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法"><span class="nav-number">5.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参数决定"><span class="nav-number">6.</span> <span class="nav-text">参数决定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优点与缺点"><span class="nav-number">7.</span> <span class="nav-text">优点与缺点</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预积分"><span class="nav-number">1.</span> <span class="nav-text">预积分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连续形式下-PVQ-增量的误差、-协方差及-Jacobian"><span class="nav-number">2.</span> <span class="nav-text">连续形式下 PVQ 增量的误差、 协方差及 Jacobian</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#离散形式下-PVQ-增量的误差、-协方差及-Jacobian"><span class="nav-number">3.</span> <span class="nav-text">离散形式下 PVQ 增量的误差、 协方差及 Jacobian</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -645,56 +578,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
