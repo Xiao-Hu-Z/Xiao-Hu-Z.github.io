@@ -147,7 +147,7 @@ template {
   display: none;
 }
 ::selection {
-  background: #262a30;
+  background: #49b1f5;
   color: #fff;
 }
 html,
@@ -266,7 +266,7 @@ table {
   border-spacing: 0;
   font-size: 0.875em;
   margin: 0 0 20px 0;
-  width: 100%;
+  width: normal;
 }
 table > tbody > tr:nth-of-type(odd) {
   background: #f9f9f9;
@@ -296,9 +296,9 @@ td {
 }
 .btn {
   background: #fff;
-  border: 2px solid #555;
+  border: 2px solid #49b1f5;
   border-radius: 2px;
-  color: #555;
+  color: #49b1f5;
   display: inline-block;
   font-size: 0.875em;
   line-height: 2;
@@ -310,8 +310,8 @@ td {
   transition-timing-function: ease-in-out;
 }
 .btn:hover {
-  background: #222;
-  border-color: #222;
+  background: #49b1f5;
+  border-color: #49b1f5;
   color: #fff;
 }
 .btn + .btn {
@@ -409,7 +409,7 @@ code {
   font-family: consolas, Menlo, monospace, "PingFang SC", "Microsoft YaHei";
 }
 code {
-  background: #eee;
+  background: #edf1ff;
   border-radius: 3px;
   color: #555;
   padding: 2px 4px;
@@ -445,7 +445,7 @@ pre code {
   padding: 0;
 }
 .highlight figcaption {
-  background: #eee;
+  background: #edf1ff;
   color: #4d4d4c;
   line-height: 1em;
   margin: 0;
@@ -905,8 +905,8 @@ pre .javascript .function {
   margin: 0.1em 0.2em;
 }
 .comment-button-group .comment-button.active {
-  background: #222;
-  border-color: #222;
+  background: #49b1f5;
+  border-color: #49b1f5;
   color: #fff;
 }
 .comment-position {
@@ -1209,7 +1209,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #618fff;
+  background: #3ca7fa;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2641,10 +2641,31 @@ body {
   background-attachment: fixed;
   background-position: 50% 50%;
 }
+.site-meta {
+  padding: 20px 0;
+  color: #fff;
+  background: #0684bd;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
 .main-inner {
   background: #fff;
-  opacity: 0.8;
+  opacity: 0.95;
 }
-.header-inner {
-  opacity: 0.8;
+.post {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.brand {
+  color: $white;
+}
+.site-subtitle {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #fff;
 }
