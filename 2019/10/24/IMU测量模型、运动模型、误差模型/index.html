@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-pace-theme-center-atom.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度 a_m=\frac{f}{m}=a-g其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IMU测量模型、运动模型、误差模型">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;24&#x2F;IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度 a_m=\frac{f}{m}=a-g其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017192448388.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017155511191.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017160718789.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017163839187.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017165037235.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017182956354.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017171617729.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017172240109.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017172303634.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017172326866.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017182109980.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190929113450104.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017204504508.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017204557636.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017212131103.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-10-24T08:40:07.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017192448388.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>IMU测量模型、运动模型、误差模型 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IMU测量模型、运动模型、误差模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-24 16:40:07" itemprop="dateCreated datePublished" datetime="2019-10-24T16:40:07+08:00">2019-10-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VIO/" itemprop="url" rel="index">
+                    <span itemprop="name">VIO</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="IMU测量模型"><a href="#IMU测量模型" class="headerlink" title="IMU测量模型"></a>IMU测量模型</h1><ul>
+<li><p>MEMS 加速度计工作原理<br>测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示<br>加速度计测量值$a_m$为弹簧拉力对应的加速度</p>
+<script type="math/tex; mode=display">a_m=\frac{f}{m}=a-g</script><p>其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。</p>
+</li>
+<li><p>陀螺仪测量原理<br>陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。</p>
+<p>低端 MEMS 陀螺上一般采用振动陀螺原理，通过测量 Coriolisforce 来间接得到角速度。</p>
+<blockquote>
+<p>在旋转坐标系中，运动的物体受到科氏力作用<br>MEMS 陀螺仪：一个主动运动轴 + 一个敏感轴<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017192448388.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h1 id="IMU运动模型"><a href="#IMU运动模型" class="headerlink" title="IMU运动模型"></a>IMU运动模型</h1><h2 id="旋转量求导"><a href="#旋转量求导" class="headerlink" title="旋转量求导"></a>旋转量求导</h2><p>首先，如下图所示，考虑一个从原点出发的向量 r 绕单位轴 u 旋转，角速度大小为 θ˙。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017155511191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>角速度矢量可以表示为${\boldsymbol \omega}=\dot{\theta}u$，易得向量 r 末端点 P 的速度矢量，即 r的时间一阶导为</p>
+<script type="math/tex; mode=display">\frac{d{r}}{dt} = {\boldsymbol \omega} \times {r}</script><p>坐标系 {B} 绕单位轴 u 旋转，如上所述，其三个轴的时间一阶导同样为</p>
+<script type="math/tex; mode=display">\frac{d{\bf i}_B}{dt} = {\boldsymbol \omega} \times {\bf i}_B, \frac{d{\bf j}_B}{dt} = {\boldsymbol \omega} \times {\bf j}_B, \frac{d{\bf k}_B}{dt} = {\boldsymbol \omega} \times {\bf k}_B</script><p>$[ {\bf i}_B \quad {\bf j}_B \quad {\bf k}_B ]$ 实际上就是坐标系 {B} 相对于参考坐标系的旋转矩阵 R，R的时间一阶导为</p>
+<script type="math/tex; mode=display">\dot{\bf R} =  [ {\boldsymbol \omega} \times {\bf i}_B \quad {\boldsymbol \omega} \times {\bf j}_B \quad {\boldsymbol \omega} \times {\bf k}_B ] = {\boldsymbol \omega} \times {\bf R}</script><p>叉乘运算可以转化为负对称矩阵的乘法：</p>
+<script type="math/tex; mode=display">\dot{\bf R} = {\boldsymbol \omega}^{\land} {\bf R}</script><p>其中负对称矩阵${\boldsymbol \omega}^{\land}$为</p>
+<script type="math/tex; mode=display">% <![CDATA[
+\quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
+<script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
+</li>
+</ul><a id="more"></a>
+<blockquote>
+<p>证：对任意旋转矩阵 R 和三维向量 v，都有$({\bf R v})^{\land} = {\bf Rv^{\land}R}^T$<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017160718789.png#pic_center"><br>最后一式利用向量叉乘的旋转变换不变性可证，即，对于任意${\bf v,u}\in \mathbb{R}^3$永远有</p>
+<script type="math/tex; mode=display">({\bf Rv})\times({\bf Ru})={\bf R(v\times u)}</script><p>从三维几何的角度来理解：v,u 是任意两个三维向量，(v×u) 是一个和 v,u 都垂直、大小为 |v||u|sin(u,v) 的三维向量；将 v,u,v×u 三个向量都经过同一个旋转，它们的相对位姿和模长都不会改变，所以 (Rv) 和 (Ru) 的叉乘仍是 R(v×u)。</p>
+</blockquote>
+<h2 id="科氏加速度"><a href="#科氏加速度" class="headerlink" title="科氏加速度"></a>科氏加速度</h2><p>这次把绕惯性系 {A} 中固定单位轴 u 旋转的 {B} 作为参考坐标系。考虑下图， 点 P 相对于 {B} 运动，记 ${}^Br$ 分别为 P 在 {B} 下的坐标，r 为 P 的绝对坐标（即 {A} 下坐标）， R 仍为 {B} 相对于 {A} 的旋转矩阵，易知 $r=R{}^Br$。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017163839187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>$r=R{}^Br$求一阶时间导</p>
+<script type="math/tex; mode=display">{\bf v} = \dot{\bf r} = \dot{\bf R} {}^B{\bf r} + {\bf R}^B\dot{\bf r} = {\boldsymbol \omega}^{\land}{\bf R}{}^B{\bf r}+ {\bf R}^B\dot{\bf r}</script><p>记P在 {B}下速度为 ${}^Bv$，于是</p>
+<script type="math/tex; mode=display">v = w^{\land}r+ {R}^B{}= w \times r+ v_r</script><p>${\bf v}_r$来表达「相对速度」的概念，准确定义为 P 相对于 {B} 的速度，在惯性系 {A} 下的表达<br>再对求时间导：</p>
+<blockquote>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017165037235.png#pic_center"><br>在旋转坐标系下观察，运动的物体（运动方向和旋转轴不为同一个轴时）会受到科氏力的作用。</p>
+<ul>
+<li>第一项中${\boldsymbol \alpha}$为 {B} 的角加速度，所以第一项的物理意义是 {B} 旋转所造成的 P 的切向加速度</li>
+<li>第二项是 {B} 旋转所造成的向心加速度</li>
+<li>第三项比较特殊，为 {B} 的旋转运动与 P 相对 {B} 的平移运动耦合产生的加速度，称为科氏加速度</li>
+<li>第四项为 P 相对于 {B} 的加速度，但在惯性系{A}下表达，类似于${\bf v}_r$</li>
+</ul>
+</blockquote>
+<h1 id="IMU-误差模型"><a href="#IMU-误差模型" class="headerlink" title="IMU 误差模型"></a>IMU 误差模型</h1><p>加速度计和陀螺仪的误差可以分为：确定性误差，随机误差。</p>
+<ul>
+<li>确定性误差可以事先标定确定，包括： bias, scale …</li>
+<li>随机误差通常假设噪声服从高斯分布，包括：高斯白噪声， bias<br>随机游走…<h2 id="确定性误差"><a href="#确定性误差" class="headerlink" title="确定性误差"></a>确定性误差</h2></li>
+</ul>
+<ol>
+<li>Bias ，Scale<br>理论上，当没有外部作用时， IMU 传感器的输出应该为 0，但实际数据存在一个偏置 b。</li>
+</ol>
+<ul>
+<li>加速度计 bias 对位姿估计的影响：<script type="math/tex; mode=display">v_err=b_at，p_err=\frac{1}{2}b_at^2</script></li>
+<li>scale 可以看成是实际数值和传感器输出值之间的比值</li>
+</ul>
+<ol>
+<li>Nonorthogonality/Misalignment Errors(非正交/错位错误）<br><img alt data-src="https://img-blog.csdnimg.cn/20191017182956354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"> </li>
+<li>其他确定性误差<blockquote>
+<ul>
+<li>Run-to-Run Bias/Scale Facto</li>
+<li>In Run (Stability) Bias/Scale Factor</li>
+<li>Temperature-Dependent Bias/Scale Factor</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h3 id="确定性误差误差标定"><a href="#确定性误差误差标定" class="headerlink" title="确定性误差误差标定"></a>确定性误差误差标定</h3><h4 id="六面法标定加速度"><a href="#六面法标定加速度" class="headerlink" title="六面法标定加速度"></a>六面法标定加速度</h4><p><strong>bias 和 scale factor</strong></p>
+<blockquote>
+<p>六面法是指将加速度计的 3 个轴分别朝上或者朝下水平放置一段时间，采集 6 个面的数据完成标定。如果各个轴都是正交的，那很容易得到 bias 和 scale：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017171617729.png#pic_center"><br>其中,$l$为加速度计某个轴的测量值， g为当地的重力加速度</p>
+</blockquote>
+<p><strong>（Nonorthogonality/Misalignment Errors)</strong></p>
+<blockquote>
+<p>多轴 IMU 传感器制作的时候，由于制作工艺的问题，会使得 xyz 轴可能不垂直，如下图所示。</p>
+<p>考虑轴间误差的时候，实际加速度和测量值之间的关系为：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017172240109.png#pic_center"><br>水平静止放置 6 面的时候，加速度的理论值为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017172303634.png#pic_center"><br>对应的测量值矩阵 L ：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017172326866.png#pic_center"><br>利用最小二乘就能够把12个变量求出来。</p>
+</blockquote>
+<h4 id="六面法标定陀螺仪"><a href="#六面法标定陀螺仪" class="headerlink" title="六面法标定陀螺仪"></a>六面法标定陀螺仪</h4><blockquote>
+<ul>
+<li>六面法标定陀螺仪 bias 和 scale factor<br>和加速度计六面法不同的是，陀螺仪的真实值由高精度转台提供，这<br>里的 6 面是指各个轴顺时针和逆时针旋转。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017182109980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>参考：<a href="https://blog.csdn.net/CSDN_XCS/article/details/90339761" target="_blank" rel="noopener">https://blog.csdn.net/CSDN_XCS/article/details/90339761</a></li>
+</ul>
+</blockquote>
+<h4 id="温度相关的参数标定"><a href="#温度相关的参数标定" class="headerlink" title="温度相关的参数标定"></a>温度相关的参数标定</h4><ul>
+<li>目的：这个标定的主要目的是对传感器估计的 bias 和 scale 进行温度补偿，获取不同温度时 bias 和 scale 的值，绘制成曲线。</li>
+<li>两种标定方法：<blockquote>
+<p>• soak method: 控制恒温室的温度值，然后读取传感器数值进行标定。<br>• ramp method：记录一段时间内线性升温和降温时传感器的数据来进行标定。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="随机误差"><a href="#随机误差" class="headerlink" title="随机误差"></a>随机误差</h2><h3 id="高斯白噪声与随机游走"><a href="#高斯白噪声与随机游走" class="headerlink" title="高斯白噪声与随机游走"></a>高斯白噪声与随机游走</h3><h4 id="高斯白噪声"><a href="#高斯白噪声" class="headerlink" title="高斯白噪声"></a>高斯白噪声</h4><p>高斯白噪声的高斯指的是概率分布为正态分布，白噪声指的是其二阶矩不相关，一阶矩为常数。故把瞬时值的概率分布服从高斯分布，功率谱密度服从均匀分布的噪声称为高斯白噪声</p>
+<p>IMU 数据连续时间上受到一个均值为 0，方差为 $σ^2$，各时刻之间相互独立的高斯过程 n(t)：</p>
+<script type="math/tex; mode=display">E[n(t)]=0</script><script type="math/tex; mode=display">E[n(t_1​)n(t_2​)]=σ^2δ(t_1​−t_2​)</script><p>自相关函数的数学定义：$R(τ)=∫^{−∞}_∞　x(t)x(t−τ)dt$</p>
+<p>其中 $δ()$ 表示狄拉克函数<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190929113450104.png#pic_center"><br><strong>白噪声的离散化</strong><br>实际上， IMU 传感器获取的数据为离散采样，离散和连续高斯白噪声的方差之间存在如下转换关系：</p>
+<script type="math/tex; mode=display">n_d[k] \triangleq n(t_0+\Delta t)\simeq\frac{1}{\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)dt</script><script type="math/tex; mode=display">
+ \begin{aligned}
+E(n_d[k]^2) & = E(\frac{1}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(\tau)n(t)d \tau dt) \\
+&= E( \frac{\sigma^2}{\Delta t^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\\
+&= E(\frac{\sigma^2}{\Delta t})
+\end{aligned}</script><p>即:</p>
+<script type="math/tex; mode=display">nd[k] = σ_dw[k]</script><p>其中：$w[k] ∼ N(0, 1)$，$\sigma_d=\sigma \frac{1}{\sqrt{\bigtriangleup t}}$<br>也就是说高斯白噪声的连续时间到离散时间之间差一个 $\frac{1}{\sqrt{\bigtriangleup t}}$ ，√∆t 是传感器的采样时间。</p>
+<h4 id="Bias-随机游走"><a href="#Bias-随机游走" class="headerlink" title="Bias 随机游走"></a>Bias 随机游走</h4><p>通常用维纳过程 (wiener process) 来建模 bias 随时间连续变化的过程，离散时间下称之为随机游走</p>
+<script type="math/tex; mode=display">\dot{b}_{(t)}=n(t)=\sigma_bw(t)</script><p>其中 w 是方差为 1 的白噪声</p>
+<p>离散和连续之间的转换：</p>
+<script type="math/tex; mode=display">b_d[k] \triangleq b(t_0) + \int_{t_0}^{t_0+\Delta t}n(t)dt$$$$\begin{aligned}
+E((b_d[k]-b_d[k-1])^2) 
+&=E(\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}n(t)n(\tau)d \tau dt)\\
+&= E({\sigma_{b}^2}\int_{t_0}^{t_0+\Delta t}\int_{t_0}^{t_0+\Delta t}\delta(t-\tau)d \tau dt)\\
+&= E(\sigma_{b}^2\Delta t)
+\end{aligned}</script><p>即：</p>
+<script type="math/tex; mode=display">b_d[k] = b_d[k − 1] + σ_{bd}w[k]</script><p>其中：</p>
+<script type="math/tex; mode=display">w[k] ∼ N(0, 1),σ_{bd} = σ_b\sqrt{\bigtriangleup t}</script><p>bias 随机游走的噪声方差从连续时间到离散之间需要乘以 $\sqrt{\bigtriangleup t}$ </p>
+<h3 id="随机误差的标定"><a href="#随机误差的标定" class="headerlink" title="随机误差的标定"></a>随机误差的标定</h3><h4 id="艾伦方差标定"><a href="#艾伦方差标定" class="headerlink" title="艾伦方差标定"></a>艾伦方差标定</h4><p>Allan 方差法是 20 世纪 60 年代由美国国家标准局的 David Allan 提出的，它是一种基于时域的分析方法。</p>
+<blockquote>
+<p>具体的流程如下：</p>
+<ol>
+<li>保持传感器绝对静止获取数据</li>
+<li>对数据进行分段，设定时间段的时长，如下图所示<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017204504508.png#pic_center"></li>
+<li>将传感器数据按照时间段进行平均</li>
+<li>计算方差，绘制艾伦曲线，得到的艾伦曲线如下图所示:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017204557636.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">Allan方差法可用于5种随机误差的标定：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017212131103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>参考：<a href="https://blog.csdn.net/YunLaowang/article/details/95608107" target="_blank" rel="noopener">VIO标定IMU随机误差：Allan方差法</a><br><a href="https://blog.csdn.net/lei1105034103/article/details/89159459" target="_blank" rel="noopener">陀螺 Allan 方差分析</a></li>
+</ol>
+</blockquote>
+<h2 id="IMU-数学模型"><a href="#IMU-数学模型" class="headerlink" title="IMU 数学模型"></a>IMU 数学模型</h2><p>以 ECI 为参考坐标系（由于 ECI 为惯性系，不需要考虑地球自转）：<br>忽略 scale 的影响，只考虑白噪声和 bias 随机游走：<br>IMU的真实值：$w^b,a^b$<br>IMU的测量值：$\widetilde{w},\widetilde{a}^b$<br>IMU机体系即b系，w系表示世界坐标系。</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ \widetilde{w}&=w^b +b^g+n^g\\
+ \widetilde{a}^b&=a^b+b^a+n^a\\&=q_{bw}(a^w+g^w)+b^a+n^a
+ \end{aligned}</script><p>考虑高斯白噪声项，有：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ &w^b=\widetilde{w} -b^g-n^g\\
+ &a^w=q_{wb}(\widetilde{a}^b-b^a-n^a)-g^w
+ \end{aligned}</script><p>不考虑高斯白噪声项，有：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ &w^b=\widetilde{w} -b^g\\
+ &a^w=q_{wb}(\widetilde{a}^b-b^a)-g^w
+ \end{aligned}</script><p>参考：<a href="https://fzheng.me/2016/11/20/imu_model_eq/#1-2-%E5%89%8D%E7%BD%AE2-%E5%9B%9B%E5%85%83%E6%95%B0" target="_blank" rel="noopener">从零开始的 IMU 状态模型推导</a></p>
+
+    </div>
+
+    
+    
+    
+    <div>
+     
+       <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+     
+    </div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" title="IMU测量模型、运动模型、误差模型">https://xiao-hu.com.cn/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/23/VINS-Mono%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E5%89%8D%E6%AE%B5%E5%A4%84%E7%90%86/" rel="next" title="VINS-Mono——视觉前段处理">
+                  <i class="fa fa-chevron-left"></i> VINS-Mono——视觉前段处理
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" rel="prev" title="随机抽样一致RANSAC-Random-Sample-Consensus">
+                  随机抽样一致RANSAC-Random-Sample-Consensus <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IMU测量模型"><span class="nav-number">1.</span> <span class="nav-text">IMU测量模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IMU运动模型"><span class="nav-number">2.</span> <span class="nav-text">IMU运动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#旋转量求导"><span class="nav-number">2.1.</span> <span class="nav-text">旋转量求导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#科氏加速度"><span class="nav-number">2.2.</span> <span class="nav-text">科氏加速度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IMU-误差模型"><span class="nav-number">3.</span> <span class="nav-text">IMU 误差模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确定性误差"><span class="nav-number">3.1.</span> <span class="nav-text">确定性误差</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#确定性误差误差标定"><span class="nav-number">3.1.1.</span> <span class="nav-text">确定性误差误差标定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#六面法标定加速度"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">六面法标定加速度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#六面法标定陀螺仪"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">六面法标定陀螺仪</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#温度相关的参数标定"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">温度相关的参数标定</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机误差"><span class="nav-number">3.2.</span> <span class="nav-text">随机误差</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯白噪声与随机游走"><span class="nav-number">3.2.1.</span> <span class="nav-text">高斯白噪声与随机游走</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#高斯白噪声"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">高斯白噪声</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bias-随机游走"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">Bias 随机游走</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机误差的标定"><span class="nav-number">3.2.2.</span> <span class="nav-text">随机误差的标定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#艾伦方差标定"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">艾伦方差标定</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IMU-数学模型"><span class="nav-number">3.3.</span> <span class="nav-text">IMU 数学模型</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">51k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">47 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
