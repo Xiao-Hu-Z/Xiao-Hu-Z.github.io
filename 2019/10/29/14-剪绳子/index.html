@@ -63,14 +63,14 @@
   };
 </script>
 
-  <meta name="description" content="题目：给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&amp;gt;1并且m&amp;gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]k[1]…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.思路： $O(n^2)$时间和$O(n)$空间的动态规划 $O(1)时间和空间的贪婪算法">
+  <meta name="description" content="题目：给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&amp;gt;1并且m&amp;gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]k[1]…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.思路： $O(n^2)$时间和$O(n)$空间的动态规划 $O(1)$时间和空间的贪婪算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="14.剪绳子">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;29&#x2F;14-%E5%89%AA%E7%BB%B3%E5%AD%90&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="题目：给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&amp;gt;1并且m&amp;gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]k[1]…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.思路： $O(n^2)$时间和$O(n)$空间的动态规划 $O(1)时间和空间的贪婪算法">
+<meta property="og:description" content="题目：给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&amp;gt;1并且m&amp;gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]k[1]…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.思路： $O(n^2)$时间和$O(n)$空间的动态规划 $O(1)$时间和空间的贪婪算法">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T03:41:19.206Z">
+<meta property="og:updated_time" content="2019-10-29T06:10:33.930Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xiao-hu.com.cn/2019/10/29/14-%E5%89%AA%E7%BB%B3%E5%AD%90/">
@@ -254,7 +254,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-29 10:45:41 / 修改时间：11:41:19" itemprop="dateCreated datePublished" datetime="2019-10-29T10:45:41+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 10:45:41 / 修改时间：14:10:33" itemprop="dateCreated datePublished" datetime="2019-10-29T10:45:41+08:00">2019-10-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,12 +302,12 @@
       
         <h1 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h1><p>给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&gt;1并且m&gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]<em>k[1]</em>…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.</p><h1 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h1><ul>
 <li>$O(n^2)$时间和$O(n)$空间的动态规划</li>
-<li>$O(1)时间和空间的贪婪算法</li>
+<li>$O(1)$时间和空间的贪婪算法</li>
 </ul><a id="more"></a>
 
 <h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><blockquote>
 <p>第一步：确定最优策略，使得剪掉绳子的几段乘积最大。最后一步：乘积最大。子问题：假设该绳子剪成两段，剪完的两个部分都必须是最大乘积。</p>
-<p>第二步：状态转移方程： dp[i] = max{ dp[i - j]<em>dp[j], (i - j)</em>j} ,这是一个自上而下的递归公式。由于递归会有大量的不必要的重复计算。更好的办法是按照<strong>从下而上</strong>的顺序计算，也就是说我们先得到f(2),f(3)，再得到f(4),f(5)，直到得到f(n)。</p>
+<p>第二步：状态转移方程： dp[i] = max{ dp[i - j]<em>dp[j]} ,这是一个自上而下的递归公式。由于递归会有大量的不必要的重复计算。更好的办法是按照<em>*从下而上</em></em>的顺序计算，也就是说我们先得到f(2),f(3)，再得到f(4),f(5)，直到得到f(n)。</p>
 <p>第三步：确定初始值和边界：dp[0] = 0,dp[1] = 1, dp[2] = 1</p>
 <p>第四步：计算顺序，从dp[3]开始到dp[n]</p>
 </blockquote>
@@ -357,16 +357,16 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/" rel="next" title="数据结构与算法——排序">
-                  <i class="fa fa-chevron-left"></i> 数据结构与算法——排序
+                <a href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/" rel="next" title="数据结构与算法——查找">
+                  <i class="fa fa-chevron-left"></i> 数据结构与算法——查找
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/10/29/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/" rel="prev" title="二进制中1的个数">
-                  二进制中1的个数 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/29/15.%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/" rel="prev" title="15.二进制中1的个数">
+                  15.二进制中1的个数 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -589,6 +589,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
