@@ -66,27 +66,27 @@
   <meta name="description" content="博观而约取,厚积而薄发">
 <meta property="og:type" content="website">
 <meta property="og:title" content="xiaohu博客">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;archives&#x2F;2019&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;page&#x2F;3&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
 <meta property="og:description" content="博观而约取,厚积而薄发">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/archives/2019/">
+<link rel="canonical" href="https://xiao-hu.com.cn/page/3/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: false,
+    isHome: true,
     isPost: false,
     isPage: false,
-    isArchive: true
+    isArchive: false
   };
 </script>
 
-  <title>归档 | xiaohu博客</title>
+  <title>xiaohu博客</title>
   
 
 
@@ -224,230 +224,220 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+        
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 22 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">4.二维数组中的查找</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-19 10:16:29" itemprop="dateCreated datePublished" datetime="2019-10-19T10:16:29+08:00">2019-10-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-29 10:19:29" itemprop="dateModified" datetime="2019-10-29T10:19:29+08:00">2019-10-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
+          <p>题目描述<br>在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。<br><strong>Python</strong><br>遍历二维数组<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># array 二维列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Find</span><span class="params">(self, target, array)</span>:</span></span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(array)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(len(array[<span class="number">0</span>])):</span><br><span class="line">                <span class="keyword">if</span> target==array[i][j]:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-29T11:42:07+08:00"
-              content="2019-10-29">
-          10-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/29/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/" itemprop="url">
-            <span itemprop="name">二进制中1的个数</span>
-          </a>
-      </h2>
-
-    </header>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
   </article>
+  
+  
+  
+  
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-29T10:45:41+08:00"
-              content="2019-10-29">
-          10-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/29/14-%E5%89%AA%E7%BB%B3%E5%AD%90/" itemprop="url">
-            <span itemprop="name">14.剪绳子</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-27T13:16:28+08:00"
-              content="2019-10-27">
-          10-27
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/" itemprop="url">
-            <span itemprop="name">数据结构与算法——排序</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-27T13:16:28+08:00"
-              content="2019-10-27">
-          10-27
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/" itemprop="url">
-            <span itemprop="name">数据结构与算法——查找</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-25T21:49:20+08:00"
-              content="2019-10-25">
-          10-25
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/" itemprop="url">
-            <span itemprop="name">VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-24T16:40:49+08:00"
-              content="2019-10-24">
-          10-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" itemprop="url">
-            <span itemprop="name">随机抽样一致RANSAC-Random-Sample-Consensus</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-24T16:40:07+08:00"
-              content="2019-10-24">
-          10-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" itemprop="url">
-            <span itemprop="name">IMU测量模型、运动模型、误差模型</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-23T22:15:34+08:00"
-              content="2019-10-23">
-          10-23
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/23/hexo4.0%20-%20Next7.2.4%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE/" itemprop="url">
-            <span itemprop="name">hexo4.0 - Next7.2.4 主题优化配置</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-23T22:15:34+08:00"
-              content="2019-10-23">
-          10-23
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" itemprop="url">
-            <span itemprop="name">Ubuntu16下Github+Hexo搭建博客教程</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-23T22:15:34+08:00"
-              content="2019-10-23">
-          10-23
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/23/VINS-Mono%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E5%89%8D%E6%AE%B5%E5%A4%84%E7%90%86/" itemprop="url">
-            <span itemprop="name">VINS-Mono——视觉前段处理</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
+  
 
 
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/18/VINS-Mono%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/18/VINS-Mono%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">VINS-Mono论文学习与代码解读</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-18 20:04:56" itemprop="dateCreated datePublished" datetime="2019-10-18T20:04:56+08:00">2019-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-21 18:50:10" itemprop="dateModified" datetime="2019-10-21T18:50:10+08:00">2019-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VIO/" itemprop="url" rel="index">
+                    <span itemprop="name">VIO</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>334</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86564879" target="_blank" rel="noopener">VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86030962" target="_blank" rel="noopener">VINS-Mono代码解读——各种数据结构 sensor_msgs</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/85797156" target="_blank" rel="noopener">VINS-Mono代码解读——视觉跟踪 feature_trackers</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86290941" target="_blank" rel="noopener">VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/86293038" target="_blank" rel="noopener">VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线性优化前</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/88942414" target="_blank" rel="noopener">VINS-Mono代码解读——视觉惯性联合初始化 initialStructure sfm</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/89106128" target="_blank" rel="noopener">VINS-Mono理论学习——视觉惯性联合初始化与外参标定</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/93593844" target="_blank" rel="noopener">VINS-Mono理论学习——后端非线性优化</a></li>
+<li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li>
+</ol>
+      
     </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
   </div>
-  
-  
-  
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2019/page/2/">2</a><a class="page-number" href="/archives/2019/page/3/">3</a><a class="extend next" rel="next" href="/archives/2019/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
 
 
