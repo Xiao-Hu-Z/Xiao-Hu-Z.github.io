@@ -63,16 +63,17 @@
   };
 </script>
 
-  <meta name="description" content="博观而约取,厚积而薄发">
-<meta property="og:type" content="website">
-<meta property="og:title" content="xiaohu博客">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;archives&#x2F;2019&#x2F;index.html">
+  <meta name="description" content="题目描述输入一个链表，按链表从尾到头的顺序返回一个ArrayList。仅仅需要打印数值,而不是反转链表,这个还是有区别.如果单纯的反转打印链表的值的话,我们可以使用stack操作.C++123456789101112131415161718192021class Solution &amp;#123;public:    vector&amp;lt;int&amp;gt; printListFromTailToHead(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9.用两个栈实现队列">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;19&#x2F;6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="博观而约取,厚积而薄发">
+<meta property="og:description" content="题目描述输入一个链表，按链表从尾到头的顺序返回一个ArrayList。仅仅需要打印数值,而不是反转链表,这个还是有区别.如果单纯的反转打印链表的值的话,我们可以使用stack操作.C++123456789101112131415161718192021class Solution &amp;#123;public:    vector&amp;lt;int&amp;gt; printListFromTailToHead(">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-29T02:17:31.472Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/archives/2019/">
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/">
 
 
 <script id="page-configurations">
@@ -80,13 +81,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
-    isArchive: true
+    isArchive: false
   };
 </script>
 
-  <title>归档 | xiaohu博客</title>
+  <title>9.用两个栈实现队列 | xiaohu博客</title>
   
 
 
@@ -224,232 +225,153 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 20 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9.用两个栈实现队列
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-19 12:16:29" itemprop="dateCreated datePublished" datetime="2019-10-19T12:16:29+08:00">2019-10-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-29 10:17:31" itemprop="dateModified" datetime="2019-10-29T10:17:31+08:00">2019-10-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>894</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
-    </div>
+        <p>题目描述<br>输入一个链表，按链表从尾到头的顺序返回一个ArrayList。</p><p>仅仅需要打印数值,而不是反转链表,这个还是有区别.如果单纯的反转打印链表的值的话,我们可以使用stack操作.<br><strong>C++</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; printListFromTailToHead(ListNode* head) &#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;ListNode*&gt;nodes;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ArrayList;</span><br><span class="line">        ListNode* node=head;</span><br><span class="line">        <span class="keyword">while</span>(node !=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            nodes.push(node);</span><br><span class="line">            node=node-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(!nodes.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            node=nodes.top();<span class="comment">//返回栈顶元素, 但不删除该元素</span></span><br><span class="line">            ArrayList.push_back(node-&gt;val);</span><br><span class="line">            nodes.pop();<span class="comment">//弹出栈顶元素, 但不返回其值</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ArrayList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br><strong>Python</strong></p><a id="more"></a>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-27T13:16:28+08:00"
-              content="2019-10-27">
-          10-27
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/" itemprop="url">
-            <span itemprop="name">数据结构与算法——排序</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-27T13:16:28+08:00"
-              content="2019-10-27">
-          10-27
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/" itemprop="url">
-            <span itemprop="name">数据结构与算法——查找</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-25T21:49:20+08:00"
-              content="2019-10-25">
-          10-25
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/" itemprop="url">
-            <span itemprop="name">VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-25T14:58:17+08:00"
-              content="2019-10-25">
-          10-25
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/25/hexo4.0%20-%20Next7.2.4%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE/" itemprop="url">
-            <span itemprop="name">hexo4.0 - Next7.2.4 主题优化配置</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-24T16:40:49+08:00"
-              content="2019-10-24">
-          10-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/24/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" itemprop="url">
-            <span itemprop="name">随机抽样一致RANSAC-Random-Sample-Consensus</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-24T16:40:07+08:00"
-              content="2019-10-24">
-          10-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" itemprop="url">
-            <span itemprop="name">IMU测量模型、运动模型、误差模型</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-23T22:15:34+08:00"
-              content="2019-10-23">
-          10-23
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/23/VINS-Mono%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E5%89%8D%E6%AE%B5%E5%A4%84%E7%90%86/" itemprop="url">
-            <span itemprop="name">VINS-Mono——视觉前段处理</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-23T22:15:34+08:00"
-              content="2019-10-23">
-          10-23
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" itemprop="url">
-            <span itemprop="name">Ubuntu16下Github+Hexo搭建博客教程</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-22T15:16:28+08:00"
-              content="2019-10-22">
-          10-22
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/22/11.%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97/" itemprop="url">
-            <span itemprop="name">11.旋转数组的最小数字</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-20T14:16:29+08:00"
-              content="2019-10-20">
-          10-20
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/" itemprop="url">
-            <span itemprop="name">10.斐波那契数列（跳台阶）</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># class ListNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.next = None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># 返回从尾部到头部的列表值序列，例如[1,2,3]</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printListFromTailToHead</span><span class="params">(self, listNode)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">        ArrayList=[]</span><br><span class="line">        head=listNode</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> head:</span><br><span class="line">            ArrayList.insert(<span class="number">0</span>,head.val)</span><br><span class="line">            head=head.next</span><br><span class="line">        <span class="keyword">return</span> ArrayList</span><br><span class="line">        </span><br><span class="line"><span class="comment">#        while head:</span></span><br><span class="line"><span class="comment">#            ArrayList.append(head.val)</span></span><br><span class="line"><span class="comment">#            head=head.next</span></span><br><span class="line"><span class="comment">#        return ArrayList[::-1]</span></span><br></pre></td></tr></table></figure>
 
     </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/" title="9.用两个栈实现队列">https://xiao-hu.com.cn/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/19/5.%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/" rel="next" title="5.替换空格">
+                  <i class="fa fa-chevron-left"></i> 5.替换空格
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/19/7.%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="prev" title="7.重建二叉树">
+                  7.重建二叉树 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
   </div>
-  
-  
-  
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2019/page/2/">2</a><a class="extend next" rel="next" href="/archives/2019/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
 
 
           </div>

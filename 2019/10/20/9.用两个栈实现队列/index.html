@@ -63,17 +63,17 @@
   };
 </script>
 
-  <meta name="description" content="题目一：一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级的台阶总共有多少种跳法思路 如果只有一阶台阶，一种跳法，如果只有两阶台阶，两种跳法 把n阶台阶时的跳法看成n的函数，记法f(n)，f(n)=f(n-1)+f(n-2) 采用循环方式实现，递归实践效率太低1234567891011121314151617181920class Solution &amp;#123;public:">
+  <meta name="description" content="题目描述用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。思路： 首先把元素插入stack1; 当stack2为空时，把stack1的元素逐个弹出并压入stack2 当stack2步为空时，在stack2的栈顶元素最先进入队列的元素，可以弹出 C++1234567891011121314151617181920212223242526272829303132333">
 <meta property="og:type" content="article">
-<meta property="og:title" content="10.斐波那契数列（跳台阶）">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89&#x2F;index.html">
+<meta property="og:title" content="9.用两个栈实现队列">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;9.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="题目一：一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级的台阶总共有多少种跳法思路 如果只有一阶台阶，一种跳法，如果只有两阶台阶，两种跳法 把n阶台阶时的跳法看成n的函数，记法f(n)，f(n)=f(n-1)+f(n-2) 采用循环方式实现，递归实践效率太低1234567891011121314151617181920class Solution &amp;#123;public:">
+<meta property="og:description" content="题目描述用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。思路： 首先把元素插入stack1; 当stack2为空时，把stack1的元素逐个弹出并压入stack2 当stack2步为空时，在stack2的栈顶元素最先进入队列的元素，可以弹出 C++1234567891011121314151617181920212223242526272829303132333">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T02:27:27.560Z">
+<meta property="og:updated_time" content="2019-10-29T02:20:00.827Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/">
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/10/20/9.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
 
 
 <script id="page-configurations">
@@ -87,7 +87,7 @@
   };
 </script>
 
-  <title>10.斐波那契数列（跳台阶） | xiaohu博客</title>
+  <title>9.用两个栈实现队列 | xiaohu博客</title>
   
 
 
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/20/9.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          10.斐波那契数列（跳台阶）
+          9.用两个栈实现队列
         </h1>
 
         <div class="post-meta">
@@ -253,14 +253,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-20 14:16:29" itemprop="dateCreated datePublished" datetime="2019-10-20T14:16:29+08:00">2019-10-20</time>
+              <time title="创建时间：2019-10-20 13:16:29" itemprop="dateCreated datePublished" datetime="2019-10-20T13:16:29+08:00">2019-10-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:27:27" itemprop="dateModified" datetime="2019-10-29T10:27:27+08:00">2019-10-29</time>
+                <time title="修改时间：2019-10-29 10:20:00" itemprop="dateModified" datetime="2019-10-29T10:20:00+08:00">2019-10-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -287,7 +287,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>935</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -306,18 +306,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>﻿题目一：<br>一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级的台阶总共有多少种跳法</p><p>思路</p><ul>
-<li>如果只有一阶台阶，一种跳法，如果只有两阶台阶，两种跳法</li>
-<li>把n阶台阶时的跳法看成n的函数，记法f(n)，f(n)=f(n-1)+f(n-2)</li>
-</ul><p>采用循环方式实现，递归实践效率太低<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result[<span class="number">3</span>]=&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">if</span>(n&lt;<span class="number">3</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> result[n];         </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> fibOne=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> fibTwo=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> fibN;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">3</span>;i&lt;=n;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            fibN=fibOne+fibTwo;</span><br><span class="line">            fibOne=fibTwo;</span><br><span class="line">            fibTwo=fibN;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fibN;  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><a id="more"></a>
+        <p>题目描述<br>用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。</p><p>思路：</p><ul>
+<li>首先把元素插入stack1;</li>
+<li>当stack2为空时，把stack1的元素逐个弹出并压入stack2</li>
+<li>当stack2步为空时，在stack2的栈顶元素最先进入队列的元素，可以弹出</li>
+</ul><p><strong>C++</strong></p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">s.empty();         //如果栈为空则返回true, 否则返回false;</span></span><br><span class="line"><span class="comment">s.size();          //返回栈中元素的个数</span></span><br><span class="line"><span class="comment">s.top();           //返回栈顶元素, 但不删除该元素</span></span><br><span class="line"><span class="comment">s.pop();           //弹出栈顶元素, 但不返回其值</span></span><br><span class="line"><span class="comment">s.push();          //将元素压入栈顶</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> node)</span> </span>&#123;</span><br><span class="line">        stack1.push(node);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(stack2.size()==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span>(stack1.size()&gt;<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">int</span> data=stack1.top();</span><br><span class="line">                stack1.pop();</span><br><span class="line">                stack2.push(data);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> head=stack2.top();</span><br><span class="line">        stack2.pop();</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; stack1;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; stack2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><a id="more"></a>
 
 
 
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    def climbStairs(self, n: int) -&gt; int:</span><br><span class="line">        result=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">if</span> n&lt;<span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> result[n]</span><br><span class="line">        </span><br><span class="line">        f1=<span class="number">1</span></span><br><span class="line">        f2=<span class="number">2</span></span><br><span class="line">        <span class="keyword">for</span> i in range(<span class="number">3</span>,n+<span class="number">1</span>):</span><br><span class="line">            fn=f1+f2</span><br><span class="line">            f1=f2</span><br><span class="line">            f2=fn</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> fn</span><br></pre></td></tr></table></figure>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">jumpFloorII</span><span class="params">(self, number)</span>:</span></span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>**(number<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
-<p><strong>相关题目：</strong><br>我们可以用2<em>1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2</em>1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectCover</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result[]=&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">if</span>(number&lt;<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">return</span> result[number];</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">int</span> f1=<span class="number">1</span>,f2=<span class="number">2</span>,fn;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">3</span>;i&lt;=number;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            fn=f1+f2;</span><br><span class="line">            f1=f2;</span><br><span class="line">            f2=fn;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> fn;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p><strong>扩展</strong><br>一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">jumpFloorII</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> f=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(number&lt;<span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> f;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=number;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            f=<span class="number">2</span>*f;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//return pow(2,number-1);</span></span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+
+<p><strong>Python</strong><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.stack1 = []</span><br><span class="line">        self.stack2 = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        self.stack1.append(node)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># return xx</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.stack2:</span><br><span class="line">            <span class="keyword">while</span> self.stack1:</span><br><span class="line">                <span class="comment">#.pop(i)将列表中第i项元素取出并删除该元素</span></span><br><span class="line">                self.stack2.append(self.stack1.pop(<span class="number">-1</span>))</span><br><span class="line">        <span class="keyword">return</span> self.stack2.pop(<span class="number">-1</span>)</span><br></pre></td></tr></table></figure></p>
 
     </div>
     
@@ -338,7 +336,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://xiao-hu.com.cn/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/" title="10.斐波那契数列（跳台阶）">https://xiao-hu.com.cn/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/</a>
+    <a href="https://xiao-hu.com.cn/2019/10/20/9.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/" title="9.用两个栈实现队列">https://xiao-hu.com.cn/2019/10/20/9.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -353,16 +351,16 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/" rel="next" title="KLT 光流算法">
-                  <i class="fa fa-chevron-left"></i> KLT 光流算法
+                <a href="/2019/10/20/Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/" rel="next" title="Harris角点检测">
+                  <i class="fa fa-chevron-left"></i> Harris角点检测
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/10/22/11.%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97/" rel="prev" title="11.旋转数组的最小数字">
-                  11.旋转数组的最小数字 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/" rel="prev" title="KLT 光流算法">
+                  KLT 光流算法 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
