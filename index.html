@@ -254,7 +254,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-29 20:43:40 / 修改时间：20:52:42" itemprop="dateCreated datePublished" datetime="2019-10-29T20:43:40+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 20:43:40 / 修改时间：20:56:22" itemprop="dateCreated datePublished" datetime="2019-10-29T20:43:40+08:00">2019-10-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,7 +293,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="状态向量"><a href="#状态向量" class="headerlink" title="状态向量"></a>状态向量</h1><p>VIO 紧耦合方案的主要思路就是通过将基于视觉构造的残差项和基于 IMU 构造的残差项放在一起构造成一个联合优化的问题，整个优化问题的最优解即可认为是比较准确的状态估计。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192151582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>为了限制优化变量的数目， VINS-Mono 采用了滑动窗口的形式， 滑动窗口中的全状态量包括滑动窗口内的n+1个关键帧时刻 IMU 坐标系的位置、姿态、姿态（旋转）、加速度计偏置、陀螺仪偏置， Camera 到 IMU 的外参， m +1个 3D 路标点的逆深度：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192802133.png#pic_center"><br>优化过程中的误差状态量为：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192821349.png#pic_center"></p>
+          <h1 id="状态向量"><a href="#状态向量" class="headerlink" title="状态向量"></a>状态向量</h1><p>VIO 紧耦合方案的主要思路就是通过将基于视觉构造的残差项和基于 IMU 构造的残差项放在一起构造成一个联合优化的问题，整个优化问题的最优解即可认为是比较准确的状态估计。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192151582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>为了限制优化变量的数目， VINS-Mono 采用了滑动窗口的形式， 滑动窗口中的全状态量包括滑动窗口内的n+1个关键帧时刻 IMU 坐标系的位置、姿态、姿态（旋转）、加速度计偏置、陀螺仪偏置， Camera 到 IMU 的外参， m +1个 3D 路标点的逆深度：</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/#more" rel="contents">
