@@ -64,6 +64,7 @@
 </script>
 
   <meta name="description" content="IMU测量模型 MEMS 加速度计工作原理测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示加速度计测量值$a_m$为弹簧拉力对应的加速度 a_m=\frac{f}{m}=a-g其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。  陀螺仪测量原理陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。">
+<meta name="keywords" content="VINS-Mono,VIO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IMU测量模型、运动模型、误差模型">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;24&#x2F;IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B&#x2F;index.html">
@@ -85,7 +86,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017204504508.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017204557636.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017212131103.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-24T08:40:07.360Z">
+<meta property="og:updated_time" content="2019-10-30T03:38:12.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191017192448388.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 
@@ -271,13 +272,26 @@
 
               <time title="创建时间：2019-10-24 16:40:07" itemprop="dateCreated datePublished" datetime="2019-10-24T16:40:07+08:00">2019-10-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:38:12" itemprop="dateModified" datetime="2019-10-30T11:38:12+08:00">2019-10-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VIO/" itemprop="url" rel="index">
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/VIO/" itemprop="url" rel="index">
                     <span itemprop="name">VIO</span>
                   </a>
                 </span>
@@ -468,6 +482,11 @@ E((b_d[k]-b_d[k-1])^2)
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/VINS-Mono/" rel="tag"><i class="fa fa-tag"></i> VINS-Mono</a>
+              <a href="/tags/VIO/" rel="tag"><i class="fa fa-tag"></i> VIO</a>
+          </div>
 
         
 
@@ -552,7 +571,7 @@ E((b_d[k]-b_d[k-1])^2)
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

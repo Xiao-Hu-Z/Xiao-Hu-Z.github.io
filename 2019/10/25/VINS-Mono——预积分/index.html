@@ -64,6 +64,7 @@
 </script>
 
   <meta name="description" content="为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。intergration_base.h：IMU预积分imu_factor.h：IMU残差、雅可比IMU 测量方程.忽略地球旋转， IMU 测量方程为预积分方程IMU integration in world frame将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转（PVQ）">
+<meta name="keywords" content="VINS-Mono">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VINS-Mono——预积分">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;25&#x2F;VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86&#x2F;index.html">
@@ -97,7 +98,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019102521324273.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213150727.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213209259.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-30T03:29:39.247Z">
+<meta property="og:updated_time" content="2019-10-30T03:40:21.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191024214341590.png#pic_center">
 
@@ -288,7 +289,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:29:39" itemprop="dateModified" datetime="2019-10-30T11:29:39+08:00">2019-10-30</time>
+                <time title="修改时间：2019-10-30 11:40:21" itemprop="dateModified" datetime="2019-10-30T11:40:21+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -296,8 +297,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
                   </a>
                 </span>
             </span>
@@ -415,6 +416,10 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/VINS-Mono/" rel="tag"><i class="fa fa-tag"></i> VINS-Mono</a>
+          </div>
 
         
 
@@ -499,7 +504,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

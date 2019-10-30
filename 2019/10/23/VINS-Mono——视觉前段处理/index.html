@@ -64,7 +64,7 @@
 </script>
 
   <meta name="description" content="论文：每当进入新的图像，都会使用KLT稀疏光流法进行跟踪，同时提取100-300个角点信息，我的理解是角点是用来建立图像，光流跟踪是用来快速定位。同时在这里还进行了关键帧的选取（注意这一过程在代码中是由vins_estimate文件中实现的），主要是两个剔除关键帧的策略，分别是平均视差法和跟踪质量法。平均视差法：如果当前帧的和上一个关键帧跟踪点的平均视差超出了一个设定的阈值，就将当前帧设为关键帧。">
-<meta name="keywords" content="VINS">
+<meta name="keywords" content="VINS-Mono">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VINS-Mono——视觉前段处理">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;23&#x2F;VINS-Mono%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E5%89%8D%E6%AE%B5%E5%A4%84%E7%90%86&#x2F;index.html">
@@ -73,7 +73,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191023190400778.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191023221410832.png">
-<meta property="og:updated_time" content="2019-10-30T03:23:50.980Z">
+<meta property="og:updated_time" content="2019-10-30T03:40:17.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191023190400778.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 
@@ -264,7 +264,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:23:50" itemprop="dateModified" datetime="2019-10-30T11:23:50+08:00">2019-10-30</time>
+                <time title="修改时间：2019-10-30 11:40:17" itemprop="dateModified" datetime="2019-10-30T11:40:17+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,8 +272,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
                   </a>
                 </span>
             </span>
@@ -441,7 +441,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/VINS/" rel="tag"><i class="fa fa-tag"></i> VINS</a>
+              <a href="/tags/VINS-Mono/" rel="tag"><i class="fa fa-tag"></i> VINS-Mono</a>
           </div>
 
         
@@ -527,7 +527,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

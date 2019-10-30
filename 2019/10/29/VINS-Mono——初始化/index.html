@@ -64,7 +64,7 @@
 </script>
 
   <meta name="description" content="估计器初始化 初始化的原因是单目惯性紧耦合系统是一个非线性程度很高的系统，首先单目是无法获得空间中的绝对尺度，而IMU又必然存在偏置，在后面进行求解的时候还需要用到重力加速度（包括大小和方向），对于速度比较敏感的条件下，比如说无人机，又要精确的速度信息，因此，如何有效的在紧耦合系统处理之前计算出这些量，对整个紧耦合系统的鲁棒性有着重大的意义 初始化要做的事其实说起来很简单，就是计算出绝对尺度s、陀">
-<meta name="keywords" content="VINS">
+<meta name="keywords" content="VINS-Mono">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VINS-Mono——初始化">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;29&#x2F;VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96&#x2F;index.html">
@@ -91,7 +91,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028183439415.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028183526590.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028160032562.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-30T03:23:31.332Z">
+<meta property="og:updated_time" content="2019-10-30T03:37:18.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;201910192045598.png#pic_center">
 
@@ -282,7 +282,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:23:31" itemprop="dateModified" datetime="2019-10-30T11:23:31+08:00">2019-10-30</time>
+                <time title="修改时间：2019-10-30 11:37:18" itemprop="dateModified" datetime="2019-10-30T11:37:18+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -290,8 +290,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
                   </a>
                 </span>
             </span>
@@ -445,7 +445,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/VINS/" rel="tag"><i class="fa fa-tag"></i> VINS</a>
+              <a href="/tags/VINS-Mono/" rel="tag"><i class="fa fa-tag"></i> VINS-Mono</a>
           </div>
 
         
@@ -531,7 +531,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

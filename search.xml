@@ -91,10 +91,10 @@
 <p>参考：<br><a href="https://blog.csdn.net/weixin_44580210/article/details/95748091" target="_blank" rel="noopener">VINS-Mono关键知识点总结——边缘化marginalization理论和代码详解</a><br><a href="https://blog.csdn.net/weixin_44580210/article/details/93377806" target="_blank" rel="noopener">VINS-Mono关键知识点总结——预积分和后端优化IMU部分</a></p>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
       </categories>
       <tags>
-        <tag>VINS</tag>
+        <tag>VINS-Mono</tag>
       </tags>
   </entry>
   <entry>
@@ -187,10 +187,10 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
       </categories>
       <tags>
-        <tag>VINS</tag>
+        <tag>VINS-Mono</tag>
       </tags>
   </entry>
   <entry>
@@ -594,8 +594,11 @@
 <p>参考：<a href="https://blog.csdn.net/qq_41839222/article/details/86290941" target="_blank" rel="noopener">VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）</a></p>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+      </tags>
   </entry>
   <entry>
     <title>随机抽样一致RANSAC-Random-Sample-Consensus</title>
@@ -672,8 +675,12 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>VIO</category>
+        <category>VINS-Mono</category>
+        <category>VSLAM</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+      </tags>
   </entry>
   <entry>
     <title>IMU测量模型、运动模型、误差模型</title>
@@ -803,8 +810,13 @@ E((b_d[k]-b_d[k-1])^2)
  \end{aligned}</script><p>参考：<a href="https://fzheng.me/2016/11/20/imu_model_eq/#1-2-%E5%89%8D%E7%BD%AE2-%E5%9B%9B%E5%85%83%E6%95%B0" target="_blank" rel="noopener">从零开始的 IMU 状态模型推导</a></p>
 ]]></content>
       <categories>
+        <category>VINS-Mono</category>
         <category>VIO</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+        <tag>VIO</tag>
+      </tags>
   </entry>
   <entry>
     <title>VINS-Mono——视觉前段处理</title>
@@ -910,10 +922,10 @@ E((b_d[k]-b_d[k-1])^2)
 <p>参考：<a href="https://blog.csdn.net/qq_41839222/article/details/85797156" target="_blank" rel="noopener">VINS-Mono代码解读——视觉跟踪 feature_trackers</a><br><a href="https://blog.csdn.net/wangshuailpp/article/details/78719401" target="_blank" rel="noopener">VINS理论与代码详解2——单目视觉跟踪</a><br><a href="https://blog.csdn.net/q597967420/article/details/76099425" target="_blank" rel="noopener">VINS-Mono源码解析（二）前端：特征跟踪</a></p>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
       </categories>
       <tags>
-        <tag>VINS</tag>
+        <tag>VINS-Mono</tag>
       </tags>
   </entry>
   <entry>
@@ -1146,8 +1158,13 @@ E((b_d[k]-b_d[k-1])^2)
     <url>/2019/10/20/KLT-%E5%85%89%E6%B5%81%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Optical-Flow"><a href="#Optical-Flow" class="headerlink" title="Optical Flow"></a>Optical Flow</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132123717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132137931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="KLT"><a href="#KLT" class="headerlink" title="KLT"></a>KLT</h1><p>KLT 算法本质上也基于光流的三个假设，不同于前述直接比较像素点灰度值的作法，KLT 比较像素点周围的窗口像素，来寻找最相似的像素点。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102013215737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191020132228980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>参考：<a href="https://blog.csdn.net/sgfmby1994/article/details/68489944" target="_blank" rel="noopener">总结：光流—LK光流—基于金字塔分层的LK光流—中值流</a><br><a href="https://leijiezhang001.github.io/KLT/" target="_blank" rel="noopener">KLT 光流算法详解</a><br><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法(LK)学习（一）——算法原理</a></p>]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
+        <category>VSLAM</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+        <tag>VSLAM</tag>
+      </tags>
   </entry>
   <entry>
     <title>9.用两个栈实现队列</title>
@@ -1235,8 +1252,12 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 <p>参考：<a href="https://blog.csdn.net/linqianbi/article/details/78930239" target="_blank" rel="noopener">https://blog.csdn.net/linqianbi/article/details/78930239</a></p>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
+        <category>VSLAM</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+      </tags>
   </entry>
   <entry>
     <title>【VINS-Mono】A Robust and Versatile Monocular Visual-Inertial State Estimator</title>
@@ -1329,7 +1350,7 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 <p>虽然基于特征的VINS估计器已经达到了实际使用的成熟程度，我们仍然看到了未来研究的许多方向。单目VINS可能会根据运动和环境而达到较难观测甚至退化的状态。我们最感兴趣的是在线方法来评估单目VINS的可观测性，以及在线生成运动计划来恢复可观测性。另一个研究方向是在大量消费设备上大规模部署单目VINS，例如移动电话。这一应用要求在线校准几乎所有传感器的内参和外参，以及在线鉴定校准质量。最后，我们感兴趣的是制作由单目VINS给出的稠密地图。我们在[44]中首次给出了用于无人机导航的单目视觉-惯性稠密地图的结果。然而，仍需进行广泛的研究以进一步提高系统的精度和鲁棒性。</p>
 ]]></content>
       <categories>
-        <category>VINS</category>
+        <category>VINS-Mono</category>
       </categories>
       <tags>
         <tag>VINS-Mono</tag>
@@ -1430,7 +1451,10 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 <li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li>
 </ol>]]></content>
       <categories>
-        <category>VIO</category>
+        <category>VINS-Mono</category>
       </categories>
+      <tags>
+        <tag>VINS-Mono</tag>
+      </tags>
   </entry>
 </search>

@@ -64,6 +64,7 @@
 </script>
 
   <meta name="description" content="何为角点下面有两幅不同视角的图像，通过找出对应的角点进行匹配。再看下图所示，放大图像的两处角点区域：角点在保留图像图形重要特征的同时，可以有效地减少信息的数据量，使其信息的含量很高，有效地提高了计算的速度，有利于图像的可靠匹配，使得实时处理成为可能。我们可以直观的概括下角点所具有的特征： 轮廓之间的交点； 对于同一场景，即使视角发生变化，通常具备稳定性质的特征； 该点附近区域的像素点无论在梯度方向">
+<meta name="keywords" content="VINS-Mono">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Harris角点检测">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;20&#x2F;Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B&#x2F;index.html">
@@ -82,7 +83,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020102127533.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020104945973.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020105015840.png#pic_center">
-<meta property="og:updated_time" content="2019-10-24T08:35:53.403Z">
+<meta property="og:updated_time" content="2019-10-30T03:39:45.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191020095257386.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 
@@ -273,7 +274,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-24 16:35:53" itemprop="dateModified" datetime="2019-10-24T16:35:53+08:00">2019-10-24</time>
+                <time title="修改时间：2019-10-30 11:39:45" itemprop="dateModified" datetime="2019-10-30T11:39:45+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -281,8 +282,14 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
                   </a>
                 </span>
             </span>
@@ -412,6 +419,10 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/VINS-Mono/" rel="tag"><i class="fa fa-tag"></i> VINS-Mono</a>
+          </div>
 
         
 
@@ -496,7 +507,7 @@ traceM=\lambda_1 + \lambda_2 = A+B</script><blockquote>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
