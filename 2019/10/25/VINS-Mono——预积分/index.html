@@ -97,7 +97,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019102521324273.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213150727.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191025213209259.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-30T03:17:58.529Z">
+<meta property="og:updated_time" content="2019-10-30T03:20:53.981Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191024214341590.png#pic_center">
 
@@ -288,7 +288,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:17:58" itemprop="dateModified" datetime="2019-10-30T11:17:58+08:00">2019-10-30</time>
+                <time title="修改时间：2019-10-30 11:20:53" itemprop="dateModified" datetime="2019-10-30T11:20:53+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -334,7 +334,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。</p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p><h1 id="IMU-测量方程"><a href="#IMU-测量方程" class="headerlink" title="IMU 测量方程."></a>IMU 测量方程.</h1><p>忽略地球旋转， IMU 测量方程为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191024214341590.png#pic_center"></p><h1 id="预积分方程"><a href="#预积分方程" class="headerlink" title="预积分方程"></a>预积分方程</h1><h2 id="IMU-integration-in-world-frame"><a href="#IMU-integration-in-world-frame" class="headerlink" title="IMU integration in world frame"></a>IMU integration in world frame</h2><p>将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转<br>（PVQ），作为视觉估计的初始值，这里的旋转采用的四元数。</p><a id="more"></a>
+        <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。</p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p><h1 id="IMU-测量方程"><a href="#IMU-测量方程" class="headerlink" title="IMU 测量方程."></a>IMU 测量方程.</h1><p>忽略地球旋转， IMU 测量方程为</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191024214341590.png#pic_center"></p><h1 id="预积分方程"><a href="#预积分方程" class="headerlink" title="预积分方程"></a>预积分方程</h1><h2 id="IMU-integration-in-world-frame"><a href="#IMU-integration-in-world-frame" class="headerlink" title="IMU integration in world frame"></a>IMU integration in world frame</h2><p>将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转<br>（PVQ），作为视觉估计的初始值，这里的旋转采用的四元数。</p><a id="more"></a>
+
 
 
 
@@ -651,6 +652,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

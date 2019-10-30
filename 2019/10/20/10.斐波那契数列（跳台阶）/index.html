@@ -70,7 +70,7 @@
 <meta property="og:site_name" content="xiaohu博客">
 <meta property="og:description" content="题目一：一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级的台阶总共有多少种跳法思路 如果只有一阶台阶，一种跳法，如果只有两阶台阶，两种跳法 把n阶台阶时的跳法看成n的函数，记法f(n)，f(n)=f(n-1)+f(n-2) 采用循环方式实现，递归实践效率太低1234567891011121314151617181920class Solution &amp;#123;public:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T02:27:27.560Z">
+<meta property="og:updated_time" content="2019-10-30T03:25:19.934Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xiao-hu.com.cn/2019/10/20/10.%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%EF%BC%88%E8%B7%B3%E5%8F%B0%E9%98%B6%EF%BC%89/">
@@ -260,7 +260,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:27:27" itemprop="dateModified" datetime="2019-10-29T10:27:27+08:00">2019-10-29</time>
+                <time title="修改时间：2019-10-30 11:25:19" itemprop="dateModified" datetime="2019-10-30T11:25:19+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -584,6 +584,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

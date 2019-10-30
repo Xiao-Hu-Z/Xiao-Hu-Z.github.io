@@ -70,7 +70,7 @@
 <meta property="og:site_name" content="xiaohu博客">
 <meta property="og:description" content="题目描述输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。二进制的5种位运算 与（&amp;amp;） 或（|） 异或（^) 左移(&amp;lt;&amp;lt;)  ：左移n位时，做左边的n位被丢弃，最右边不是那个补上n个0 右移(&amp;gt;&amp;gt;)  ：右移n位时，最右边的n位被丢弃,左边分两种情况  1.如果数字为正，右移最左边补n个0 2.如果数字为负，右移最左边补n个1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T06:09:04.748Z">
+<meta property="og:updated_time" content="2019-10-30T03:25:10.290Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xiao-hu.com.cn/2019/10/29/15.%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/">
@@ -252,10 +252,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-10-29 11:42:07 / 修改时间：14:09:04" itemprop="dateCreated datePublished" datetime="2019-10-29T11:42:07+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 11:42:07" itemprop="dateCreated datePublished" datetime="2019-10-29T11:42:07+08:00">2019-10-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:25:10" itemprop="dateModified" datetime="2019-10-30T11:25:10+08:00">2019-10-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -606,6 +612,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

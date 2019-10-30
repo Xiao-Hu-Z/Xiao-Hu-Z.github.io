@@ -91,7 +91,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028183439415.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028183526590.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191028160032562.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-10-29T09:32:56.721Z">
+<meta property="og:updated_time" content="2019-10-30T03:23:31.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;201910192045598.png#pic_center">
 
@@ -274,10 +274,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-10-29 17:31:40 / 修改时间：17:32:56" itemprop="dateCreated datePublished" datetime="2019-10-29T17:31:40+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 17:31:40" itemprop="dateCreated datePublished" datetime="2019-10-29T17:31:40+08:00">2019-10-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:23:31" itemprop="dateModified" datetime="2019-10-30T11:23:31+08:00">2019-10-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -329,13 +335,44 @@
 <li>需要注意的是，在初始化过程中，并没有对加速度计的偏置进行校正，这是因为重力是初始化过程中待求的量，而加速度计偏置与重力耦合，而且系统的加速度相对于重力加速度很小，所以加速度计偏置在初始化过程中很难观测，因此初始化过程中不考虑加速度计偏置的校正。</li>
 </ul><a id="more"></a>
 <h2 id="滑动窗口-Sliding-Window-纯视觉SfM"><a href="#滑动窗口-Sliding-Window-纯视觉SfM" class="headerlink" title="滑动窗口(Sliding Window)纯视觉SfM"></a>滑动窗口(Sliding Window)纯视觉SfM</h2><p>首先，我们检查了最新帧与之前所有帧之间的特征对应。如果我们能在滑动窗口中的最新帧和任何其他帧之间，找到稳定的特征跟踪(超过30个跟踪特征)和足够的视差(超过20个的旋转补偿像素)，使用五点法恢复这两个帧之间的相对旋转和尺度平移。否则，将最新的帧保存在窗口中，并等待新的帧。如果五点算法成功的话，任意设置尺度，并对这两个帧中观察到的所有特征进行三角化。基于这些三角特征，采用PnP来估计窗口中所有其他帧的姿态。最后，应用全局光束平差法(BA)最小化所有特征观测的重投影误差。由于我们还没有任何世界坐标系的知识，我们将第一个相机坐标系$(·)^{c_0}$设置为SfM的参考坐标系。所有帧的位姿$(\bar p^{c0}_{c_k}，q^{c0}_{c_k})$和特征位置表示相对于$(·)^{c_0}$。假设摄像机和IMU之间有一个粗略测量的外部参数$(p^b_c,q^b_c)$，我们可以将姿态从相机坐标系转换到物体(IMU)坐标系。</p>
-<p>纯视觉初始化时，我们采用第一帧 c0 作为基准坐标系，若要转化为从 body 坐标系到 c0坐标系，可以进行如下变换，其中s是匹配视觉结构与距离尺度的尺度参数，解出尺度参数是实现成功初始化的关键。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/201910192045598.png#pic_center"><br>上式推导如下：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028185549508.png#pic_center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028185607797.png#pic_center"></p>
-<h2 id="B-视觉惯性校准（Visual-Inertial-Alignment"><a href="#B-视觉惯性校准（Visual-Inertial-Alignment" class="headerlink" title="B. 视觉惯性校准（Visual-Inertial Alignment)"></a>B. 视觉惯性校准（Visual-Inertial Alignment)</h2><h3 id="陀螺仪偏置标定"><a href="#陀螺仪偏置标定" class="headerlink" title="陀螺仪偏置标定"></a>陀螺仪偏置标定</h3><p>这 一 部 分 的 内 容 对 应 于 VINS-Mono 代 码 initial_aligment.cpp 中 的<br>solveGyroscopeBias()函数。<br>考虑滑动窗口中连续两帧$b_k$和$b_{k+1}$，我们从视觉sfM中得到旋转$q^{c0}_{b_k}$和$q^{c0}_{b_{k+1}}$，从IMU预积分得到的相对约束$γ^{b_k}_{b_{k+1}}$。<br>陀螺仪的误差有两部分测量噪声和陀螺仪偏置，噪声暂时可以忽略（毕竟太小），而视觉的误差就只有观测噪声（也可以忽略不管），因此两者差值的绝对值就是陀螺仪偏置，将整个滑动窗口的所有的旋转做差构成了一个最小化误差模型：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019204702396.png#pic_center"><br>其中B代表窗口的所有帧。<br>$q^{c0}_{b_k}$$q^{c0}_{b_{k+1}}$：相机从$b_k$到$b_{k+1}$下的相对旋转<br>$γ^{b_k}_{b_{k+1}}$：陀螺仪从$b_{k+1}$到$b_k$下的相对旋转<br>第二个式子给出了$γ^{b_k}_{b_{k+1}}$对陀螺仪偏置的一阶近似。</p>
-<p>因为四元数最小值为单位四元数 [1; 0v]T，所以<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028171134242.png#pic_center"><br>只考虑虚部，则有：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028171213618.png#pic_center"></p>
+<p>纯视觉初始化时，我们采用第一帧 c0 作为基准坐标系，若要转化为从 body 坐标系到 c0坐标系，可以进行如下变换，其中s是匹配视觉结构与距离尺度的尺度参数，解出尺度参数是实现成功初始化的关键。</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/201910192045598.png#pic_center"></p>
+<p>上式推导如下：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028185549508.png#pic_center"></p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028185607797.png#pic_center"></p>
+<h2 id="B-视觉惯性校准（Visual-Inertial-Alignment"><a href="#B-视觉惯性校准（Visual-Inertial-Alignment" class="headerlink" title="B. 视觉惯性校准（Visual-Inertial Alignment)"></a>B. 视觉惯性校准（Visual-Inertial Alignment)</h2><h3 id="陀螺仪偏置标定"><a href="#陀螺仪偏置标定" class="headerlink" title="陀螺仪偏置标定"></a>陀螺仪偏置标定</h3><p>这 一 部 分 的 内 容 对 应 于 VINS-Mono 代 码 initial_aligment.cpp 中 的<br>solveGyroscopeBias()函数。<br>考虑滑动窗口中连续两帧$b_k$和$b_{k+1}$，我们从视觉sfM中得到旋转$q^{c0}_{b_k}$和$q^{c0}_{b_{k+1}}$，从IMU预积分得到的相对约束$γ^{b_k}_{b_{k+1}}$。<br>陀螺仪的误差有两部分测量噪声和陀螺仪偏置，噪声暂时可以忽略（毕竟太小），而视觉的误差就只有观测噪声（也可以忽略不管），因此两者差值的绝对值就是陀螺仪偏置，将整个滑动窗口的所有的旋转做差构成了一个最小化误差模型：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019204702396.png#pic_center"></p>
+<p>其中B代表窗口的所有帧。<br>$q^{c0}_{b_k}$$q^{c0}_{b_{k+1}}$：相机从$b_k$到$b_{k+1}$下的相对旋转<br>$γ^{b_k}_{b_{k+1}}$：陀螺仪从$b_{k+1}$到$b_k$下的相对旋转<br>第二个式子给出了$γ^{b_k}_{b_{k+1}}$对陀螺仪偏置的一阶近似。</p>
+<p>因为四元数最小值为单位四元数 [1; 0v]T，所以</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028171134242.png#pic_center"></p>
+<p>只考虑虚部，则有：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028171213618.png#pic_center"></p>
 <p>然后取最小二乘，当然也可以使用SVD分解等方法求解，得到了陀螺仪偏置$b_w$的初始校准。然后我们用新的陀螺仪偏置重新传递所有的IMU预积分项$\hat α^{b_k}_{b_{k+1}}、\hat β^{b_k}_{b_{k+1}}、\hat γ^{b_k}_{b_{k+1}}$ 。</p>
-<h3 id="速度、重力向量和尺度初始化："><a href="#速度、重力向量和尺度初始化：" class="headerlink" title="速度、重力向量和尺度初始化："></a>速度、重力向量和尺度初始化：</h3><p>这一部分的内容对应于 VINS-Mono 代码 initial_aligment.cpp 中的 LinearAlignment()<br>函数<br>在陀螺仪偏置初始化后，我们继续初始化导航的其他基本状态，即速度、重力向量和尺度：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019204809433.png#pic_center"><br>其中，$v^{b_k}_{b_k}$是第k帧图像本体坐标系的速度，$g^{c_0}$是$c_0$坐标系中的重力向量，s是单目SfM到公制单位的尺度。<br>在$c_0$坐标系的预积分：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180200742.png#pic_center"><br>$p^{c_0}_{b_{k+1}}$和$p^{c_0}_{b_{k}}$可由视觉 SFM 获得：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180301129.png#pic_center"><br>将此式带入上式得：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180458901.png#pic_center"><br>将等式中速度都转换到$c_0$ 坐标系下：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181635823.png#pic_center"><br>将上式转换成$Hx=b$ 的形式，这样便于利用 cholesky 进行求解，由$s\bar p^{c_0}_{b_k}=p^{c_0}_{c_k}-R^{c_0}_{c_k}p_c^b$，带入上式得：</p>
-<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181106531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>联力等式：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181609102.png#pic_center"><br>即： $H^{6×10}X_I^{\ 10×1} = b^{6×1}$<br>H矩阵一定是一个正定对称矩阵，以采用快速的 Cholosky 分解下面方程求解$X_I$：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028182207166.png#pic_center"><br>可以得到滑动窗口中所有关键帧的本体坐标系速度，视觉参照系$(·)^{c_0}$的重力向量，以及单目尺度因子 s 。</p>
-<h3 id="修正重力矢量"><a href="#修正重力矢量" class="headerlink" title="修正重力矢量"></a>修正重力矢量</h3><p>这里计算的重力吸收了重力加速度计的偏置，虽然不需要计算重力加速度计的偏置，但重力还是需要优化的，说到优化重力加速度，肯定包含两个量，大小和方向，也就是三个维度，但是一般来说大小是确定已知的（这里设为9.8），因此其实我们要做的就是优化方向，是一个两维的向量，下图是优化重力的方法以及b1,b2单位向量的方向确定模型。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019205318309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">将重力向量重新参数化：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183144674.png#pic_center"><br>其中g是已知的重力大小，$\bar {\hat g}$是表示重力方向的单位向量，b1、 b2为重力向量正切空间的一对<br>正交基 ，如图所示，w1和w2分别是在b1和b2上的对应位移。<br>将上式代入前面式子中，重新整理可得：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183424735.png#pic_center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183439415.png"><br>这样，可以用 Cholosky 分解下面方程求解$X_I$：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183526590.png#pic_center"></p>
+<h3 id="速度、重力向量和尺度初始化："><a href="#速度、重力向量和尺度初始化：" class="headerlink" title="速度、重力向量和尺度初始化："></a>速度、重力向量和尺度初始化：</h3><p>这一部分的内容对应于 VINS-Mono 代码 initial_aligment.cpp 中的 LinearAlignment()<br>函数<br>在陀螺仪偏置初始化后，我们继续初始化导航的其他基本状态，即速度、重力向量和尺度：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019204809433.png#pic_center"></p>
+<p>其中，$v^{b_k}_{b_k}$是第k帧图像本体坐标系的速度，$g^{c_0}$是$c_0$坐标系中的重力向量，s是单目SfM到公制单位的尺度。<br>在$c_0$坐标系的预积分：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180200742.png#pic_center"></p>
+<p>$p^{c_0}_{b_{k+1}}$和$p^{c_0}_{b_{k}}$可由视觉 SFM 获得：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180301129.png#pic_center"></p>
+<p>将此式带入上式得：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028180458901.png#pic_center"></p>
+<p>将等式中速度都转换到$c_0$ 坐标系下：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181635823.png#pic_center"></p>
+<p>将上式转换成$Hx=b$ 的形式，这样便于利用 cholesky 进行求解，由$s\bar p^{c_0}_{b_k}=p^{c_0}_{c_k}-R^{c_0}_{c_k}p_c^b$，带入上式得：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181106531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p>联力等式：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028181609102.png#pic_center"></p>
+<p>即： $H^{6×10}X_I^{\ 10×1} = b^{6×1}$<br>H矩阵一定是一个正定对称矩阵，以采用快速的 Cholosky 分解下面方程求解$X_I$：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028182207166.png#pic_center"></p>
+<p>可以得到滑动窗口中所有关键帧的本体坐标系速度，视觉参照系$(·)^{c_0}$的重力向量，以及单目尺度因子 s 。</p>
+<h3 id="修正重力矢量"><a href="#修正重力矢量" class="headerlink" title="修正重力矢量"></a>修正重力矢量</h3><p>这里计算的重力吸收了重力加速度计的偏置，虽然不需要计算重力加速度计的偏置，但重力还是需要优化的，说到优化重力加速度，肯定包含两个量，大小和方向，也就是三个维度，但是一般来说大小是确定已知的（这里设为9.8），因此其实我们要做的就是优化方向，是一个两维的向量，下图是优化重力的方法以及b1,b2单位向量的方向确定模型。</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191019205318309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p>将重力向量重新参数化：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183144674.png#pic_center"></p>
+<p>其中g是已知的重力大小，$\bar {\hat g}$是表示重力方向的单位向量，b1、 b2为重力向量正切空间的一对<br>正交基 ，如图所示，w1和w2分别是在b1和b2上的对应位移。<br>将上式代入前面式子中，重新整理可得：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183424735.png#pic_center"><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183439415.png"></p>
+<p>这样，可以用 Cholosky 分解下面方程求解$X_I$：</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028183526590.png#pic_center"></p>
 <p>完成初始化：经过对重力向量的细化，通过将重力旋转到z轴上，得到世界坐标系与摄像机坐标系c0之间的旋转$q^w_{c_0}$。然后我们将所有变量从参考坐标系$(·)^{c_0}$ 旋转到世界坐标系$(·)^w$。本体坐标系的速度也将被旋转到世界坐标系。视觉SfM的变换矩阵将被缩放到度量单位。此时，初始化过程已经完成，所有这些度量值都将被输入到一个紧耦合的单目VIO中。</p>
 <h1 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h1><h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191028160032562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
 <h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>直接从estimator.cpp中的 if (solver_flag == INITIAL) 开始</p>
@@ -647,6 +684,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

@@ -78,7 +78,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019101421402779.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191014213725806.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191027131236947.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
-<meta property="og:updated_time" content="2019-10-27T05:21:55.332Z">
+<meta property="og:updated_time" content="2019-10-30T03:24:52.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191014201459952.png#pic_center">
 
@@ -261,10 +261,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-10-27 13:16:28 / 修改时间：13:21:55" itemprop="dateCreated datePublished" datetime="2019-10-27T13:16:28+08:00">2019-10-27</time>
+              <time title="创建时间：2019-10-27 13:16:28" itemprop="dateCreated datePublished" datetime="2019-10-27T13:16:28+08:00">2019-10-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:24:52" itemprop="dateModified" datetime="2019-10-30T11:24:52+08:00">2019-10-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -317,7 +323,8 @@
 <h1 id="顺序表查找"><a href="#顺序表查找" class="headerlink" title="顺序表查找"></a>顺序表查找</h1><ul>
 <li>定义：<br>从线性表的一段开始，逐个检查关键字是否满足给定的条件。若查找到某个元素的关键字满足给定的条件，则查找成功，返回该元素在线性表中的位置；若已经查找到表的另一端，但还没有查找到符合给定条件的元素，则返回查找失败的信息。</li>
 <li>时间复杂度：O(N）</li>
-<li>优缺点：<blockquote>
+<li><p>优缺点：</p>
+<blockquote>
 <p>优点：对数据元素的存储没有需求，顺序存储或链式存储皆可；对表中记录的有序性也没有要求，无论记录是否按关键码有序，均可应用<br>缺点：当n较大时，平均查找长度较大，效率低</p>
 </blockquote>
 </li>
@@ -331,14 +338,16 @@
 </blockquote>
 </li>
 <li>时间复杂度：O(logN）</li>
-<li>优缺点：<blockquote>
+<li><p>优缺点：</p>
+<blockquote>
 <p>优点：折半查找的时间复杂度为O(logn)，远远优于顺序查找的O(n)，<br>缺点：二分查找的效率高，但是要求表关键字有序</p>
 </blockquote>
 </li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 折半查找 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Binary_Search</span><span class="params">(<span class="keyword">int</span> *a,<span class="keyword">int</span> n,<span class="keyword">int</span> key)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> low,high,mid;</span><br><span class="line">	low=<span class="number">1</span>;	<span class="comment">/* 定义最低下标为记录首位 */</span></span><br><span class="line">	high=n;	<span class="comment">/* 定义最高下标为记录末位 */</span></span><br><span class="line">	<span class="keyword">while</span>(low&lt;=high)</span><br><span class="line">	&#123;</span><br><span class="line">		mid=(low+high)/<span class="number">2</span>;	<span class="comment">/* 折半 */</span></span><br><span class="line">		<span class="keyword">if</span> (key&lt;a[mid])		<span class="comment">/* 若查找值比中值小 */</span></span><br><span class="line">			high=mid<span class="number">-1</span>;		<span class="comment">/* 最高下标调整到中位下标小一位 */</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (key&gt;a[mid])<span class="comment">/* 若查找值比中值大 */</span></span><br><span class="line">			low=mid+<span class="number">1</span>;		<span class="comment">/* 最低下标调整到中位下标大一位 */</span></span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> mid;		<span class="comment">/* 若相等则说明mid即为查找到的位置 */</span></span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="插值查找"><a href="#插值查找" class="headerlink" title="插值查找"></a>插值查找</h2><ul>
-<li>定义：<blockquote>
+<li><p>定义：</p>
+<blockquote>
 <p>基于二分查找算法，将查找点的选择改进为自适应选择，mid=low+(key-a[low])/(a[high]-a[low])*(high-low)<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191014201459952.png#pic_center"></p>
 </blockquote>
 </li>
@@ -746,6 +755,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
