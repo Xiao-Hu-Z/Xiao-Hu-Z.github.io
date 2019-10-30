@@ -540,10 +540,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-10-29 14:35:11 / 修改时间：14:36:15" itemprop="dateCreated datePublished" datetime="2019-10-29T14:35:11+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 14:35:11" itemprop="dateCreated datePublished" datetime="2019-10-29T14:35:11+08:00">2019-10-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 10:52:27" itemprop="dateModified" datetime="2019-10-30T10:52:27+08:00">2019-10-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -562,14 +568,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>1.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -581,7 +587,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。</p><p>保证base和exponent不同时为0</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li><p>当指数exponent为正</p>
+</li>
+<li><p>当指数为负，可以先对指数取绝对值，算出次方的结果后取倒数，要讨论底数是否为0</p>
+<blockquote>
+<p>底数base不为0</p>
+<p>底数base为0，对0求倒数，导致程序出错，需要进行特殊处理，这里采用全局变量</p>
+<p><img alt="1572402654504" data-src="/home/xiaohu/.config/Typora/typora-user-images/1572402654504.png"></p>
+</blockquote>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
     
@@ -1016,7 +1040,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1030,7 +1054,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/" class="post-title-link" itemprop="url">VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian</a>
+            <a href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/" class="post-title-link" itemprop="url">VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian</a>
         </h1>
 
         <div class="post-meta">
@@ -1089,7 +1113,7 @@
           <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。<br>想写博客记录下，但懒敲公式。</p><h1 id="预积分"><a href="#预积分" class="headerlink" title="预积分"></a>预积分</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181407525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181521323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center =30x30"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181458844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521325497.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="连续形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#连续形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="连续形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>连续形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521324273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="离散形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#离散形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="离散形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>离散形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213150727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213209259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025215804453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86%EF%BC%8CPVQ-%E5%A2%9E%E9%87%8F%E7%9A%84%E8%AF%AF%E5%B7%AE%E3%80%81-%E5%8D%8F%E6%96%B9%E5%B7%AE%E5%8F%8A-Jacobian/#more" rel="contents">
+              <a class="btn" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1322,12 +1346,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">133k</span>
+    <span title="站点总字数">135k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:01</span>
+    <span title="站点阅读时长">2:03</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
