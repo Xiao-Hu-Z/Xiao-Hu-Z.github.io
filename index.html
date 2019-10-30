@@ -1071,7 +1071,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:21:13" itemprop="dateModified" datetime="2019-10-29T10:21:13+08:00">2019-10-29</time>
+                <time title="修改时间：2019-10-30 11:17:58" itemprop="dateModified" datetime="2019-10-30T11:17:58+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1091,7 +1091,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.8k</span>
+              <span>4.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1110,7 +1110,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。<br>想写博客记录下，但懒敲公式。</p><h1 id="预积分"><a href="#预积分" class="headerlink" title="预积分"></a>预积分</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181407525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181521323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center =30x30"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025181458844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521325497.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="连续形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#连续形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="连续形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>连续形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019102521324273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="离散形式下-PVQ-增量的误差、-协方差及-Jacobian"><a href="#离散形式下-PVQ-增量的误差、-协方差及-Jacobian" class="headerlink" title="离散形式下 PVQ 增量的误差、 协方差及 Jacobian"></a>离散形式下 PVQ 增量的误差、 协方差及 Jacobian</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213150727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025213209259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191025215804453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p>
+          <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。</p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p><h1 id="IMU-测量方程"><a href="#IMU-测量方程" class="headerlink" title="IMU 测量方程."></a>IMU 测量方程.</h1><p>忽略地球旋转， IMU 测量方程为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191024214341590.png#pic_center"></p><h1 id="预积分方程"><a href="#预积分方程" class="headerlink" title="预积分方程"></a>预积分方程</h1><h2 id="IMU-integration-in-world-frame"><a href="#IMU-integration-in-world-frame" class="headerlink" title="IMU integration in world frame"></a>IMU integration in world frame</h2><p>将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转<br>（PVQ），作为视觉估计的初始值，这里的旋转采用的四元数。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/#more" rel="contents">
