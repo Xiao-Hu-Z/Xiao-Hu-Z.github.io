@@ -539,7 +539,7 @@
       </categories>
   </entry>
   <entry>
-    <title>VINS-Mono——预积分，PVQ 增量的误差、 协方差及 Jacobian</title>
+    <title>VINS-Mono——预积分</title>
     <url>/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。</p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p><h1 id="IMU-测量方程"><a href="#IMU-测量方程" class="headerlink" title="IMU 测量方程."></a>IMU 测量方程.</h1><p>忽略地球旋转， IMU 测量方程为</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191024214341590.png#pic_center"></p><h1 id="预积分方程"><a href="#预积分方程" class="headerlink" title="预积分方程"></a>预积分方程</h1><h2 id="IMU-integration-in-world-frame"><a href="#IMU-integration-in-world-frame" class="headerlink" title="IMU integration in world frame"></a>IMU integration in world frame</h2><p>将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转<br>（PVQ），作为视觉估计的初始值，这里的旋转采用的四元数。</p><a id="more"></a>
 
