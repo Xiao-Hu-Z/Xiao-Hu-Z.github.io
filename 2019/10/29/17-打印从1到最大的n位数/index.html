@@ -63,12 +63,14 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="题目：输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。思路 用一个循环从1开始逐个打印，但当n很大时，有可能用整型(int)或长整型(long)都会溢出。  字符串模拟运算的解法，用字符串或者数组表达大数  把字符串中的每一个数字都初始化为’0’每一次为字符串表示的数字加1，再打印出来">
+<meta property="og:type" content="article">
 <meta property="og:title" content="17.打印从1到最大的n位数">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;10&#x2F;29&#x2F;17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="题目：输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。思路 用一个循环从1开始逐个打印，但当n很大时，有可能用整型(int)或长整型(long)都会溢出。  字符串模拟运算的解法，用字符串或者数组表达大数  把字符串中的每一个数字都初始化为’0’每一次为字符串表示的数字加1，再打印出来">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T06:37:52.879Z">
+<meta property="og:updated_time" content="2019-10-31T07:23:09.182Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xiao-hu.com.cn/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/">
@@ -250,10 +252,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-10-29 14:37:09 / 修改时间：14:37:52" itemprop="dateCreated datePublished" datetime="2019-10-29T14:37:09+08:00">2019-10-29</time>
+              <time title="创建时间：2019-10-29 14:37:09" itemprop="dateCreated datePublished" datetime="2019-10-29T14:37:09+08:00">2019-10-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 15:23:09" itemprop="dateModified" datetime="2019-10-31T15:23:09+08:00">2019-10-31</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -279,14 +287,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -298,7 +306,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="题目："><a href="#题目：" class="headerlink" title="题目："></a><strong>题目：</strong></h1><p>输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li><p>用一个循环从1开始逐个打印，但当n很大时，有可能用整型(int)或长整型(long)都会溢出。</p>
+</li>
+<li><p>字符串模拟运算的解法，<strong>用字符串或者数组表达大数</strong></p>
+<blockquote>
+<p>把字符串中的每一个数字都初始化为’0’<br>每一次为字符串表示的数字加1，再打印出来</p>
+</blockquote>
+</li>
+</ol><a id="more"></a>
+
+<p>这题对我来说有点难，只是看懂了，python代码以后在整理.</p>
+<p>法1：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigits_1</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *number = <span class="keyword">new</span> <span class="keyword">char</span>[n + <span class="number">1</span>];</span><br><span class="line">    <span class="built_in">memset</span>(number, <span class="string">'0'</span>, n);</span><br><span class="line">    number[n] = <span class="string">'\0'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!Increment(number))</span><br><span class="line">    &#123;</span><br><span class="line">        PrintNumber(number);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span>[]number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串number表示一个数字，在 number上增加1</span></span><br><span class="line"><span class="comment">// 如果做加法溢出，则返回true；否则为false</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Increment</span><span class="params">(<span class="keyword">char</span>* number)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> isOverflow = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">int</span> nTakeOver = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> nLength = <span class="built_in">strlen</span>(number);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = nLength - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> nSum = number[i] - <span class="string">'0'</span> + nTakeOver;</span><br><span class="line">        <span class="keyword">if</span> (i == nLength - <span class="number">1</span>)</span><br><span class="line">            nSum++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nSum &gt;= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>)</span><br><span class="line">                isOverflow = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                nSum -= <span class="number">10</span>;</span><br><span class="line">                nTakeOver = <span class="number">1</span>;</span><br><span class="line">                number[i] = <span class="string">'0'</span> + nSum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            number[i] = <span class="string">'0'</span> + nSum;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> isOverflow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintNumber</span><span class="params">(<span class="keyword">char</span>* number)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> isBeginning0 = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> nLength = <span class="built_in">strlen</span>(number);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nLength; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (isBeginning0 &amp;&amp; number[i] != <span class="string">'0'</span>)</span><br><span class="line">            isBeginning0 = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!isBeginning0)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"%c"</span>, number[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\t"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>法2：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigits_2</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span>* number = <span class="keyword">new</span> <span class="keyword">char</span>[n + <span class="number">1</span>];</span><br><span class="line">    number[n] = <span class="string">'\0'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        number[<span class="number">0</span>] = i + <span class="string">'0'</span>;</span><br><span class="line">        Print1ToMaxOfNDigitsRecursively(number, n, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span>[] number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigitsRecursively</span><span class="params">(<span class="keyword">char</span>* number, <span class="keyword">int</span> length, <span class="keyword">int</span> index)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index == length - <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        PrintNumber(number);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        number[index + <span class="number">1</span>] = i + <span class="string">'0'</span>;</span><br><span class="line">        Print1ToMaxOfNDigitsRecursively(number, length, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintNumber</span><span class="params">(<span class="keyword">char</span>* number)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> isBeginning0 = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> nLength = <span class="built_in">strlen</span>(number);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nLength; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (isBeginning0 &amp;&amp; number[i] != <span class="string">'0'</span>)</span><br><span class="line">            isBeginning0 = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!isBeginning0)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"%c"</span>, number[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\t"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
     </div>
     
     
@@ -389,6 +412,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目："><span class="nav-number">1.</span> <span class="nav-text">题目：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -404,7 +428,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -464,12 +488,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">138k</span>
+    <span title="站点总字数">142k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:05</span>
+    <span title="站点阅读时长">2:09</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
