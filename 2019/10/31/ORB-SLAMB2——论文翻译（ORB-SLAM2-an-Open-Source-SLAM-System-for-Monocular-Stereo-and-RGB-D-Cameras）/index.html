@@ -86,7 +86,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101104655260.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101104722466.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019110111103884.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
-<meta property="og:updated_time" content="2019-11-01T06:06:13.933Z">
+<meta property="og:updated_time" content="2019-11-01T06:39:37.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191031172843722.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 
@@ -277,7 +277,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-01 14:06:13" itemprop="dateModified" datetime="2019-11-01T14:06:13+08:00">2019-11-01</time>
+                <time title="修改时间：2019-11-01 14:39:37" itemprop="dateModified" datetime="2019-11-01T14:39:37+08:00">2019-11-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -327,7 +327,7 @@
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>SLAM（同时定位与地图重建）在过去的20年中，一直是计算机视觉和机器人领域的热门话题，同时也吸引了很多高科技公司的关注。SLAM技术是在未知的环境当中建立一个地图并且能够在地图当中实时的定位。在不同类型的传感器当中，相机十分廉价，并且能够提供丰富的环境信息，受到研究者的青睐。相机提供的图像信息可以用作鲁棒的和精确的位置识别。位置识别是SLAM系统中回环检测的关键模块（例如，当传感器检测到一个已经建好图的位置的时候，可以进行修正在探索过程中的误差）以及，能够修正由于剧烈的震动或者在系统进行初始化的时候在相机跟踪失败后的重新定位。因此以相机为核心的视觉SLAM在过去的一年中得到快速的发展。 </p>
 <p>   视觉SLAM仅仅通过一个单目相机就能够完成。单目相机也是最便宜也是最小巧的传感器设备。然而深度信息无法从单目相机中观测到，地图的尺度和预测轨迹是未知的。此外，由于不能从第一帧当中进行三角测量化，单目视觉SLAM系统的启动往往需要多个视角或者滤波技术才能产生一个初始化的地图。最后，单目SLAM可能会造成尺度漂移,以及在探索的过程中执行纯旋转的时候可能会失败。通过使用一个双目或者RGB-D相机将会解决这些问题，并且能够成为一种更加有效的视觉SLAM的解决方案。</p>
 <p> 在这篇文章当中，我们在单目ORB-SLAM[1]的基础上提出ORB-SLAM2，有以下贡献：</p>
-<pre><code> 1. 这是首个基于单目，双目和RGB-D相机的开源SLAM方案，这个方案包括，回环检测，地图重用和重定位。
+<pre><code>1. 这是首个基于单目，双目和RGB-D相机的开源SLAM方案，这个方案包括，回环检测，地图重用和重定位。
 2. 我们的RGB-D结果说明，光速法平差优化（BA）比ICP或者光度和深度误差最小方法的更加精确。
 3. 通过匹配远处和近处的双目匹配的点和单目观测，我们的双目的结果比直接使用双目系统更加精确。
 4. 针对无法建图的情况，提出了一个轻量级的定位模式 ，能够更加有效的重用地图。
@@ -429,6 +429,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/01/ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89/" rel="prev" title="ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System）">
+                  ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System） <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -490,7 +493,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -550,12 +553,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">169k</span>
+    <span title="站点总字数">191k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:33</span>
+    <span title="站点阅读时长">2:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
