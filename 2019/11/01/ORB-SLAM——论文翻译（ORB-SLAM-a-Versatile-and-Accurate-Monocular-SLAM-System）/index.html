@@ -64,8 +64,9 @@
 </script>
 
   <meta name="description" content="ORB-SLAM：一种通用的(全能的)精确的单目SLAM系统摘要本文提出了ORB-SLAM，在大小场景、室内室外环境下都可以实时操作的一种基于特征的单目SLAM系统。系统对复杂的剧烈运动具有鲁棒性，允许宽基线的闭环和重定位，且包含完整的自动初始化。基于最近几年的优秀算法之上，我们从头开始设计了一种新颖的系统，它对所有SLAM任务使用相同的特征：追踪、建图、重定位和闭环。合适策略的存在使得选择的重建">
+<meta name="keywords" content="ORB-SLAM2">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System）">
+<meta property="og:title" content="ORB-SLAM——论文翻译（ORB-SLAM:a Versatile and Accurate Monocular SLAM System）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;01&#x2F;ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
 <meta property="og:description" content="ORB-SLAM：一种通用的(全能的)精确的单目SLAM系统摘要本文提出了ORB-SLAM，在大小场景、室内室外环境下都可以实时操作的一种基于特征的单目SLAM系统。系统对复杂的剧烈运动具有鲁棒性，允许宽基线的闭环和重定位，且包含完整的自动初始化。基于最近几年的优秀算法之上，我们从头开始设计了一种新颖的系统，它对所有SLAM任务使用相同的特征：追踪、建图、重定位和闭环。合适策略的存在使得选择的重建">
@@ -99,7 +100,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101171657388.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101172300914.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101172336172.png#pic_center">
-<meta property="og:updated_time" content="2019-11-01T10:22:31.149Z">
+<meta property="og:updated_time" content="2019-11-01T10:35:37.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101155613105.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 
@@ -117,7 +118,7 @@
   };
 </script>
 
-  <title>ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System） | xiaohu博客</title>
+  <title>ORB-SLAM——论文翻译（ORB-SLAM:a Versatile and Accurate Monocular SLAM System） | xiaohu博客</title>
   
 
 
@@ -273,7 +274,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System）
+          ORB-SLAM——论文翻译（ORB-SLAM:a Versatile and Accurate Monocular SLAM System）
         </h1>
 
         <div class="post-meta">
@@ -284,7 +285,18 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-01 18:16:09 / 修改时间：18:22:31" itemprop="dateCreated datePublished" datetime="2019-11-01T18:16:09+08:00">2019-11-01</time>
+              <time title="创建时间：2019-11-01 17:15:37 / 修改时间：18:35:37" itemprop="dateCreated datePublished" datetime="2019-11-01T17:15:37+08:00">2019-11-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -531,7 +543,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://xiao-hu.com.cn/2019/11/01/ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89/" title="ORB-SLAM——论文翻译（ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System）">https://xiao-hu.com.cn/2019/11/01/ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89/</a>
+    <a href="https://xiao-hu.com.cn/2019/11/01/ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89/" title="ORB-SLAM——论文翻译（ORB-SLAM:a Versatile and Accurate Monocular SLAM System）">https://xiao-hu.com.cn/2019/11/01/ORB-SLAM%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM-a-Versatile-and-Accurate-Monocular-SLAM-System%EF%BC%89/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -541,6 +553,10 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ORB-SLAM2/" rel="tag"><i class="fa fa-tag"></i> ORB-SLAM2</a>
+          </div>
 
         
 
@@ -775,6 +791,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
