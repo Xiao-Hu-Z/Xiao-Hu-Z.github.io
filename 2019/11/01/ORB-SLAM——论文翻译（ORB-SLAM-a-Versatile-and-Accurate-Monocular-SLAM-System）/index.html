@@ -100,7 +100,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101171657388.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101172300914.png#pic_center">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101172336172.png#pic_center">
-<meta property="og:updated_time" content="2019-11-01T10:35:37.115Z">
+<meta property="og:updated_time" content="2019-11-04T10:16:53.063Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191101155613105.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
 
@@ -283,10 +283,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-11-01 17:15:37 / 修改时间：18:35:37" itemprop="dateCreated datePublished" datetime="2019-11-01T17:15:37+08:00">2019-11-01</time>
+              <time title="创建时间：2019-11-01 17:15:37" itemprop="dateCreated datePublished" datetime="2019-11-01T17:15:37+08:00">2019-11-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-04 18:16:53" itemprop="dateModified" datetime="2019-11-04T18:16:53+08:00">2019-11-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -378,14 +384,14 @@
 <p>我们使用g2o[37]库中的Levenverg-Marquardt算法执行所有的优化。我们在附录中描述了每个优化的误差，计算成本和变量。</p>
 <h2 id="C、地图点云、关键帧及其选择标准"><a href="#C、地图点云、关键帧及其选择标准" class="headerlink" title="C、地图点云、关键帧及其选择标准"></a>C、地图点云、关键帧及其选择标准</h2><p>对每个地图点云pi保存以下信息：</p>
 <ul>
-<li>它在世界坐标系中的3D坐标X_w.i </li>
-<li>视图方向n_i，即所有视图方向的平均单位向量（该方向是指连接该点云和其对应观测关键帧光心的射线方向）</li>
-<li>ORB特征描述子D_i，与其他所有能观测到该点云的关键帧中ORB描述子相比，该描述子的汉明距离最小</li>
-<li>根据ORB特征尺度不变性约束，可观测的点云的最大距离dmax和最小距离dmin</li>
+<li>它在世界坐标系中的3D坐标$X_{w.i}$</li>
+<li>视图方向$n_i$，即所有视图方向的平均单位向量（该方向是指连接该点云和其对应观测关键帧光心的射线方向）</li>
+<li>ORB特征描述子$D_i$，与其他所有能观测到该点云的关键帧中ORB描述子相比，该描述子的汉明距离最小</li>
+<li>根据ORB特征尺度不变性约束，可观测的点云的最大距离$d_{max}$和最小距离$d_{min}$</li>
 </ul>
-<p>对每个关键帧K_i保存以下信息：</p>
+<p>对每个关键帧$K_i$保存以下信息：</p>
 <ul>
-<li>相机位姿T_(i,w)，从世界坐标系转换到相机坐标系下的变换矩阵</li>
+<li>相机位姿$T_(i,w)$，从世界坐标系转换到相机坐标系下的变换矩阵</li>
 <li>相机内参，包括主点和焦距</li>
 <li>从图像帧提取的所有ORB特征，不管其是否已经关联了地图云点， 这些ORB特征点都经过畸变模型矫正过</li>
 </ul>
@@ -410,7 +416,7 @@
 </li>
 <li>4.运动和从运动到结构的重构</li>
 <li>一旦选择好模型，我们就可以获得相应的运动状态。如果选择单映矩阵，我们按照Faugeras等人发表的论文[23]中提到的方法，提取8种运动假设，该方法提出用cheriality测试来选择有效解。然而，如果在低视差的情况下，这些测试就会失效，因为云点很容易在相机的前面或后面移动，会导致选解错误。我们提出的方法是直接按这8种解将二维点三角化，然后检查是否有一种解可以使得所有的云点都位于两个相机的前面，且重投影误差较小。如果没有一个明确的解胜出，我们就不执行初始化，重新从第一步开始。这种方法使初始化程序在低视差和两个交叉的视图情况下更具鲁棒性，这也是我们整个算法体现鲁棒性的关键所在。<br>在基本矩阵的情况下，我们使用标定矩阵K用下式将其转换为本质矩阵：．<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191101161803488.png#pic_center"><br>然后用文献[2]中的奇异值分解方法计算4个运动解，然后就像上文中叙述的一样，我们将四个解用于三角化特征点，以选择正解。</li>
-<li>5.Bundle adjustment<br>最后我们执行一个全局BA，详细优化过程参见附录，以优化初始重构得到的点云地图。<br>如图3所示是对论文[39]中的室外NewCollege机器人图像序列进行地图初始化的例子，室外环境下初始化工作具有很大挑战性。从图中可以看出，PTAM算法和LSD-SLAM算法对位于同一平面上的所有点都进行了初始化，而我们的方法是当两幅图像有足够视差之后才进行初始化，并基于基础矩阵得到了正确的结果。<blockquote>
+<li>C5.Bundle adjustment<br>最后我们执行一个全局BA，详细优化过程参见附录，以优化初始重构得到的点云地图。<br>如图3所示是对论文[39]中的室外NewCollege机器人图像序列进行地图初始化的例子，室外环境下初始化工作具有很大挑战性。从图中可以看出，PTAM算法和LSD-SLAM算法对位于同一平面上的所有点都进行了初始化，而我们的方法是当两幅图像有足够视差之后才进行初始化，并基于基础矩阵得到了正确的结果。<blockquote>
 <p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191101161919724.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>图3 基于NewCollege图像序列[39]进行地图初始化，最上面一行：PTAM算法,中间一行：LSD-SLAM算法，底下一行：ORB-SLAM算法。其中，PTAM算法和LSD-SLAM算法初始化了一个错误的平面地图，而我们的方法自动选择在两帧图像存在足够视差的情况下再利用基础矩阵初始化。如果人工选择关键帧，则PTAM算法也能够初始化得很好。</p>
 <h1 id="跟踪"><a href="#跟踪" class="headerlink" title="跟踪"></a>跟踪</h1><p>在这一部分，我们将详细介绍跟踪线程在相机每帧图像上执行的步骤。在几个步骤中都提到的相机位姿优化，包括运动BA，将在附录部分进行阐述。</p>
 <h2 id="A、ORB特征提取"><a href="#A、ORB特征提取" class="headerlink" title="A、ORB特征提取"></a>A、ORB特征提取</h2><p>我们在8层图像金字塔上提取FAST角点，金字塔图像尺度因子为1.2。如果图像分辨率从512<em>384到752</em>480，我们发现提取1000个角点比较合适，如果分辨率提高，如KITTI数据集[40]，则提取2000个角点。为了确保特征点均匀分布，我们将每层图像分成网格，每格提取至少5个角点。然后检测每格角点，如果角点数量不够，就调整阈值。如果某些单元格内检测不出角点，则其对应提取的角点数量也相应减少。最后，根据保留的FAST的角点计算方向和ORB特征描述子。ORB特征描述子将用于算法后续所有的特征匹配，而不是像PTAM算法中那样根据图像区块的相关性进行搜索。</p>
@@ -634,7 +640,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -694,12 +700,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">202k</span>
+    <span title="站点总字数">209k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:03</span>
+    <span title="站点阅读时长">3:10</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
