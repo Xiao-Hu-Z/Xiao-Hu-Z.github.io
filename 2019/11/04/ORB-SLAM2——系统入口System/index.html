@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在主函数中，我们创建了一个ORB_SLAM2::System的对象SLAM，这个时候就会进入到SLAM系统的主接口System.cc。这个代码是所有调用SLAM系统的主入口。system.h123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555">
+<meta name="keywords" content="ORB-SLAM2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ORB-SLAM2——系统入口System">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;04&#x2F;ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="在主函数中，我们创建了一个ORB_SLAM2::System的对象SLAM，这个时候就会进入到SLAM系统的主接口System.cc。这个代码是所有调用SLAM系统的主入口。system.h123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191104191938848.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-04T12:58:49.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191104191938848.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ORB-SLAM2——系统入口System | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ORB-SLAM2——系统入口System
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-04 19:12:42 / 修改时间：20:58:49" itemprop="dateCreated datePublished" datetime="2019-11-04T19:12:42+08:00">2019-11-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191104191938848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+ </p><p>在主函数中，我们创建了一个ORB_SLAM2::System的对象SLAM，这个时候就会进入到SLAM系统的主接口System.cc。这个代码是所有调用SLAM系统的主入口。</p><h1 id="system-h"><a href="#system-h" class="headerlink" title="system.h"></a>system.h</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">System</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    <span class="keyword">enum</span> eSensor&#123;</span><br><span class="line">        MONOCULAR=<span class="number">0</span>,</span><br><span class="line">        STEREO=<span class="number">1</span>,</span><br><span class="line">        RGBD=<span class="number">2</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.</span></span><br><span class="line">    System(<span class="keyword">const</span> <span class="built_in">string</span> &amp;strVocFile, <span class="keyword">const</span> <span class="built_in">string</span> &amp;strSettingsFile, <span class="keyword">const</span> eSensor sensor, <span class="keyword">const</span> <span class="keyword">bool</span> bUseViewer = <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking函数:输出相机位姿</span></span><br><span class="line">    <span class="comment">// Proccess the given stereo frame. Images must be synchronized and rectified.</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackStereo</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;imLeft, <span class="keyword">const</span> cv::Mat &amp;imRight, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Process the given rgbd frame. Depthmap must be registered to the RGB frame.</span></span><br><span class="line">    <span class="comment">// Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Input depthmap: Float (CV_32F).</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackRGBD</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> cv::Mat &amp;depthmap, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Proccess the given monocular frame</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackMonocular</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This stops local mapping thread (map building) and performs only camera tracking.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ActivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// This resumes local mapping thread and performs SLAM again.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DeactivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Returns true if there have been a big map change (loop closure, global BA)</span></span><br><span class="line">    <span class="comment">// since last call to this function</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">MapChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset the system (clear map)</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Reset</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// All threads will be requested to finish.</span></span><br><span class="line">    <span class="comment">// It waits until all threads have finished.</span></span><br><span class="line">    <span class="comment">// This function must be called before saving the trajectory.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Shutdown</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save keyframe poses in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// This method works for all sensor input.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveKeyFrameTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the KITTI dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://www.cvlibs.net/datasets/kitti/eval_odometry.php</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryKITTI</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> Save/Load functions</span></span><br><span class="line">    <span class="comment">// SaveMap(const string &amp;filename);</span></span><br><span class="line">    <span class="comment">// LoadMap(const string &amp;filename);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Information from most recent processed frame</span></span><br><span class="line">    <span class="comment">// You can call this right after TrackMonocular (or stereo or RGBD)</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetTrackingState</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; GetTrackedMapPoints();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; GetTrackedKeyPointsUn();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    eSensor mSensor;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ORB vocabulary used for place recognition and feature matching.</span></span><br><span class="line">    ORBVocabulary* mpVocabulary;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// KeyFrame database for place recognition (relocalization and loop detection).</span></span><br><span class="line">    KeyFrameDatabase* mpKeyFrameDatabase;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Map structure that stores the pointers to all KeyFrames and MapPoints.</span></span><br><span class="line">    Map* mpMap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracker. It receives a frame and computes the associated camera pose.</span></span><br><span class="line">    <span class="comment">// It also decides when to insert a new keyframe, create some new MapPoints and</span></span><br><span class="line">    <span class="comment">// performs relocalization if tracking fails.</span></span><br><span class="line">    Tracking* mpTracker;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Local Mapper. It manages the local map and performs local bundle adjustment.</span></span><br><span class="line">    LocalMapping* mpLocalMapper;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Loop Closer. It searches loops with every new keyframe. If there is a loop it performs</span></span><br><span class="line">    <span class="comment">// a pose graph optimization and full bundle adjustment (in a new thread) afterwards.</span></span><br><span class="line">    LoopClosing* mpLoopCloser;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The viewer draws the map and the current camera pose. It uses Pangolin.</span></span><br><span class="line">    Viewer* mpViewer;</span><br><span class="line"></span><br><span class="line">    FrameDrawer* mpFrameDrawer;</span><br><span class="line">    MapDrawer* mpMapDrawer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// System threads: Local Mapping, Loop Closing, Viewer.</span></span><br><span class="line">    <span class="comment">// The Tracking thread "lives" in the main execution thread that creates the System object.</span></span><br><span class="line">    <span class="built_in">std</span>::thread* mptLocalMapping;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptLoopClosing;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptViewer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset flag</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexReset;</span><br><span class="line">    <span class="keyword">bool</span> mbReset;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Change mode flags</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexMode;</span><br><span class="line">    <span class="keyword">bool</span> mbActivateLocalizationMode;</span><br><span class="line">    <span class="keyword">bool</span> mbDeactivateLocalizationMode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking state</span></span><br><span class="line">    <span class="keyword">int</span> mTrackingState;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; mTrackedMapPoints;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; mTrackedKeyPointsUn;</span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexState;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<h1 id="构造函数ORB-SLAM2-System"><a href="#构造函数ORB-SLAM2-System" class="headerlink" title="构造函数ORB_SLAM2::System"></a>构造函数ORB_SLAM2::System</h1><blockquote>
+<ol>
+<li>系统参数设置文件读取</li>
+<li>ORB词袋文件读取(txt)</li>
+<li>创建关键帧数据库mpKeyFrameDatabase</li>
+<li>创建地图对象mpMap</li>
+<li>创建两个显示窗口mpFrameDrawer， mpMapDrawer</li>
+<li>初始化Tracking对象mpTracker</li>
+<li>初始化Local Mapping对象mpLocalMapper并发布Local Mapping线程mptLocalMapping       </li>
+<li>初始化Loop Closing对象mpLoopCloser，并开启线程运行mptLoopClosing</li>
+<li>初始化窗口，开启线程显示图像和地图点                    </li>
+</ol>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">//创建ORB_SLAM系统对象</span></span><br><span class="line">    <span class="comment">//ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::STEREO,true);</span></span><br><span class="line">System::System(<span class="keyword">const</span> <span class="built_in">string</span> &amp;strVocFile, <span class="keyword">const</span> <span class="built_in">string</span> &amp;strSettingsFile, <span class="keyword">const</span> eSensor sensor,</span><br><span class="line">               <span class="keyword">const</span> <span class="keyword">bool</span> bUseViewer):mSensor(sensor), mpViewer(<span class="keyword">static_cast</span>&lt;Viewer*&gt;(<span class="literal">NULL</span>)), mbReset(<span class="literal">false</span>),mbActivateLocalizationMode(<span class="literal">false</span>),</span><br><span class="line">        mbDeactivateLocalizationMode(<span class="literal">false</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Output welcome message</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt;</span><br><span class="line">    <span class="string">"ORB-SLAM2 Copyright (C) 2014-2016 Raul Mur-Artal, University of Zaragoza."</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt;</span><br><span class="line">    <span class="string">"This program comes with ABSOLUTELY NO WARRANTY;"</span> &lt;&lt; <span class="built_in">endl</span>  &lt;&lt;</span><br><span class="line">    <span class="string">"This is free software, and you are welcome to redistribute it"</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt;</span><br><span class="line">    <span class="string">"under certain conditions. See LICENSE.txt."</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Input sensor was set to: "</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(mSensor==MONOCULAR)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Monocular"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(mSensor==STEREO)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Stereo"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(mSensor==RGBD)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"RGB-D"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Check settings file</span></span><br><span class="line">    <span class="comment">//1.读取参数文件，内参、帧率、基线、深度, XXX.yaml</span></span><br><span class="line">    cv::<span class="function">FileStorage <span class="title">fsSettings</span><span class="params">(strSettingsFile.c_str(), cv::FileStorage::READ)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!fsSettings.isOpened())</span><br><span class="line">    &#123;</span><br><span class="line">       <span class="built_in">cerr</span> &lt;&lt; <span class="string">"Failed to open settings file at: "</span> &lt;&lt; strSettingsFile &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">       <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//Load ORB Vocabulary</span></span><br><span class="line">    <span class="comment">//2.下载ORB词袋  .txt</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"Loading ORB Vocabulary. This could take a while..."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    mpVocabulary = <span class="keyword">new</span> ORBVocabulary();</span><br><span class="line">    <span class="keyword">bool</span> bVocLoad = mpVocabulary-&gt;loadFromTextFile(strVocFile);</span><br><span class="line">    <span class="keyword">if</span>(!bVocLoad)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span> &lt;&lt; <span class="string">"Wrong path to vocabulary. "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">cerr</span> &lt;&lt; <span class="string">"Falied to open at: "</span> &lt;&lt; strVocFile &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Vocabulary loaded!"</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Create KeyFrame Database</span></span><br><span class="line">    <span class="comment">//3.创建关键帧数据库</span></span><br><span class="line">    mpKeyFrameDatabase = <span class="keyword">new</span> KeyFrameDatabase(*mpVocabulary);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Create the Map</span></span><br><span class="line">    <span class="comment">//4.创建地图</span></span><br><span class="line">    mpMap = <span class="keyword">new</span> Map();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Create Drawers. These are used by the Viewer</span></span><br><span class="line">    <span class="comment">//创建两个显示窗口</span></span><br><span class="line">    mpFrameDrawer = <span class="keyword">new</span> FrameDrawer(mpMap);</span><br><span class="line">    mpMapDrawer = <span class="keyword">new</span> MapDrawer(mpMap, strSettingsFile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Initialize the Tracking thread</span></span><br><span class="line">    <span class="comment">//5.1初始化 Tracking</span></span><br><span class="line">    <span class="comment">//(it will live in the main thread of execution, the one that called this constructor)</span></span><br><span class="line">    mpTracker = <span class="keyword">new</span> Tracking(<span class="keyword">this</span>, mpVocabulary, mpFrameDrawer, mpMapDrawer,</span><br><span class="line">                             mpMap, mpKeyFrameDatabase, strSettingsFile, mSensor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Initialize the Local Mapping thread and launch</span></span><br><span class="line">    <span class="comment">//5.2初始化并发布 Local Mapping 线程</span></span><br><span class="line">    mpLocalMapper = <span class="keyword">new</span> LocalMapping(mpMap, mSensor==MONOCULAR);</span><br><span class="line">    mptLocalMapping = <span class="keyword">new</span> thread(&amp;ORB_SLAM2::LocalMapping::Run,mpLocalMapper);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Initialize the Loop Closing thread and launch</span></span><br><span class="line">    <span class="comment">//5.3初始化并发布 Loop Closing 线程</span></span><br><span class="line">    mpLoopCloser = <span class="keyword">new</span> LoopClosing(mpMap, mpKeyFrameDatabase, mpVocabulary, mSensor!=MONOCULAR);</span><br><span class="line">    mptLoopClosing = <span class="keyword">new</span> thread(&amp;ORB_SLAM2::LoopClosing::Run, mpLoopCloser);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Initialize the Viewer thread and launch</span></span><br><span class="line">    <span class="comment">//5.4初始化并发布 Viewer 线程</span></span><br><span class="line">    <span class="comment">//初始化窗口，开启线程显示图像和地图点</span></span><br><span class="line">    <span class="keyword">if</span>(bUseViewer)</span><br><span class="line">    &#123;</span><br><span class="line">        mpViewer = <span class="keyword">new</span> Viewer(<span class="keyword">this</span>, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);</span><br><span class="line">        mptViewer = <span class="keyword">new</span> thread(&amp;Viewer::Run, mpViewer);</span><br><span class="line">        mpTracker-&gt;SetViewer(mpViewer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Set pointers between threads</span></span><br><span class="line">    mpTracker-&gt;SetLocalMapper(mpLocalMapper);</span><br><span class="line">    mpTracker-&gt;SetLoopClosing(mpLoopCloser);</span><br><span class="line"></span><br><span class="line">    mpLocalMapper-&gt;SetTracker(mpTracker);</span><br><span class="line">    mpLocalMapper-&gt;SetLoopCloser(mpLoopCloser);</span><br><span class="line"></span><br><span class="line">    mpLoopCloser-&gt;SetTracker(mpTracker);</span><br><span class="line">    mpLoopCloser-&gt;SetLocalMapper(mpLocalMapper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="System-TrackStereo"><a href="#System-TrackStereo" class="headerlink" title="System::TrackStereo"></a>System::TrackStereo</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">cv::Mat System::TrackStereo(<span class="keyword">const</span> cv::Mat &amp;imLeft, <span class="keyword">const</span> cv::Mat &amp;imRight, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(mSensor!=STEREO)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span> &lt;&lt; <span class="string">"ERROR: you called TrackStereo but input sensor was not set to STEREO."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check mode change</span></span><br><span class="line">    &#123;</span><br><span class="line">        unique_lock&lt;mutex&gt; lock(mMutexMode);</span><br><span class="line">        <span class="keyword">if</span>(mbActivateLocalizationMode)</span><br><span class="line">        &#123;</span><br><span class="line">            mpLocalMapper-&gt;RequestStop();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Wait until Local Mapping has effectively stopped</span></span><br><span class="line">            <span class="keyword">while</span>(!mpLocalMapper-&gt;isStopped())</span><br><span class="line">            &#123;</span><br><span class="line">                usleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            mpTracker-&gt;InformOnlyTracking(<span class="literal">true</span>);</span><br><span class="line">            mbActivateLocalizationMode = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(mbDeactivateLocalizationMode)</span><br><span class="line">        &#123;</span><br><span class="line">            mpTracker-&gt;InformOnlyTracking(<span class="literal">false</span>);</span><br><span class="line">            mpLocalMapper-&gt;Release();</span><br><span class="line">            mbDeactivateLocalizationMode = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check reset</span></span><br><span class="line">    &#123;</span><br><span class="line">    unique_lock&lt;mutex&gt; lock(mMutexReset);</span><br><span class="line">    <span class="keyword">if</span>(mbReset)</span><br><span class="line">    &#123;</span><br><span class="line">        mpTracker-&gt;Reset();</span><br><span class="line">        mbReset = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cv::Mat Tcw = mpTracker-&gt;GrabImageStereo(imLeft,imRight,timestamp);</span><br><span class="line"></span><br><span class="line">    unique_lock&lt;mutex&gt; lock2(mMutexState);</span><br><span class="line">    mTrackingState = mpTracker-&gt;mState;</span><br><span class="line">    mTrackedMapPoints = mpTracker-&gt;mCurrentFrame.mvpMapPoints;</span><br><span class="line">    mTrackedKeyPointsUn = mpTracker-&gt;mCurrentFrame.mvKeysUn;</span><br><span class="line">    <span class="keyword">return</span> Tcw;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="System-SaveTrajectoryKITTI"><a href="#System-SaveTrajectoryKITTI" class="headerlink" title="System::SaveTrajectoryKITTI"></a>System::SaveTrajectoryKITTI</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> System::SaveTrajectoryKITTI(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"Saving camera trajectory to "</span> &lt;&lt; filename &lt;&lt; <span class="string">" ..."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">if</span>(mSensor==MONOCULAR)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span> &lt;&lt; <span class="string">"ERROR: SaveTrajectoryKITTI cannot be used for monocular."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;KeyFrame*&gt; vpKFs = mpMap-&gt;GetAllKeyFrames();<span class="comment">//获得所有关键帧</span></span><br><span class="line">    sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);<span class="comment">//对关键帧排序，闭环检测后第一关键帧可能就不在起始位置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Transform all keyframes so that the first keyframe is at the origin.</span></span><br><span class="line">    <span class="comment">// After a loop closure the first keyframe might not be at the origin.</span></span><br><span class="line">    cv::Mat Two = vpKFs[<span class="number">0</span>]-&gt;GetPoseInverse();<span class="comment">//获得第一帧相对于世界坐标系的位姿</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//遍历所有帧</span></span><br><span class="line">    ofstream f;</span><br><span class="line">    f.open(filename.c_str());</span><br><span class="line">    f &lt;&lt; fixed;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Frame pose is stored relative to its reference keyframe (which is optimized by BA and pose graph).</span></span><br><span class="line">    <span class="comment">// We need to get first the keyframe pose and then concatenate the relative transformation.</span></span><br><span class="line">    <span class="comment">// Frames not localized (tracking failure) are not saved.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// For each frame we have a reference keyframe (lRit), the timestamp (lT) and a flag</span></span><br><span class="line">    <span class="comment">// which is true when tracking failed (lbL).</span></span><br><span class="line">    <span class="built_in">list</span>&lt;ORB_SLAM2::KeyFrame*&gt;::iterator lRit = mpTracker-&gt;mlpReferences.begin();<span class="comment">//参考关键帧迭代器</span></span><br><span class="line">    <span class="built_in">list</span>&lt;<span class="keyword">double</span>&gt;::iterator lT = mpTracker-&gt;mlFrameTimes.begin();<span class="comment">//时间戳迭代器</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">list</span>&lt;cv::Mat&gt;::iterator lit=mpTracker-&gt;mlRelativeFramePoses.begin(), lend=mpTracker-&gt;mlRelativeFramePoses.end();lit!=lend;lit++, lRit++, lT++)</span><br><span class="line">    &#123;</span><br><span class="line">        ORB_SLAM2::KeyFrame* pKF = *lRit;</span><br><span class="line"></span><br><span class="line">        cv::Mat Trw = cv::Mat::eye(<span class="number">4</span>,<span class="number">4</span>,CV_32F);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//追踪成功但是关键帧不好，则获取当前关键帧相对于上一帧的位姿，并将上一帧设为关键帧，依次不断的判断关键帧的质量，直到选取合适的关键帧</span></span><br><span class="line">        <span class="keyword">while</span>(pKF-&gt;isBad())</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="comment">//  cout &lt;&lt; "bad parent" &lt;&lt; endl;</span></span><br><span class="line">            Trw = Trw*pKF-&gt;mTcp;</span><br><span class="line">            pKF = pKF-&gt;GetParent();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Trw = Trw*pKF-&gt;GetPose()*Two;<span class="comment">//将关键帧的位姿乘第一帧相对于世界坐标的位姿得到关键帧相对于世界坐标的位姿</span></span><br><span class="line"></span><br><span class="line">        cv::Mat Tcw = (*lit)*Trw;<span class="comment">////在将关键帧相对于世界坐标的位姿乘当前帧相对于关键帧的位姿得到当前帧相对于世界坐标的位姿</span></span><br><span class="line">        cv::Mat Rwc = Tcw.rowRange(<span class="number">0</span>,<span class="number">3</span>).colRange(<span class="number">0</span>,<span class="number">3</span>).t();<span class="comment">//求旋转矩阵R</span></span><br><span class="line">        cv::Mat twc = -Rwc*Tcw.rowRange(<span class="number">0</span>,<span class="number">3</span>).col(<span class="number">3</span>);<span class="comment">//求平移矩阵t</span></span><br><span class="line">        <span class="comment">// 变换矩阵f</span></span><br><span class="line">        f &lt;&lt; setprecision(<span class="number">9</span>) &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>,<span class="number">0</span>) &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>,<span class="number">1</span>)  &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>,<span class="number">2</span>) &lt;&lt; <span class="string">" "</span>  &lt;&lt; twc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>) &lt;&lt; <span class="string">" "</span> &lt;&lt;</span><br><span class="line">             Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>,<span class="number">0</span>) &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>,<span class="number">1</span>)  &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>,<span class="number">2</span>) &lt;&lt; <span class="string">" "</span>  &lt;&lt; twc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>) &lt;&lt; <span class="string">" "</span> &lt;&lt;</span><br><span class="line">             Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">2</span>,<span class="number">0</span>) &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">2</span>,<span class="number">1</span>)  &lt;&lt; <span class="string">" "</span> &lt;&lt; Rwc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">2</span>,<span class="number">2</span>) &lt;&lt; <span class="string">" "</span>  &lt;&lt; twc.at&lt;<span class="keyword">float</span>&gt;(<span class="number">2</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    f.close();</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"trajectory saved!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/" title="ORB-SLAM2——系统入口System">https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ORB-SLAM2/" rel="tag"><i class="fa fa-tag"></i> ORB-SLAM2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/" rel="next" title="ORB-SLAM2——整体框架">
+                  <i class="fa fa-chevron-left"></i> ORB-SLAM2——整体框架
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/" rel="prev" title="ORB-SLAM2——Tracking">
+                  ORB-SLAM2——Tracking <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#system-h"><span class="nav-number">1.</span> <span class="nav-text">system.h</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数ORB-SLAM2-System"><span class="nav-number">2.</span> <span class="nav-text">构造函数ORB_SLAM2::System</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-TrackStereo"><span class="nav-number">3.</span> <span class="nav-text">System::TrackStereo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-SaveTrajectoryKITTI"><span class="nav-number">4.</span> <span class="nav-text">System::SaveTrajectoryKITTI</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">220k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:20</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
