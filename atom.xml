@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://xiao-hu.com.cn/"/>
-  <updated>2019-11-09T03:39:04.024Z</updated>
+  <updated>2019-11-09T03:42:59.513Z</updated>
   <id>https://xiao-hu.com.cn/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>36.二叉搜索树与双向链表</title>
+    <link href="https://xiao-hu.com.cn/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/"/>
+    <id>https://xiao-hu.com.cn/2019/11/09/36-二叉搜索树与双向链表/</id>
+    <published>2019-11-09T03:41:44.000Z</published>
+    <updated>2019-11-09T03:42:59.513Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+    
+      <category term="剑指offer" scheme="https://xiao-hu.com.cn/categories/%E5%89%91%E6%8C%87offer/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>35.复杂链表的复制</title>
@@ -476,30 +500,6 @@
       
         &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
       
-    
-    </summary>
-    
-    
-      <category term="剑指offer" scheme="https://xiao-hu.com.cn/categories/%E5%89%91%E6%8C%87offer/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>22.链表中倒数第k个结点</title>
-    <link href="https://xiao-hu.com.cn/2019/11/02/22-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/"/>
-    <id>https://xiao-hu.com.cn/2019/11/02/22-链表中倒数第k个结点/</id>
-    <published>2019-11-02T12:15:40.000Z</published>
-    <updated>2019-11-02T13:11:55.605Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入一个链表，输出该链表中倒数第k个结点。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol><li>先统计链表节点的个数n，再从头遍历到第n-k+1个节点</li><li>为了实现只遍历一次，可以定义两个指针，第一个指针从链表的头指针开始遍历向前走k-1步，第二个指针保持不动，从第k步开始，第二个指针也开始从链表的头指针开始遍历</li></ol><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>思维全面，注意代码的鲁棒性 。</p><a id="more"></a><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct ListNode &#123;</span></span><br><span class="line"><span class="comment">int val;</span></span><br><span class="line"><span class="comment">struct ListNode *next;</span></span><br><span class="line"><span class="comment">ListNode(int x) :</span></span><br><span class="line"><span class="comment">val(x), next(NULL) &#123;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">&#125;;*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">FindKthToTail</span><span class="params">(ListNode* pListHead, <span class="keyword">unsigned</span> <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        ListNode* Ahead=pListHead;</span><br><span class="line">        ListNode* Behind=pListHead;</span><br><span class="line">        <span class="keyword">if</span>(pListHead==<span class="literal">NULL</span> || k==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> i=<span class="number">0</span>;i&lt;k<span class="number">-1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Ahead-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">                Ahead=Ahead-&gt;next;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(Ahead-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Ahead=Ahead-&gt;next;</span><br><span class="line">            Behind=Behind-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> Behind;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><p>题目：求链表的中间节点，如果节点的总数为奇数，则返回中间节点，若节点的总数为偶数，返回中间两个节点的任意一个。</p><p>思路：定义两个指针，一个指针一次走一步，一个指针一次走两部</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; class=&quot;aplayer-secondary-script-marker&quot;&gt;&lt;/script&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;输入一个链表，输出该链表中倒数第k个结点。&lt;/p&gt;&lt;h1 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;先统计链表节点的个数n，再从头遍历到第n-k+1个节点&lt;/li&gt;
-&lt;li&gt;为了实现只遍历一次，可以定义两个指针，第一个指针从链表的头指针开始遍历向前走k-1步，第二个指针保持不动，从第k步开始，第二个指针也开始从链表的头指针开始遍历&lt;/li&gt;
-&lt;/ol&gt;&lt;h1 id=&quot;代码&quot;&gt;&lt;a href=&quot;#代码&quot; class=&quot;headerlink&quot; title=&quot;代码&quot;&gt;&lt;/a&gt;代码&lt;/h1&gt;&lt;p&gt;思维全面，注意代码的鲁棒性 。&lt;/p&gt;
     
     </summary>
     
