@@ -63,19 +63,20 @@
   };
 </script>
 
-  <meta name="description" content="题目输入一个链表，反转链表后，输出新链表的表头。思路在调整节点i的next指针，需要知道节点i的前一个节点h，事先还要保存i的下一个节点j，以防止链表断开。需要定定义三个指针代码123456789101112131415161718192021222324252627282930&#x2F;*struct ListNode &amp;#123;	int val;	struct ListNode *next;	Lis">
+  <meta name="description" content="mutexmutex是多线程编程时经常用到的，在C++11中需要包含模块。而在该文件中还有其他和mutex协作的类和函数，使得多线程编程时非常方便。mutex类mutex对象是一个lockable的对象，当关键区域需要被互斥访问的时候被用来当作信号。mutex对象提供互斥的拥有权限，并且不支持递归。实际就是mutex是用来进行线程同步的。常用的成员函数有lock()和unlock()">
 <meta property="og:type" content="article">
-<meta property="og:title" content="24.反转链表">
-<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;03&#x2F;24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8&#x2F;index.html">
+<meta property="og:title" content="C++ 学习（5）——多线程">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;10&#x2F;C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="题目输入一个链表，反转链表后，输出新链表的表头。思路在调整节点i的next指针，需要知道节点i的前一个节点h，事先还要保存i的下一个节点j，以防止链表断开。需要定定义三个指针代码123456789101112131415161718192021222324252627282930&#x2F;*struct ListNode &amp;#123;	int val;	struct ListNode *next;	Lis">
+<meta property="og:description" content="mutexmutex是多线程编程时经常用到的，在C++11中需要包含模块。而在该文件中还有其他和mutex协作的类和函数，使得多线程编程时非常方便。mutex类mutex对象是一个lockable的对象，当关键区域需要被互斥访问的时候被用来当作信号。mutex对象提供互斥的拥有权限，并且不支持递归。实际就是mutex是用来进行线程同步的。常用的成员函数有lock()和unlock()">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191103101356721.png#pic_center">
-<meta property="og:updated_time" content="2019-11-03T02:31:22.751Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;home&#x2F;xiaohu&#x2F;.config&#x2F;Typora&#x2F;typora-user-images&#x2F;1573373150246.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;home&#x2F;xiaohu&#x2F;.config&#x2F;Typora&#x2F;typora-user-images&#x2F;1573373275431.png">
+<meta property="og:updated_time" content="2019-11-10T08:09:13.962Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191103101356721.png#pic_center">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;home&#x2F;xiaohu&#x2F;.config&#x2F;Typora&#x2F;typora-user-images&#x2F;1573373150246.png">
 
-<link rel="canonical" href="https://xiao-hu.com.cn/2019/11/03/24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/">
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 
 
 <script id="page-configurations">
@@ -89,7 +90,7 @@
   };
 </script>
 
-  <title>24.反转链表 | xiaohu博客</title>
+  <title>C++ 学习（5）——多线程 | xiaohu博客</title>
   
 
 
@@ -232,7 +233,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/03/24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -245,7 +246,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          24.反转链表
+          C++ 学习（5）——多线程
         </h1>
 
         <div class="post-meta">
@@ -256,7 +257,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-03 10:30:22 / 修改时间：10:31:22" itemprop="dateCreated datePublished" datetime="2019-11-03T10:30:22+08:00">2019-11-03</time>
+              <time title="创建时间：2019-11-10 10:43:09 / 修改时间：16:09:13" itemprop="dateCreated datePublished" datetime="2019-11-10T10:43:09+08:00">2019-11-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -264,8 +265,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
             </span>
@@ -283,14 +284,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>561</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -302,7 +303,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>输入一个链表，反转链表后，输出新链表的表头。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191103101356721.png#pic_center"><br>在调整节点i的next指针，需要知道节点i的前一个节点h，事先还要保存i的下一个节点j，以防止链表断开。需要定定义三个指针</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct ListNode &#123;</span></span><br><span class="line"><span class="comment">	int val;</span></span><br><span class="line"><span class="comment">	struct ListNode *next;</span></span><br><span class="line"><span class="comment">	ListNode(int x) :</span></span><br><span class="line"><span class="comment">			val(x), next(NULL) &#123;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">&#125;;*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">ReverseList</span><span class="params">(ListNode* pHead)</span> </span>&#123;</span><br><span class="line">        ListNode* pRversedHead=<span class="literal">NULL</span>;</span><br><span class="line">        ListNode* pNode=pHead;</span><br><span class="line">        ListNode* pPrev=<span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span>(pNode!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ListNode* pNext=pNode-&gt;next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(pNext==<span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                pRversedHead=pNode;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            pNode-&gt;next=pPrev;</span><br><span class="line">            pPrev=pNode;</span><br><span class="line">            pNode=pNext;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> pRversedHead;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <h1 id="mutex"><a href="#mutex" class="headerlink" title="mutex"></a>mutex</h1><p>mutex是多线程编程时经常用到的，在C++11中需要包含<mutex>模块。而在该文件中还有其他和mutex协作的类和函数，使得多线程编程时非常方便。</mutex></p><h2 id="mutex类"><a href="#mutex类" class="headerlink" title="mutex类"></a>mutex类</h2><p>mutex对象是一个lockable的对象，当关键区域需要被互斥访问的时候被用来当作信号。mutex对象提供互斥的拥有权限，并且不支持递归。</p><p>实际就是mutex是用来进行线程同步的。常用的成员函数有lock()和unlock()</p><a id="more"></a>
+
+
+<p><strong>lcok()</strong></p>
+<p>调用该函数后，调用函数会锁定mutex，在有些情况下调用函数会阻塞。<br>1、如果mutex当前没有被任何其他线程locked，则调用线程lock这个mutex对象（从此刻到直到其成员函数unlock被调用，当前线程拥有mutex对象）。<br>2、如果mutex目前被其他线程locked，则当前线程阻塞直到mutex被其他线程unlock。<br>3、如果mutex目前被当前线程lock，则会产生死锁错误。大部分情况会崩溃，因为mutex不支持递归。</p>
+<p><strong>unlock()</strong></p>
+<p>unlock mutex对象，释放mutex对象的所有权。通常和lock成对使用。<br>调用该函数后，如果有其他线程因为lock同一个mutex对象而阻塞，则他们中的一个会获得mutex的所有权，从而继续执行。</p>
+<p>不使用mutex同步的情况下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"线程"</span> &lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">":"</span> &lt;&lt; <span class="string">"The thread1 is running !"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"线程"</span> &lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">":"</span> &lt;&lt; <span class="string">"The thread2 is running !"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">thread <span class="title">t1</span><span class="params">(fn1)</span></span>;</span><br><span class="line">	<span class="function">thread <span class="title">t2</span><span class="params">(fn2)</span></span>;</span><br><span class="line">	t1.detach();</span><br><span class="line">	t2.detach();</span><br><span class="line"></span><br><span class="line">	this_thread::sleep_for(chrono::milliseconds(<span class="number">1000</span>));</span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>cout是标准输出的接口，所以两个线程同时输出的时候会对cout进行抢占，而两个线程并没有对cout进行同步，所以可能会出现输出错乱的情况。输出结果如下：</strong></p>
+<p><img alt="1573373150246" data-src="/home/xiaohu/.config/Typora/typora-user-images/1573373150246.png"></p>
+<p>使用mutex对cout进行互斥访问，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"线程"</span> &lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">":"</span> &lt;&lt; <span class="string">"The thread1 is running !"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"线程"</span> &lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">":"</span> &lt;&lt; <span class="string">"The thread2 is running !"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">thread <span class="title">t1</span><span class="params">(fn1)</span></span>;</span><br><span class="line">    <span class="function">thread <span class="title">t2</span><span class="params">(fn2)</span></span>;</span><br><span class="line">    t1.detach();</span><br><span class="line">    t2.detach();</span><br><span class="line"></span><br><span class="line">    this_thread::sleep_for(chrono::milliseconds(<span class="number">1000</span>));</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出比较工整了，因为我们对cout作了访问保护，当一个线程输出的时候，另一个线程是不能输出的，只有当一个线程输出完毕了，另一个线程才能输出。而这一切是通过mutex来实现的。</p>
+<p><img alt="1573373275431" data-src="/home/xiaohu/.config/Typora/typora-user-images/1573373275431.png"></p>
+<p><a href="https://blog.csdn.net/coolwriter/article/details/79883253" target="_blank" rel="noopener">C++多线程（一）thread类</a></p>
+<p><a href="https://blog.csdn.net/coolwriter/article/details/79884298" target="_blank" rel="noopener">c++ 多线线程（二）-mutex</a></p>
+<p><a href="https://www.cnblogs.com/haippy/p/3284540.html" target="_blank" rel="noopener">C++11 并发指南系列</a></p>
+<p><a href="https://www.cnblogs.com/haippy/p/3236136.html" target="_blank" rel="noopener">C++11 并发指南二(std::thread 详解)</a></p>
+<p><a href="https://www.cnblogs.com/haippy/p/3237213.html" target="_blank" rel="noopener">C++11 并发指南三(std::mutex 详解)</a></p>
+
     </div>
     
     
@@ -322,7 +343,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://xiao-hu.com.cn/2019/11/03/24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" title="24.反转链表">https://xiao-hu.com.cn/2019/11/03/24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/</a>
+    <a href="https://xiao-hu.com.cn/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="C++ 学习（5）——多线程">https://xiao-hu.com.cn/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -337,17 +358,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/02/22-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/" rel="next" title="22.链表中倒数第k个结点">
-                  <i class="fa fa-chevron-left"></i> 22.链表中倒数第k个结点
+                <a href="/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" rel="next" title="36.二叉搜索树与双向链表">
+                  <i class="fa fa-chevron-left"></i> 36.二叉搜索树与双向链表
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/03/25-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8%E8%A1%A8/" rel="prev" title="25.合并两个排序的链表表">
-                  25.合并两个排序的链表表 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -393,7 +411,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mutex"><span class="nav-number">1.</span> <span class="nav-text">mutex</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mutex类"><span class="nav-number">1.1.</span> <span class="nav-text">mutex类</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -569,56 +587,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 

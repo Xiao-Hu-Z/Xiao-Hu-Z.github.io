@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">Ubuntu16下Github+Hexo搭建博客教程</a>
+            <a href="/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">IMU测量模型、运动模型、误差模型</a>
         </h1>
 
         <div class="post-meta">
@@ -253,14 +253,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-23 22:15:34" itemprop="dateCreated datePublished" datetime="2019-10-23T22:15:34+08:00">2019-10-23</time>
+              <time title="创建时间：2019-10-24 16:40:07" itemprop="dateCreated datePublished" datetime="2019-10-24T16:40:07+08:00">2019-10-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-25 15:02:58" itemprop="dateModified" datetime="2019-10-25T15:02:58+08:00">2019-10-25</time>
+                <time title="修改时间：2019-10-30 11:38:12" itemprop="dateModified" datetime="2019-10-30T11:38:12+08:00">2019-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,8 +268,14 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">hexo</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/VIO/" itemprop="url" rel="index">
+                    <span itemprop="name">VIO</span>
                   </a>
                 </span>
             </span>
@@ -280,14 +286,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -299,10 +305,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>﻿博客网址</p><p>==<a href="https://xiao-hu.com.cn/">https://xiao-hu.com.cn/</a>==</p><h1 id="安装git、nodejs"><a href="#安装git、nodejs" class="headerlink" title="安装git、nodejs"></a>安装git、nodejs</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure><p>升级nodejs版本，目前的最新版本v10.6.0<br>参考：<a href="https://blog.csdn.net/u010277553/article/details/80938829" target="_blank" rel="noopener">Ubuntu16 升级nodejs版本</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install n -g</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br></pre></td></tr></table></figure><br>加速下载：<a href="https://blog.csdn.net/ibmall/article/details/81390639" target="_blank" rel="noopener">npm 安装 hexo 卡住问题解决</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
+          <h1 id="IMU测量模型"><a href="#IMU测量模型" class="headerlink" title="IMU测量模型"></a>IMU测量模型</h1><ul>
+<li><p>MEMS 加速度计工作原理<br>测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示<br>加速度计测量值$a_m$为弹簧拉力对应的加速度</p>
+<script type="math/tex; mode=display">a_m=\frac{f}{m}=a-g</script><p>其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。</p>
+</li>
+<li><p>陀螺仪测量原理<br>陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。</p>
+<p>低端 MEMS 陀螺上一般采用振动陀螺原理，通过测量 Coriolisforce 来间接得到角速度。</p>
+<blockquote>
+<p>在旋转坐标系中，运动的物体受到科氏力作用<br>MEMS 陀螺仪：一个主动运动轴 + 一个敏感轴<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017192448388.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h1 id="IMU运动模型"><a href="#IMU运动模型" class="headerlink" title="IMU运动模型"></a>IMU运动模型</h1><h2 id="旋转量求导"><a href="#旋转量求导" class="headerlink" title="旋转量求导"></a>旋转量求导</h2><p>首先，如下图所示，考虑一个从原点出发的向量 r 绕单位轴 u 旋转，角速度大小为 θ˙。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017155511191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>角速度矢量可以表示为${\boldsymbol \omega}=\dot{\theta}u$，易得向量 r 末端点 P 的速度矢量，即 r的时间一阶导为</p>
+<script type="math/tex; mode=display">\frac{d{r}}{dt} = {\boldsymbol \omega} \times {r}</script><p>坐标系 {B} 绕单位轴 u 旋转，如上所述，其三个轴的时间一阶导同样为</p>
+<script type="math/tex; mode=display">\frac{d{\bf i}_B}{dt} = {\boldsymbol \omega} \times {\bf i}_B, \frac{d{\bf j}_B}{dt} = {\boldsymbol \omega} \times {\bf j}_B, \frac{d{\bf k}_B}{dt} = {\boldsymbol \omega} \times {\bf k}_B</script><p>$[ {\bf i}_B \quad {\bf j}_B \quad {\bf k}_B ]$ 实际上就是坐标系 {B} 相对于参考坐标系的旋转矩阵 R，R的时间一阶导为</p>
+<script type="math/tex; mode=display">\dot{\bf R} =  [ {\boldsymbol \omega} \times {\bf i}_B \quad {\boldsymbol \omega} \times {\bf j}_B \quad {\boldsymbol \omega} \times {\bf k}_B ] = {\boldsymbol \omega} \times {\bf R}</script><p>叉乘运算可以转化为负对称矩阵的乘法：</p>
+<script type="math/tex; mode=display">\dot{\bf R} = {\boldsymbol \omega}^{\land} {\bf R}</script><p>其中负对称矩阵${\boldsymbol \omega}^{\land}$为</p>
+<script type="math/tex; mode=display">% <![CDATA[
+\quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
+<script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2019/10/24/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -509,6 +532,109 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/10/23/hexo4.0%20-%20Next7.2.4%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">Ubuntu16下Github+Hexo搭建博客教程</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-23 22:15:34" itemprop="dateCreated datePublished" datetime="2019-10-23T22:15:34+08:00">2019-10-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-25 15:02:58" itemprop="dateModified" datetime="2019-10-25T15:02:58+08:00">2019-10-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>﻿博客网址</p><p>==<a href="https://xiao-hu.com.cn/">https://xiao-hu.com.cn/</a>==</p><h1 id="安装git、nodejs"><a href="#安装git、nodejs" class="headerlink" title="安装git、nodejs"></a>安装git、nodejs</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure><p>升级nodejs版本，目前的最新版本v10.6.0<br>参考：<a href="https://blog.csdn.net/u010277553/article/details/80938829" target="_blank" rel="noopener">Ubuntu16 升级nodejs版本</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install n -g</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br></pre></td></tr></table></figure><br>加速下载：<a href="https://blog.csdn.net/ibmall/article/details/81390639" target="_blank" rel="noopener">npm 安装 hexo 卡住问题解决</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1169,109 +1295,6 @@
 
 
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/VINS-Mono%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88VINS-Mono-A-Robust-and-Versatile-Monocular-Visual-Inertial-State-Estimator%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/19/VINS-Mono%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88VINS-Mono-A-Robust-and-Versatile-Monocular-Visual-Inertial-State-Estimator%EF%BC%89/" class="post-title-link" itemprop="url">VINS-Mono——论文翻译（A Robust and Versatile Monocular Visual-Inertial State Estimator）</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-19 22:08:36" itemprop="dateCreated datePublished" datetime="2019-10-19T22:08:36+08:00">2019-10-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 19:39:25" itemprop="dateModified" datetime="2019-10-30T19:39:25+08:00">2019-10-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS-Mono</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>18k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>16 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <font color="gray" size="10"><center>VINS-Mono：一种鲁棒且通用的单目视觉惯性状态估计器</center></font><p><strong>摘要</strong>：由一个相机和一个低成本惯性测量单元(IMU)组成的单目视觉惯性系统(VINS)，构成了用于度量六自由度状态估计的最小传感器套件。然而，由于缺乏直接距离测量，在IMU处理、估计器初始化、外部标定和非线性优化等方面提出了重大挑战。本文提出了VINS-Mono：一种具有鲁棒性和通用性的单目视觉惯性状态估计器。该方法从用于估计器初始化和故障恢复的鲁棒的程序开始。采用一种基于紧耦合、非线性优化的方法，通过融合预积分后的IMU测量值和特征观测值，获得高精度的视觉惯性里程计。结合紧耦合方法，回环检测模块能够以最小的计算代价实现重定位。此外，我们还进行四自由度位姿图优化，以加强全局一致性。我们验证了该系统在公共数据集和真实环境实验的性能，并与其他最先进的算法进行了比较。我们还在MAV平台上执行机载闭环自主飞行，并将算法移植到基于iOS的demo中。特别强调的是，本文提出的工作是一个可靠、完整和通用的系统，适用于需要高精度定位的不同应用。我们为PC和iOS移动设备开源了我们的实现方法。<br>关键词：单目视觉惯性系统，状态估计，传感器融合，SLAM</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/19/VINS-Mono%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88VINS-Mono-A-Robust-and-Versatile-Monocular-Visual-Inertial-State-Estimator%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
   </div>
 
   
@@ -1322,7 +1345,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1382,12 +1405,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">234k</span>
+    <span title="站点总字数">236k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:33</span>
+    <span title="站点阅读时长">3:35</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
