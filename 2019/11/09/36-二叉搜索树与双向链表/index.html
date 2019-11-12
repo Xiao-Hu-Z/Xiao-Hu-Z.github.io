@@ -63,14 +63,14 @@
   };
 </script>
 
-  <meta name="description" content="题目描述输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。">
+  <meta name="description" content="题目描述输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。思路1、将左子树构成双链表，并返回该链表的头节点(左子树最左边的节点)2、定位到左链表的最后一个节点(左子树最右边的节点)3、如果左子树链表不为空，则将当前root追加到左子树链表后">
 <meta property="og:type" content="article">
 <meta property="og:title" content="36.二叉搜索树与双向链表">
 <meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;09&#x2F;36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8&#x2F;index.html">
 <meta property="og:site_name" content="xiaohu博客">
-<meta property="og:description" content="题目描述输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。">
+<meta property="og:description" content="题目描述输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。思路1、将左子树构成双链表，并返回该链表的头节点(左子树最左边的节点)2、定位到左链表的最后一个节点(左子树最右边的节点)3、如果左子树链表不为空，则将当前root追加到左子树链表后">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-09T03:42:59.513Z">
+<meta property="og:updated_time" content="2019-11-12T07:00:06.380Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xiao-hu.com.cn/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/">
@@ -252,10 +252,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-11-09 11:41:44 / 修改时间：11:42:59" itemprop="dateCreated datePublished" datetime="2019-11-09T11:41:44+08:00">2019-11-09</time>
+              <time title="创建时间：2019-11-09 11:41:44" itemprop="dateCreated datePublished" datetime="2019-11-09T11:41:44+08:00">2019-11-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-12 15:00:06" itemprop="dateModified" datetime="2019-11-12T15:00:06+08:00">2019-11-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -281,7 +287,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>61</span>
+              <span>247</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -300,7 +306,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p>
+        <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>1、将左子树构成双链表，并返回该链表的头节点(左子树最左边的节点)</p><p>2、定位到左链表的最后一个节点(左子树最右边的节点)</p><p>3、如果左子树链表不为空，则将当前root追加到左子树链表后</p><a id="more"></a>
+
+
+
+<p>4、将右子树构造成双向链表，并返回链表头结点(右子树最左边的节点)</p>
+<p>5、如果右子树链表不为空，将右子树链表追加到当前root后</p>
+<p>6、根据左子树链表是否为空返回的整体双向链表的头节点</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>待写！！！</p>
+
     </div>
     
     
@@ -391,7 +405,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -407,7 +421,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -467,7 +481,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">236k</span>
+    <span title="站点总字数">237k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
