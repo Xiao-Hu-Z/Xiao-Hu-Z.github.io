@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/08/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95SSD-tensorflow/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/08/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95SSD-tensorflow/" class="post-title-link" itemprop="url">目标检测算法SSD+tensorflow</a>
+            <a href="/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">29.顺时针打印矩阵</a>
         </h1>
 
         <div class="post-meta">
@@ -252,30 +252,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-07-08 17:13:25" itemprop="dateCreated datePublished" datetime="2019-07-08T17:13:25+08:00">2019-07-08</time>
+              <time title="创建时间：2019-11-05 14:59:44 / 修改时间：20:05:59" itemprop="dateCreated datePublished" datetime="2019-11-05T14:59:44+08:00">2019-11-05</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:14:30" itemprop="dateModified" datetime="2019-11-19T17:14:30+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -286,549 +274,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1-SSD-minimal-example"><a href="#1-SSD-minimal-example" class="headerlink" title="1. SSD minimal example"></a>1. SSD minimal example</h1><p>To run the notebook you first have to unzip the checkpoint files in ./checkpoint</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip ssd_300_vgg<span class="selector-class">.ckpt</span><span class="selector-class">.zip</span></span><br></pre></td></tr></table></figure><p>解压数据如图所示</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190708202441366.png"><br>终端运行：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">jupyter</span> notebook notebooks/ssd_notebook.ipynb</span><br></pre></td></tr></table></figure><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190708202659424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/08/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95SSD-tensorflow/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/08/SSD%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/08/SSD%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">SSD论文笔记</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-08 17:11:59" itemprop="dateCreated datePublished" datetime="2019-07-08T17:11:59+08:00">2019-07-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:12:53" itemprop="dateModified" datetime="2019-11-19T17:12:53+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>提出了一种使用单个深度神经网络来检测图像中的目标的方法。我们的方法命名为SSD，将边界框的输出空间离散化为不同长宽比的一组默认框和并缩放每个特征映射的位置。在预测时，网络会在每个默认框中为每个目标类别的出现生成分数，并对框进行调整以更好地匹配目标形状。<br>网络还结合了不同分辨率的多个特征映射的预测，自然地处理各种尺寸的目标。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/08/SSD%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/06/AlexNet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/06/AlexNet/" class="post-title-link" itemprop="url">AlexNet</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-06 17:02:50" itemprop="dateCreated datePublished" datetime="2019-07-06T17:02:50+08:00">2019-07-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 19:47:54" itemprop="dateModified" datetime="2019-11-19T19:47:54+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="AlexNet特点"><a href="#AlexNet特点" class="headerlink" title="AlexNet特点"></a>AlexNet特点</h1><p>AlexNet是在LeNet的基础上加深了网络的结构，学习更丰富更高维的图像特征。AlexNet的特点：</p><ul>
-<li>更深的网络结构</li>
-<li>使用层叠的卷积层，即卷积层+卷积层+池化层来提取图像的特征</li>
-<li>使用Dropout抑制过拟合<ul>
-<li>使用数据增强Data Augmentation抑制过拟合</li>
-<li>使用Relu替换之前的sigmoid的作为激活函数</li>
-<li>多GPU训练</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/06/AlexNet/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Faster RCNN论文笔记</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-05 17:10:40" itemprop="dateCreated datePublished" datetime="2019-07-05T17:10:40+08:00">2019-07-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:11:30" itemprop="dateModified" datetime="2019-11-19T17:11:30+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>最先进的目标检测网络依靠 region proposal algorithms来假设目标的位置。SPPnet和Fast R-CNN等研究已经减少了这些检测网络的运行时间，使得 region proposal 计算成为一个瓶颈<br>Region Proposal Network (RPN) ，RPN网络与检测网络共享完整的图像卷积特征，大大减少了生成候选框所需的时间。RPN是一个全卷积网络，可以同时在每个位置预测目标边界和目标分数。RPN经过端到端的训练，可以生成高质量的区域建议，使用Fast R-CNN来用于检测。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/05/Fast-R-CNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/05/Fast-R-CNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Fast R-CNN论文笔记</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-05 17:08:56" itemprop="dateCreated datePublished" datetime="2019-07-05T17:08:56+08:00">2019-07-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 19:46:26" itemprop="dateModified" datetime="2019-11-19T19:46:26+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文提出了一种快速的基于区域的卷积网络方法（fast R-CNN）用于目标检测。Fast R-CNN建立在以前使用的深卷积网络有效地分类目标的成果上。相比于之前的成果，Fast R-CNN采用了多项创新提高训练和测试速度来提高检测精度</p><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>复杂性的产生是因为检测需要目标的精确定位，这就导致两个主要的难点。首先，必须处理大量候选目标位置（通常称为“建议”）。 第二，这些候选框仅提供粗略定位，其必须被精细化以实现精确定位。 这些问题的解决方案经常会影响速度，准确性或简单性。<br>简化了最先进的基于卷积网络的目标检测器的训练过程。我们提出一个单阶段训练算法，共同学习分类候选框和改进他们的空间位置。 </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/05/Fast-R-CNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/05/VGG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/05/VGG/" class="post-title-link" itemprop="url">VGG</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-05 17:05:15" itemprop="dateCreated datePublished" datetime="2019-07-05T17:05:15+08:00">2019-07-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:07:08" itemprop="dateModified" datetime="2019-11-19T17:07:08+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>463</span>
+              <span>984</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -847,16 +293,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="VGG的网络结构图"><a href="#VGG的网络结构图" class="headerlink" title="VGG的网络结构图"></a>VGG的网络结构图</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019070514444886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br> 由上图所知，VGG一共有五段卷积，每段卷积之后紧接着最大池化层，作者一共实验了6种网络结构。分别是VGG-11，VGG-13,VGG-16,VGG-19，网络的输入是224*224大小的图像，输出是图像分类结果<br>VGG与Alexnet相比，具有如下改进几点：</p><ul>
-<li>去掉了LRN层，作者发现深度网络中LRN的作用并不明显，干脆取消了<ul>
-<li>采用更小的卷积核-3x3，Alexnet中使用了更大的卷积核，比如有7x7的，因此VGG相对于Alexnet而言，参数量更少</li>
-<li>池化核变小，VGG中的池化核是2x2，stride为2，Alexnet池化核是3x3，步长为2</li>
-</ul>
-</li>
-</ul>
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>定义2个变量保存行数和列数，定义4个变量保存边界值，然后使用4个循环就可以了</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/05/VGG/#more" rel="contents">
+              <a class="btn" href="/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -886,7 +326,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/05/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -900,7 +340,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">SPPNet论文笔记</a>
+            <a href="/2019/11/05/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">28.对称的二叉树</a>
         </h1>
 
         <div class="post-meta">
@@ -909,30 +349,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-07-04 17:06:55" itemprop="dateCreated datePublished" datetime="2019-07-04T17:06:55+08:00">2019-07-04</time>
+              <time title="创建时间：2019-11-05 14:32:15 / 修改时间：14:59:59" itemprop="dateCreated datePublished" datetime="2019-11-05T14:32:15+08:00">2019-11-05</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:08:38" itemprop="dateModified" datetime="2019-11-19T17:08:38+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -943,14 +371,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.8k</span>
+              <span>49</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -962,23 +390,205 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><ol>
-<li>当前深度卷积神经网络（CNNs）都需要输入的图像尺寸固定（比如224×224），这种人为的需要导致面对任意尺寸和比例的图像或子图像时降低识别的精度(因为要经过crop/warp）</li>
-<li>空间金字塔池化”(spatial pyramid pooling,)的池化策略以消除上述限制。SPP-net的网络结构能够产生固定大小的表示（representation）不管输入图像的尺寸或比例。</li>
-<li>使用SPP-net，只需要从整张图片计算一次特征图（feature map），然后对任意尺寸的区域（子图像）进行特征池化以产生一个固定尺寸的表示用于训练检测器。这个方法避免了反复计算卷积特征。<h1 id="1-INTRODUCTION"><a href="#1-INTRODUCTION" class="headerlink" title="1 INTRODUCTION"></a>1 INTRODUCTION</h1></li>
-<li>CNNs在训练和测试时一个技术问题：需要输入的图像尺寸是固定的（比如224×224），限制了输入图像的长宽比和缩放尺度。当遇到任意尺寸的图像是，都是先将图像适应成固定尺寸，方法包括裁剪和变。但裁剪会导致信息的丢失，变形会导致位置信息的扭曲变形，就会影响识别的精度<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704202635434.png"></li>
-<li><p><strong>为什么CNNs需要一个固定的输入尺寸</strong>？<br>卷积层的参数和输入大小无关，它仅仅是一个卷积核在图像上滑动，不管输入图像多大都没关系，只是对不同大小的图片卷积出不同大小的特征图，但是全连接层的参数就和输入图像大小有关，因为它要把输入的所有像素点连接起来,需要指定输入层神经元个数和输出层神经元个数，所以需要规定输入的feature的大小。</p>
-</li>
-<li><p>SPP层放在最后一个卷积层之后。SPP层对特征图进行池化，并产生固定长度的输出，这个输出再喂给全连接层<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704203627122.png"></p>
-</li>
-<li>SPP有几个突出的优点：.<br> （1） SPP能在输入尺寸任意的情况下产生固定大小的输出，而以前的深度网络[3]中的滑窗池化(sliding window pooling)则不能<br> （2）SPP使用了多层空间箱(bin)，而滑窗池化则只用了一个窗口尺寸。多级池化对于物体的变形有十分强的鲁棒性。<br> （3）由于其对输入的灵活性，SPP可以池化从各种尺度抽取出来的特征</li>
-<li>SPP-net不仅仅让测试阶段允许任意尺寸的输入能够产生表示(representations)，也允许训练阶段的图像可以有各种尺寸和缩放尺度。使用各种尺寸的图像进行训练可以提高尺度不变性，以及减少过拟合。</li>
-<li>SPP的优点是与各类CNN设计是正交的，SPP对不同的CNN架构都有提升，可以帮助提升更复杂的（更大、更深）的卷积架构</li>
-<li>在目标检测方面，SPP-net也表现优异.基于SPP-net的系统（建立在R-CNN流水线上）比R-CNN计算卷积特征要快24-120倍，而精度却更高。</li>
-</ol>
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>请实现一个函数，用来判断一颗二叉树是不是对称的。如果一颗二叉树和它的镜像一样，那么他是对称的。</p>
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/05/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/05/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">28.对称的二叉树</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-05 14:32:15" itemprop="dateCreated datePublished" datetime="2019-11-05T14:32:15+08:00">2019-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-20 15:38:41" itemprop="dateModified" datetime="2020-06-20T15:38:41+08:00">2020-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>623</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>请实现一个函数，用来判断一颗二叉树是不是对称的。如果一颗二叉树和它的镜像一样，那么他是对称的。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct TreeNode &#123;</span></span><br><span class="line"><span class="comment">    int val;</span></span><br><span class="line"><span class="comment">    struct TreeNode *left;</span></span><br><span class="line"><span class="comment">    struct TreeNode *right;</span></span><br><span class="line"><span class="comment">    TreeNode(int x) :</span></span><br><span class="line"><span class="comment">            val(x), left(NULL), right(NULL) &#123;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSymmetrical</span><span class="params">(TreeNode* pRoot)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> dfs(pRoot,pRoot);</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(TreeNode* pRoot1,TreeNode* pRoot2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!pRoot1 &amp;&amp; !pRoot2)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(!pRoot1 || !pRoot2)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//需要判断值是否相等</span></span><br><span class="line">            <span class="keyword">return</span> pRoot1-&gt;val==pRoot2-&gt;val &amp;&amp; dfs(pRoot1-&gt;left,pRoot2-&gt;right) &amp;&amp; dfs(pRoot1-&gt;right,pRoot2-&gt;left);</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/" class="post-title-link" itemprop="url">ORB-SLAM2——Tracking</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 20:59:45" itemprop="dateCreated datePublished" datetime="2019-11-04T20:59:45+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-14 15:11:01" itemprop="dateModified" datetime="2019-11-14T15:11:01+08:00">2019-11-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>47k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>43 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="整体流程图"><a href="#整体流程图" class="headerlink" title="整体流程图"></a>整体流程图</h1><p>作为ORB-SLAM2里三大线程中的第一个，Tracking线程接收传感器（摄像头）传来的每一帧，并将处理的关键帧传递给LocalMapping线程。Tracking线程其实是系统里的主线程，通过反复调用Track函数进行。<br>Tracking模块主要作用：</p><ul>
+<li>单目地图的初始化</li>
+<li>当前帧的位姿估计</li>
+<li>当前帧的局部地图跟踪</li>
+<li>生成候选关键帧</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
+              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1008,7 +618,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1022,7 +632,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">yolo v3 论文笔记</a>
+            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/" class="post-title-link" itemprop="url">ORB-SLAM2——系统入口System</a>
         </h1>
 
         <div class="post-meta">
@@ -1031,30 +641,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-07-03 17:55:50" itemprop="dateCreated datePublished" datetime="2019-07-03T17:55:50+08:00">2019-07-03</time>
+              <time title="创建时间：2019-11-04 19:12:42 / 修改时间：20:58:49" itemprop="dateCreated datePublished" datetime="2019-11-04T19:12:42+08:00">2019-11-04</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:02:31" itemprop="dateModified" datetime="2019-11-19T17:02:31+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
                   </a>
                 </span>
             </span>
@@ -1065,7 +663,105 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191104191938848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+ </p><p>在主函数中，我们创建了一个ORB_SLAM2::System的对象SLAM，这个时候就会进入到SLAM系统的主接口System.cc。这个代码是所有调用SLAM系统的主入口。</p><h1 id="system-h"><a href="#system-h" class="headerlink" title="system.h"></a>system.h</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">System</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    <span class="keyword">enum</span> eSensor&#123;</span><br><span class="line">        MONOCULAR=<span class="number">0</span>,</span><br><span class="line">        STEREO=<span class="number">1</span>,</span><br><span class="line">        RGBD=<span class="number">2</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.</span></span><br><span class="line">    System(<span class="keyword">const</span> <span class="built_in">string</span> &amp;strVocFile, <span class="keyword">const</span> <span class="built_in">string</span> &amp;strSettingsFile, <span class="keyword">const</span> eSensor sensor, <span class="keyword">const</span> <span class="keyword">bool</span> bUseViewer = <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking函数:输出相机位姿</span></span><br><span class="line">    <span class="comment">// Proccess the given stereo frame. Images must be synchronized and rectified.</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackStereo</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;imLeft, <span class="keyword">const</span> cv::Mat &amp;imRight, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Process the given rgbd frame. Depthmap must be registered to the RGB frame.</span></span><br><span class="line">    <span class="comment">// Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Input depthmap: Float (CV_32F).</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackRGBD</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> cv::Mat &amp;depthmap, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Proccess the given monocular frame</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackMonocular</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This stops local mapping thread (map building) and performs only camera tracking.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ActivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// This resumes local mapping thread and performs SLAM again.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DeactivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Returns true if there have been a big map change (loop closure, global BA)</span></span><br><span class="line">    <span class="comment">// since last call to this function</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">MapChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset the system (clear map)</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Reset</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// All threads will be requested to finish.</span></span><br><span class="line">    <span class="comment">// It waits until all threads have finished.</span></span><br><span class="line">    <span class="comment">// This function must be called before saving the trajectory.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Shutdown</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save keyframe poses in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// This method works for all sensor input.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveKeyFrameTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the KITTI dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://www.cvlibs.net/datasets/kitti/eval_odometry.php</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryKITTI</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> Save/Load functions</span></span><br><span class="line">    <span class="comment">// SaveMap(const string &amp;filename);</span></span><br><span class="line">    <span class="comment">// LoadMap(const string &amp;filename);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Information from most recent processed frame</span></span><br><span class="line">    <span class="comment">// You can call this right after TrackMonocular (or stereo or RGBD)</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetTrackingState</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; GetTrackedMapPoints();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; GetTrackedKeyPointsUn();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    eSensor mSensor;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ORB vocabulary used for place recognition and feature matching.</span></span><br><span class="line">    ORBVocabulary* mpVocabulary;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// KeyFrame database for place recognition (relocalization and loop detection).</span></span><br><span class="line">    KeyFrameDatabase* mpKeyFrameDatabase;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Map structure that stores the pointers to all KeyFrames and MapPoints.</span></span><br><span class="line">    Map* mpMap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracker. It receives a frame and computes the associated camera pose.</span></span><br><span class="line">    <span class="comment">// It also decides when to insert a new keyframe, create some new MapPoints and</span></span><br><span class="line">    <span class="comment">// performs relocalization if tracking fails.</span></span><br><span class="line">    Tracking* mpTracker;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Local Mapper. It manages the local map and performs local bundle adjustment.</span></span><br><span class="line">    LocalMapping* mpLocalMapper;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Loop Closer. It searches loops with every new keyframe. If there is a loop it performs</span></span><br><span class="line">    <span class="comment">// a pose graph optimization and full bundle adjustment (in a new thread) afterwards.</span></span><br><span class="line">    LoopClosing* mpLoopCloser;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The viewer draws the map and the current camera pose. It uses Pangolin.</span></span><br><span class="line">    Viewer* mpViewer;</span><br><span class="line"></span><br><span class="line">    FrameDrawer* mpFrameDrawer;</span><br><span class="line">    MapDrawer* mpMapDrawer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// System threads: Local Mapping, Loop Closing, Viewer.</span></span><br><span class="line">    <span class="comment">// The Tracking thread "lives" in the main execution thread that creates the System object.</span></span><br><span class="line">    <span class="built_in">std</span>::thread* mptLocalMapping;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptLoopClosing;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptViewer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset flag</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexReset;</span><br><span class="line">    <span class="keyword">bool</span> mbReset;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Change mode flags</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexMode;</span><br><span class="line">    <span class="keyword">bool</span> mbActivateLocalizationMode;</span><br><span class="line">    <span class="keyword">bool</span> mbDeactivateLocalizationMode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking state</span></span><br><span class="line">    <span class="keyword">int</span> mTrackingState;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; mTrackedMapPoints;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; mTrackedKeyPointsUn;</span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexState;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">ORB-SLAM2——整体框架</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-04 19:08:34 / 修改时间：19:10:07" itemprop="dateCreated datePublished" datetime="2019-11-04T19:08:34+08:00">2019-11-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1084,10 +780,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703184150894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>作者对YOLO进行了进一步的更新，做了一些小设计更改让其表现更好。YOLOv3比YOLOv2相较大了一些，却更加准确，但是依然很快。在320×320 YOLOv3在28.2mAP上仅运行了22ms，和SSD的准确度相同但是快了3倍。在关注原有的0.5 IOU mAP 检测指标时，YOLOv3表现相当棒。在Titan X在52ms内实现了57.9 AP50，与RetinaNet在198ms内实现57.5AP50相当，但是快了3.8倍。</p>
+          <h1 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191104184711727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p> ORB_SLAM2由3+1个平行线程组成，包括跟踪、局部建图、回环检测以及在回环检测后的全局BA优化。之所以说是3+1，因为第四个线程仅在回环检测并确认后才执行。</p><p>三个主要并行线程：<br>Tracking：寻找局部地图特征点并进行匹配，运用纯运动BA最小化重投影误差，定位每帧相机位姿。<br>Local Mapping：运用局部BA算法优化相机位姿和特征点云。<br>Loop Closing：检测回环并通过位姿图优化消除累计漂移误差。在位姿图优化后会启动第4个线程执行全局BA算法，计算整个系统最优结构和运动结果。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
+              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1117,7 +813,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/03/yolo-v2-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1131,7 +827,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/03/yolo-v2-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">yolo v2 论文笔记</a>
+            <a href="/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/" class="post-title-link" itemprop="url">C++ 学习（1）——vector</a>
         </h1>
 
         <div class="post-meta">
@@ -1141,14 +837,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-03 16:55:50" itemprop="dateCreated datePublished" datetime="2019-07-03T16:55:50+08:00">2019-07-03</time>
+              <time title="创建时间：2019-11-04 18:18:28" itemprop="dateCreated datePublished" datetime="2019-11-04T18:18:28+08:00">2019-11-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:02:21" itemprop="dateModified" datetime="2019-11-19T17:02:21+08:00">2019-11-19</time>
+                <time title="修改时间：2019-11-08 17:01:13" itemprop="dateModified" datetime="2019-11-08T17:01:13+08:00">2019-11-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1156,14 +852,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
             </span>
@@ -1174,116 +864,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>YOLO9000，一个最先进的，实时目标检测系统，可以检测超过9000个目标类别。<br>YOLOv2模型可以运行在不同的大小的图片上，提供速度和精度之间的轻松权衡<br>提出了一种联合训练目标检测和分类的方法。在COCO检测数据集和ImageNet分类数据集上同时训练YOLO9000，联合训练方法允许YOLO9000预测没有标记检测数据的目标类的检测，在ImageNet检测数据集上验证我们的方法</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/03/yolo-v2-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/02/yolo-v1-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/02/yolo-v1-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">yolo v1 论文笔记</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-02 16:55:50" itemprop="dateCreated datePublished" datetime="2019-07-02T16:55:50+08:00">2019-07-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 17:02:11" itemprop="dateModified" datetime="2019-11-19T17:02:11+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3k</span>
+              <span>3.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1302,18 +883,314 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>目标检测比较流行的算法可以分为两类</p><ul>
-<li>基于Region Proposal的R-CNN系算法（R-CNN，Fast R-CNN, Faster R-CNN），它们是two-stage的，需要先使用启发式方法（selective search）或者CNN网络（RPN）产生Region Proposal，然后再在Region Proposal上做分类与回归。准确度高一些，但是速度慢</li>
-<li>Yolo，SSD这类one-stage算法，其仅仅使用一个CNN网络直接预测不同目标的类别与位置。算法是速度快，但是准确性要低一些</li>
-</ul>
+          <h1 id="一、什么是vector？"><a href="#一、什么是vector？" class="headerlink" title="一、什么是vector？"></a>一、什么是vector？</h1><p>向量（Vector）是一个封装了动态大小数组的顺序容器（Sequence Container）。跟任意其它类型容器一样，它能够存放各种类型的对象。可以简单的认为，向量是一个能够存放任意类型的动态数组。 </p><h1 id="二、容器特性"><a href="#二、容器特性" class="headerlink" title="二、容器特性"></a>二、容器特性</h1><ol>
+<li><p>顺序序列</p>
+<p>顺序容器中的元素按照严格的线性顺序排序。可以通过元素在序列中的位置访问对应的元素。</p>
+</li>
+</ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/02/yolo-v1-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
+              <a class="btn" href="/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
         
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">27.二叉树的镜像</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 15:02:06" itemprop="dateCreated datePublished" datetime="2019-11-04T15:02:06+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-05 14:32:26" itemprop="dateModified" datetime="2019-11-05T14:32:26+08:00">2019-11-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>操作给定的二叉树，将其变换为源二叉树的镜像。</p><p>输入描述:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">二叉树的镜像定义：源二叉树 </span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">6</span>   <span class="number">10</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">5</span>  <span class="number">7</span> <span class="number">9</span> <span class="number">11</span></span><br><span class="line">    	镜像二叉树</span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">10</span>   <span class="number">6</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">11</span> <span class="number">9</span> <span class="number">7</span>  <span class="number">5</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/27.%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/27.%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">27.二叉树的镜像</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 15:02:06" itemprop="dateCreated datePublished" datetime="2019-11-04T15:02:06+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-20 14:21:03" itemprop="dateModified" datetime="2020-06-20T14:21:03+08:00">2020-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>操作给定的二叉树，将其变换为源二叉树的镜像。</p><p>输入描述:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">二叉树的镜像定义：源二叉树 </span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">6</span>   <span class="number">10</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">5</span>  <span class="number">7</span> <span class="number">9</span> <span class="number">11</span></span><br><span class="line">    	镜像二叉树</span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">10</span>   <span class="number">6</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">11</span> <span class="number">9</span> <span class="number">7</span>  <span class="number">5</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/04/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/27.%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/26-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/26-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">26.树的子结构</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-04 14:58:09 / 修改时间：15:00:08" itemprop="dateCreated datePublished" datetime="2019-11-04T14:58:09+08:00">2019-11-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>918</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>注意检测空指针</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct TreeNode &#123;</span></span><br><span class="line"><span class="comment">	int val;</span></span><br><span class="line"><span class="comment">	struct TreeNode *left;</span></span><br><span class="line"><span class="comment">	struct TreeNode *right;</span></span><br><span class="line"><span class="comment">	TreeNode(int x) :</span></span><br><span class="line"><span class="comment">			val(x), left(NULL), right(NULL) &#123;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">&#125;;*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">HasSubtree</span><span class="params">(TreeNode* pRoot1, TreeNode* pRoot2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">bool</span> result=<span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(pRoot1!=<span class="literal">NULL</span>&amp;&amp; pRoot2!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">abs</span>(pRoot1-&gt;val-pRoot2-&gt;val)&lt;<span class="number">1e-8</span>)</span><br><span class="line">                result=Tree1HaveTree2(pRoot1,pRoot2);</span><br><span class="line">            <span class="keyword">if</span>(!result)</span><br><span class="line">                result=HasSubtree(pRoot1-&gt;left,pRoot2);</span><br><span class="line">            <span class="keyword">if</span>(!result)</span><br><span class="line">                result=HasSubtree(pRoot1-&gt;right,pRoot2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">Tree1HaveTree2</span><span class="params">(TreeNode* pRoot1,TreeNode* pRoot2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pRoot2==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(pRoot1==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">abs</span>(pRoot1-&gt;val-pRoot2-&gt;val)&gt;=<span class="number">1e-8</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> Tree1HaveTree2(pRoot1-&gt;left,pRoot2-&gt;left) &amp;&amp; Tree1HaveTree2(pRoot1-&gt;right,pRoot2-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -1338,7 +1215,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1384,7 +1261,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1444,12 +1321,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">554k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">9:48</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -1544,6 +1421,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

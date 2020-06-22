@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/04/19/%E8%A7%86%E8%A7%89slam-%E5%8D%81%E5%9B%9B%E8%AE%B2-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/31/ORB-SLAMB2%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM2-an-Open-Source-SLAM-System-for-Monocular-Stereo-and-RGB-D-Cameras%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/04/19/%E8%A7%86%E8%A7%89slam-%E5%8D%81%E5%9B%9B%E8%AE%B2-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">视觉slam 十四讲 环境配置</a>
+            <a href="/2019/10/31/ORB-SLAMB2%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM2-an-Open-Source-SLAM-System-for-Monocular-Stereo-and-RGB-D-Cameras%EF%BC%89/" class="post-title-link" itemprop="url">ORB-SLAMB2——论文翻译（ORB-SLAM2: an Open-Source SLAM System for Monocular, Stereo and RGB-D Cameras）</a>
         </h1>
 
         <div class="post-meta">
@@ -253,14 +253,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-04-19 16:04:44" itemprop="dateCreated datePublished" datetime="2019-04-19T16:04:44+08:00">2019-04-19</time>
+              <time title="创建时间：2019-10-31 17:15:37" itemprop="dateCreated datePublished" datetime="2019-10-31T17:15:37+08:00">2019-10-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:12:13" itemprop="dateModified" datetime="2019-11-19T16:12:13+08:00">2019-11-19</time>
+                <time title="修改时间：2019-11-01 14:39:37" itemprop="dateModified" datetime="2019-11-01T14:39:37+08:00">2019-11-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,8 +268,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">VSLAM</span>
+                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
+                    <span itemprop="name">ORB-SLAM2</span>
                   </a>
                 </span>
             </span>
@@ -280,14 +280,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.5k</span>
+              <span>9.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>8 分钟</span>
             </span>
 
         </div>
@@ -299,10 +299,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>新系统装很顺畅，没遇到什么问题</p><h1 id="Kdevelop安装"><a href="#Kdevelop安装" class="headerlink" title="Kdevelop安装"></a>Kdevelop安装</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install kdevelop</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装相应的cmake编译器</span></span><br><span class="line">sudo apt-<span class="builtin-name">get</span> install automake autoconf g++ libtool cmake</span><br></pre></td></tr></table></figure><h1 id="eigen安装"><a href="#eigen安装" class="headerlink" title="eigen安装"></a>eigen安装</h1><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sudo</span> <span class="string">apt-get install libeigen3-dev</span></span><br><span class="line"><span class="attr">sudo</span> <span class="string">updatedb</span></span><br><span class="line"><span class="attr">locate</span> <span class="string">eigen3</span></span><br></pre></td></tr></table></figure>
+          <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>ORB-SLAM2是基于单目，双目和RGB-D相机的一套完整的SLAM方案。它能够实现地图重用，回环检测和重新定位的功能。无论是在室内的小型手持设备，还是到工厂环境的无人机和城市里驾驶的汽车，ORB-SLAM2都能够在标准的CPU上进行实时工作。ORB-SLAM2在后端上采用的是基于单目和双目的光束法平差优化（BA）的方式，这个方法允许米制比例尺的轨迹精确度评估。此外，ORB-SLAM2包含一个轻量级的定位模式，该模式能够在允许零点漂移的条件下，利用视觉里程计来追踪未建图的区域并且匹配特征点。我们用29个广泛使用的公共数据测试的结果显示，在大多数情况下，本文方案比此前方案精度更高，此外，我们开源了ORB-SLAM2源代码，不仅仅是为了整个SLAM领域，同时也希望能够为其他领域研究者提供一套SLAM的解决方案。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/04/19/%E8%A7%86%E8%A7%89slam-%E5%8D%81%E5%9B%9B%E8%AE%B2-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
+              <a class="btn" href="/2019/10/31/ORB-SLAMB2%E2%80%94%E2%80%94%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%EF%BC%88ORB-SLAM2-an-Open-Source-SLAM-System-for-Monocular-Stereo-and-RGB-D-Cameras%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -332,7 +332,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/04/15/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/31/VINs-Mono%E2%80%94%E2%80%94%E9%97%AD%E7%8E%AF%E6%A3%80%E6%B5%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -346,7 +346,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/04/15/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" class="post-title-link" itemprop="url">扩展卡尔曼滤波(EKF)</a>
+            <a href="/2019/10/31/VINs-Mono%E2%80%94%E2%80%94%E9%97%AD%E7%8E%AF%E6%A3%80%E6%B5%8B/" class="post-title-link" itemprop="url">VINs-Mono——闭环检测</a>
         </h1>
 
         <div class="post-meta">
@@ -355,24 +355,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-04-15 16:24:16" itemprop="dateCreated datePublished" datetime="2019-04-15T16:24:16+08:00">2019-04-15</time>
+              <time title="创建时间：2019-10-31 17:11:12 / 修改时间：17:12:34" itemprop="dateCreated datePublished" datetime="2019-10-31T17:11:12+08:00">2019-10-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:27:10" itemprop="dateModified" datetime="2019-11-19T16:27:10+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">滤波算法</span>
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
                   </a>
                 </span>
             </span>
@@ -383,7 +377,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>861</span>
+              <span>0</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -402,10 +396,99 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://mp.csdn.net/mdeditor/99690849#" target="_blank" rel="noopener">卡尔曼滤波详细推导</a><br>把卡尔曼滤波扩展到非线性系统中，称为卡尔曼滤波器（EKF），通常的做法，在某个点附近考虑运动方程及观测方程的一阶泰勒展开，只保留一阶项，即线性部分，然后按照线性系统进行推到。<br>令k-1时刻的均值和协方差矩阵为$\hat{x}_{k-1},\hat{P}_{k-1}$.在k时刻，把运动方程和观测方程在$\hat{x}_{k-1},\hat{P}_{k-1}$处线性化（相当于一阶泰勒展开），有：</p>
+          
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/31/18-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/31/18-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">18.删除链表中的节点</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-31 15:22:44 / 修改时间：17:12:19" itemprop="dateCreated datePublished" datetime="2019-10-31T15:22:44+08:00">2019-10-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>在O(1)时间删除链表结点。</p><p>给定单向链表的头指针和一个结点指针，定义一个函数在O(1)时间删除该结点。链表节点与函数的定义如下：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span>       m_nValue;</span><br><span class="line">    ListNode* m_pNext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>删除一个节点的两种方法：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/04/15/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/#more" rel="contents">
+              <a class="btn" href="/2019/10/31/18-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -435,7 +518,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/31/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/18.1%20%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -449,7 +532,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" class="post-title-link" itemprop="url">卡尔曼滤波（KF）</a>
+            <a href="/2019/10/31/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/18.1%20%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">18.删除链表中的节点</a>
         </h1>
 
         <div class="post-meta">
@@ -459,14 +542,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-04-10 16:22:51" itemprop="dateCreated datePublished" datetime="2019-04-10T16:22:51+08:00">2019-04-10</time>
+              <time title="创建时间：2019-10-31 15:22:44" itemprop="dateCreated datePublished" datetime="2019-10-31T15:22:44+08:00">2019-10-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:27:03" itemprop="dateModified" datetime="2019-11-19T16:27:03+08:00">2019-11-19</time>
+                <time title="修改时间：2020-06-11 19:46:51" itemprop="dateModified" datetime="2020-06-11T19:46:51+08:00">2020-06-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -474,8 +557,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">滤波算法</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -486,14 +569,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -505,10 +588,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/" target="_blank" rel="noopener">英文原文</a></p><h1 id="卡尔曼滤波器简介——追踪介绍"><a href="#卡尔曼滤波器简介——追踪介绍" class="headerlink" title="卡尔曼滤波器简介——追踪介绍"></a>卡尔曼滤波器简介——追踪介绍</h1><p><strong>什么是卡尔曼滤波?</strong>　　<br>你可以在任何含有<strong>不确定信息</strong>的动态系统中使用卡尔曼滤波，对系统下一步的走向做出<strong>有根据的预测</strong>，即使伴随着各种干扰，卡尔曼滤波总是能指出真实发生的情况</p><p>在连续变化的系统中使用卡尔曼滤波是非常理想的，它具有占用内存小的优点（除了前一个状态量外，不需要保留其它历史数据），并且速度很快，很适合应用于实时问题和嵌入式系统。</p>
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>在O(1)时间删除链表结点。</p><p>给定单向链表的头指针和一个结点指针，定义一个函数在O(1)时间删除该结点。链表节点与函数的定义如下：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span>       m_nValue;</span><br><span class="line">    ListNode* m_pNext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>删除一个节点的两种方法：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/#more" rel="contents">
+              <a class="btn" href="/2019/10/31/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/18.1%20%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -538,7 +621,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/30/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E4%B8%8E%E8%BE%B9%E7%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -552,7 +635,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="post-title-link" itemprop="url">机器学习练习 6 - 支持向量机</a>
+            <a href="/2019/10/30/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E4%B8%8E%E8%BE%B9%E7%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">高斯分布与边缘化</a>
         </h1>
 
         <div class="post-meta">
@@ -561,24 +644,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-03-23 16:53:25" itemprop="dateCreated datePublished" datetime="2019-03-23T16:53:25+08:00">2019-03-23</time>
+              <time title="创建时间：2019-10-30 20:14:03 / 修改时间：20:52:33" itemprop="dateCreated datePublished" datetime="2019-10-30T20:14:03+08:00">2019-10-30</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:55:16" itemprop="dateModified" datetime="2019-11-19T16:55:16+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
                   </a>
                 </span>
             </span>
@@ -589,14 +666,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.4k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -608,10 +685,551 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在本练习中，我们将使用支持向量机（SVM）来构建垃圾邮件分类器。 我们将从一些简单的2D数据集开始使用SVM来查看它们的工作原理。 然后，我们将对一组原始电子邮件进行一些预处理工作，并使用SVM在处理的电子邮件上构建分类器，以确定它们是否为垃圾邮件。</p><h1 id="6-Support-Vector-Machines"><a href="#6-Support-Vector-Machines" class="headerlink" title="6 Support Vector Machines"></a>6 Support Vector Machines</h1><h2 id="6-1-Linear-SVM"><a href="#6-1-Linear-SVM" class="headerlink" title="6.1 Linear SVM"></a>6.1 Linear SVM</h2>
+          <h1 id="多元高斯分布"><a href="#多元高斯分布" class="headerlink" title="多元高斯分布"></a>多元高斯分布</h1><p>高斯分布有两种表达方式：</p><ul>
+<li>协方差矩阵+均值</li>
+<li>信息矩阵+信息矢量</li>
+</ul><p>协方差矩阵+均值的方式比较常见，如下</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030152615298.png#pic_center"></p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030152644545.png#pic_center"></p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030152656564.png#pic_center"></p><p>左边常数项记为$η$，$p(x)$可以记为：</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030200301827.png"></p><p>其中对称正定矩阵$Σ$为随机变量x的协方差矩阵，μ为x的均值，简记为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030200243950.png"></p><p>信息矩阵+信息矢量的形式可以由上式推导而来</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030200156360.png"></p><p>现在定义信息矩阵$Ω=Σ^{−1}$ ，信息矢量$ξ=Σ^{−1}μ=Ωμ$，则</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/#more" rel="contents">
+              <a class="btn" href="/2019/10/30/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E4%B8%8E%E8%BE%B9%E7%BC%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/30/%E8%88%92%E5%B0%94%E8%A1%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/30/%E8%88%92%E5%B0%94%E8%A1%A5/" class="post-title-link" itemprop="url">舒尔补</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-30 20:10:35 / 修改时间：20:12:44" itemprop="dateCreated datePublished" datetime="2019-10-30T20:10:35+08:00">2019-10-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>157</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>舒尔补定义<br>给定任意的矩阵块 M，如下所示:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030155959352.png"><ul>
+<li>如果矩阵块 D 是可逆的，则$A − BD^{−1}C$称之为D关于M的舒尔补</li>
+<li>如果矩阵块 A 是可逆的，则$D − CA^{−1}B$称之为A关于 M的舒尔补</li>
+</ul>
+</li>
+</ul><p>将 M 矩阵变成上三角或者下三角形过程中，都会遇到舒尔补：</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191030160209537.png"></p><p>其中：$∆A=D − CA^{−1}B$。联合起来，将 M 变形成对角形：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/30/%E8%88%92%E5%B0%94%E8%A1%A5/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">VINS-Mono——后端优化</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-29 20:43:40" itemprop="dateCreated datePublished" datetime="2019-10-29T20:43:40+08:00">2019-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 20:33:58" itemprop="dateModified" datetime="2019-10-30T20:33:58+08:00">2019-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="状态向量"><a href="#状态向量" class="headerlink" title="状态向量"></a>状态向量</h1><p>VIO 紧耦合方案的主要思路就是通过将基于视觉构造的残差项和基于 IMU 构造的残差项放在一起构造成一个联合优化的问题，整个优化问题的最优解即可认为是比较准确的状态估计。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192151582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>为了限制优化变量的数目， VINS-Mono 采用了滑动窗口的形式， 滑动窗口中的全状态量包括滑动窗口内的n+1个关键帧时刻 IMU 坐标系的位置、姿态、姿态（旋转）、加速度计偏置、陀螺仪偏置， Camera 到 IMU 的外参， m +1个 3D 路标点的逆深度：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/" class="post-title-link" itemprop="url">VINS-Mono——初始化</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-29 17:31:40" itemprop="dateCreated datePublished" datetime="2019-10-29T17:31:40+08:00">2019-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:37:18" itemprop="dateModified" datetime="2019-10-30T11:37:18+08:00">2019-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>21k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="估计器初始化"><a href="#估计器初始化" class="headerlink" title="估计器初始化"></a>估计器初始化</h1><ul>
+<li>初始化的原因是单目惯性紧耦合系统是一个非线性程度很高的系统，首先单目是无法获得空间中的绝对尺度，而IMU又必然存在偏置，在后面进行求解的时候还需要用到重力加速度（包括大小和方向），对于速度比较敏感的条件下，比如说无人机，又要精确的速度信息，因此，如何有效的在紧耦合系统处理之前计算出这些量，对整个紧耦合系统的鲁棒性有着重大的意义</li>
+<li>初始化要做的事其实说起来很简单，就是计算出绝对尺度s、陀螺仪偏置bg、加速度偏置ba、重力加速度G和每个IMU时刻的速度v</li>
+<li>VINS-Mono 的初始化采用松组合（loosely coupled）的方式获取初始值。 首先用 SFM求解滑动窗口内所有帧的位姿（以第一帧作为参考坐标系）和所有路标点的 3D 位置。然后将 SFM 的结果与 IMU 预积分的值进行对齐，实现对陀螺仪偏置的校正，再求解每一帧对应的速度，求解重力向量方向，恢复单目相机的尺度因子。</li>
+<li>需要注意的是，在初始化过程中，并没有对加速度计的偏置进行校正，这是因为重力是初始化过程中待求的量，而加速度计偏置与重力耦合，而且系统的加速度相对于重力加速度很小，所以加速度计偏置在初始化过程中很难观测，因此初始化过程中不考虑加速度计偏置的校正。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/" class="post-title-link" itemprop="url">17.打印从1到最大的n位数</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-29 14:37:09" itemprop="dateCreated datePublished" datetime="2019-10-29T14:37:09+08:00">2019-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 15:23:09" itemprop="dateModified" datetime="2019-10-31T15:23:09+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目："><a href="#题目：" class="headerlink" title="题目："></a><strong>题目：</strong></h1><p>输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li><p>用一个循环从1开始逐个打印，但当n很大时，有可能用整型(int)或长整型(long)都会溢出。</p>
+</li>
+<li><p>字符串模拟运算的解法，<strong>用字符串或者数组表达大数</strong></p>
+<blockquote>
+<p>把字符串中的每一个数字都初始化为’0’<br>每一次为字符串表示的数字加1，再打印出来</p>
+</blockquote>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/" class="post-title-link" itemprop="url">16.数组的整数次方</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-29 14:35:11" itemprop="dateCreated datePublished" datetime="2019-10-29T14:35:11+08:00">2019-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 10:52:27" itemprop="dateModified" datetime="2019-10-30T10:52:27+08:00">2019-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。</p><p>保证base和exponent不同时为0</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li><p>当指数exponent为正</p>
+</li>
+<li><p>当指数为负，可以先对指数取绝对值，算出次方的结果后取倒数，要讨论底数是否为0</p>
+<blockquote>
+<p>底数base不为0</p>
+<p>底数base为0，对0求倒数，导致程序出错，需要进行特殊处理，这里采用全局变量</p>
+<p><img alt="1572402654504" data-src="/home/xiaohu/.config/Typora/typora-user-images/1572402654504.png"></p>
+</blockquote>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -641,7 +1259,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -687,7 +1305,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -747,12 +1365,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">554k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">9:48</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

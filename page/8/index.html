@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/12/39-%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">9.用两个栈实现队列</a>
+            <a href="/2019/11/12/39-%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">39-数组中出现次数超过一半的数字</a>
         </h1>
 
         <div class="post-meta">
@@ -253,14 +253,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-19 12:16:29" itemprop="dateCreated datePublished" datetime="2019-10-19T12:16:29+08:00">2019-10-19</time>
+              <time title="创建时间：2019-11-12 15:00:26" itemprop="dateCreated datePublished" datetime="2019-11-12T15:00:26+08:00">2019-11-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:17:31" itemprop="dateModified" datetime="2019-10-29T10:17:31+08:00">2019-10-29</time>
+                <time title="修改时间：2019-11-15 09:11:41" itemprop="dateModified" datetime="2019-11-15T09:11:41+08:00">2019-11-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -280,7 +280,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>894</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -299,10 +299,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>题目描述<br>输入一个链表，按链表从尾到头的顺序返回一个ArrayList。</p><p>仅仅需要打印数值,而不是反转链表,这个还是有区别.如果单纯的反转打印链表的值的话,我们可以使用stack操作.<br><strong>C++</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; printListFromTailToHead(ListNode* head) &#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;ListNode*&gt;nodes;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ArrayList;</span><br><span class="line">        ListNode* node=head;</span><br><span class="line">        <span class="keyword">while</span>(node !=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            nodes.push(node);</span><br><span class="line">            node=node-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(!nodes.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            node=nodes.top();<span class="comment">//返回栈顶元素, 但不删除该元素</span></span><br><span class="line">            ArrayList.push_back(node-&gt;val);</span><br><span class="line">            nodes.pop();<span class="comment">//弹出栈顶元素, 但不返回其值</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ArrayList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br><strong>Python</strong></p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><ul>
+<li>法1</li>
+</ul><p>时间复杂度：$O(n^2)$</p><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) &#123;</span><br><span class="line">        <span class="keyword">if</span>(numbers.empty())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        int <span class="built_in">length</span>=numbers.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(int <span class="built_in">i</span>=<span class="number">1</span>;<span class="built_in">i</span>&lt;<span class="built_in">length</span>;<span class="built_in">i</span>++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(int <span class="built_in">j</span>=<span class="built_in">length</span><span class="number">-2</span>;<span class="built_in">j</span>&gt;=<span class="built_in">i</span>;<span class="built_in">j</span>--)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(numbers[<span class="built_in">j</span>]&gt;numbers[<span class="built_in">j</span>+<span class="number">1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    int temp=numbers[<span class="built_in">j</span>+<span class="number">1</span>];</span><br><span class="line">                    numbers[<span class="built_in">j</span>+<span class="number">1</span>]=numbers[<span class="built_in">j</span>];</span><br><span class="line">                    numbers[<span class="built_in">j</span>]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        int times=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(int <span class="built_in">i</span>=<span class="number">0</span>;<span class="built_in">i</span>&lt;<span class="built_in">length</span>;<span class="built_in">i</span>++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(numbers[<span class="built_in">i</span>]==numbers[<span class="built_in">length</span>/<span class="number">2</span>])</span><br><span class="line">                times++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(times*<span class="number">2</span>&gt;<span class="built_in">length</span>)</span><br><span class="line">            <span class="keyword">return</span>  numbers[<span class="built_in">length</span>/<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/19/6.%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/#more" rel="contents">
+              <a class="btn" href="/2019/11/12/39-%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -332,7 +334,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/5.%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -346,7 +348,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/19/5.%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/" class="post-title-link" itemprop="url">5.替换空格</a>
+            <a href="/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">C++ 学习（5）——多线程</a>
         </h1>
 
         <div class="post-meta">
@@ -355,24 +357,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-10-19 11:16:29" itemprop="dateCreated datePublished" datetime="2019-10-19T11:16:29+08:00">2019-10-19</time>
+              <time title="创建时间：2019-11-10 10:43:09 / 修改时间：16:09:13" itemprop="dateCreated datePublished" datetime="2019-11-10T10:43:09+08:00">2019-11-10</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:18:35" itemprop="dateModified" datetime="2019-10-29T10:18:35+08:00">2019-10-29</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
             </span>
@@ -383,7 +379,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -402,13 +398,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>题目描述<br>请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。</p><ul>
-<li>从前往后替换，时间复杂度$O(n^2)$</li>
-<li>从后往前替换，时间复杂度$O(n)$</li>
-</ul><p><strong>C++</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 指向字符数组的字符指针str，字符数组长度length</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">replaceSpace</span><span class="params">(<span class="keyword">char</span> *str,<span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(str==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        <span class="keyword">int</span> originalLength=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> numberOfBlank=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历字符串，统计空格个数、替换前字符个数、替换后字符个数</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;str[i]!=<span class="string">'\0'</span>;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            originalLength++;</span><br><span class="line">            <span class="keyword">if</span>(str[i]==<span class="string">' '</span>)</span><br><span class="line">                numberOfBlank++;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 替换空格</span></span><br><span class="line">        <span class="keyword">int</span> newLength = originalLength +<span class="number">2</span>* numberOfBlank;</span><br><span class="line">        <span class="keyword">if</span>(newLength+<span class="number">1</span>&gt;length)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span> *p1 = str+originalLength;	<span class="comment">// 字符指针指向原始字符串的末尾</span></span><br><span class="line">        <span class="keyword">char</span> *p2 = str+newLength;		<span class="comment">// 字符指针指向替换后字符串的末尾</span></span><br><span class="line">        <span class="keyword">while</span>(p1!=p2)&#123;</span><br><span class="line">            <span class="keyword">if</span>(*p1 == <span class="string">' '</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                *p2-- = <span class="string">'0'</span>;</span><br><span class="line">                *p2-- = <span class="string">'2'</span>;</span><br><span class="line">                *p2-- = <span class="string">'%'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                *p2-- = *p1;</span><br><span class="line">            &#125;</span><br><span class="line">            p1--;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+          <h1 id="mutex"><a href="#mutex" class="headerlink" title="mutex"></a>mutex</h1><p>mutex是多线程编程时经常用到的，在C++11中需要包含<mutex>模块。而在该文件中还有其他和mutex协作的类和函数，使得多线程编程时非常方便。</mutex></p><h2 id="mutex类"><a href="#mutex类" class="headerlink" title="mutex类"></a>mutex类</h2><p>mutex对象是一个lockable的对象，当关键区域需要被互斥访问的时候被用来当作信号。mutex对象提供互斥的拥有权限，并且不支持递归。</p><p>实际就是mutex是用来进行线程同步的。常用的成员函数有lock()和unlock()</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/19/5.%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/#more" rel="contents">
+              <a class="btn" href="/2019/11/10/C-%E5%AD%A6%E4%B9%A0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -438,7 +431,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -452,7 +445,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">4.二维数组中的查找</a>
+            <a href="/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">36.二叉搜索树与双向链表</a>
         </h1>
 
         <div class="post-meta">
@@ -462,14 +455,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-19 10:16:29" itemprop="dateCreated datePublished" datetime="2019-10-19T10:16:29+08:00">2019-10-19</time>
+              <time title="创建时间：2019-11-09 11:41:44" itemprop="dateCreated datePublished" datetime="2019-11-09T11:41:44+08:00">2019-11-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-29 10:19:29" itemprop="dateModified" datetime="2019-10-29T10:19:29+08:00">2019-10-29</time>
+                <time title="修改时间：2019-11-12 15:00:06" itemprop="dateModified" datetime="2019-11-12T15:00:06+08:00">2019-11-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -489,7 +482,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
+              <span>247</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -508,10 +501,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>题目描述<br>在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。<br><strong>Python</strong><br>遍历二维数组<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># array 二维列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Find</span><span class="params">(self, target, array)</span>:</span></span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(array)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(len(array[<span class="number">0</span>])):</span><br><span class="line">                <span class="keyword">if</span> target==array[i][j]:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>1、将左子树构成双链表，并返回该链表的头节点(左子树最左边的节点)</p><p>2、定位到左链表的最后一个节点(左子树最右边的节点)</p><p>3、如果左子树链表不为空，则将当前root追加到左子树链表后</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/19/4.%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/#more" rel="contents">
+              <a class="btn" href="/2019/11/09/36-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -541,7 +534,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/18/VINS-Mono%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/09/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -555,7 +548,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/18/VINS-Mono%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">VINS-Mono论文学习与代码解读</a>
+            <a href="/2019/11/09/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">36.二叉搜索树与双向链表</a>
         </h1>
 
         <div class="post-meta">
@@ -565,14 +558,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-18 20:04:56" itemprop="dateCreated datePublished" datetime="2019-10-18T20:04:56+08:00">2019-10-18</time>
+              <time title="创建时间：2019-11-09 11:41:44" itemprop="dateCreated datePublished" datetime="2019-11-09T11:41:44+08:00">2019-11-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:40:25" itemprop="dateModified" datetime="2019-10-30T11:40:25+08:00">2019-10-30</time>
+                <time title="修改时间：2020-06-20 22:39:50" itemprop="dateModified" datetime="2020-06-20T22:39:50+08:00">2020-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -580,8 +573,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS-Mono</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -592,7 +585,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>334</span>
+              <span>948</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -611,115 +604,232 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <ol>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/86564879" target="_blank" rel="noopener">VINS-Mono代码解读——启动文件launch与参数配置文件yaml介绍</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/86030962" target="_blank" rel="noopener">VINS-Mono代码解读——各种数据结构 sensor_msgs</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/85797156" target="_blank" rel="noopener">VINS-Mono代码解读——视觉跟踪 feature_trackers</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/86290941" target="_blank" rel="noopener">VINS-Mono理论学习——IMU预积分 Pre-integration （Jacobian 协方差）</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/86293038" target="_blank" rel="noopener">VINS-Mono代码解读——状态估计器流程 estimator 写在初始化和非线性优化前</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/88942414" target="_blank" rel="noopener">VINS-Mono代码解读——视觉惯性联合初始化 initialStructure sfm</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/89106128" target="_blank" rel="noopener">VINS-Mono理论学习——视觉惯性联合初始化与外参标定</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/93593844" target="_blank" rel="noopener">VINS-Mono理论学习——后端非线性优化</a></li>
-<li><a href="https://blog.csdn.net/qq_41839222/article/details/87878550" target="_blank" rel="noopener">VINS-Mono代码解读——回环检测与重定位 pose graph loop closing</a></li>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p><img alt="https://images2018.cnblogs.com/blog/1307402/201804/1307402-20180410161450054-1255289425.png" data-src="https://images2018.cnblogs.com/blog/1307402/201804/1307402-20180410161450054-1255289425.png"></p><ul>
+<li><p>二叉搜索树的性质</p>
+</li>
+<li><ul>
+<li>二叉搜索树是左子树&lt;根节点&lt;右子树</li>
+<li>二叉搜索树的中序遍历是递增的有序序列</li>
+</ul>
+</li>
+<li><p>二叉搜索树转双向链表的思路</p>
+</li>
+<li><ul>
+<li>首先：利用BST的中序遍历得到有序序列（递归）</li>
+<li>其次：通过调整节点指针，将有序链表调整为双向链表</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/09/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">36.二叉搜索树与双向链表</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-09 11:41:44" itemprop="dateCreated datePublished" datetime="2019-11-09T11:41:44+08:00">2019-11-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-12 15:00:06" itemprop="dateModified" datetime="2019-11-12T15:00:06+08:00">2019-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>247</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>1、将左子树构成双链表，并返回该链表的头节点(左子树最左边的节点)</p><p>2、定位到左链表的最后一个节点(左子树最右边的节点)</p><p>3、如果左子树链表不为空，则将当前root追加到左子树链表后</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/09/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/09/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/" class="post-title-link" itemprop="url">35.复杂链表的复制</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-09 11:23:23 / 修改时间：11:39:04" itemprop="dateCreated datePublished" datetime="2019-11-09T11:23:23+08:00">2019-11-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>分为三步走：</p><ol>
+<li><p>给原来的链表的每个结点复制一个新节点并且插入到对应的后面 </p>
+</li>
+<li><p>利用老节点将新节点的random指针域置好</p>
+</li>
+<li><p>将链表还原,即拆成完整的两个链表</p>
+</li>
 </ol>
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/09/23/%E5%9B%9B%E5%85%83%E7%B4%A0%E6%8F%92%E5%80%BC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/23/%E5%9B%9B%E5%85%83%E7%B4%A0%E6%8F%92%E5%80%BC/" class="post-title-link" itemprop="url">四元素插值</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-23 16:49:09" itemprop="dateCreated datePublished" datetime="2019-09-23T16:49:09+08:00">2019-09-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:49:59" itemprop="dateModified" datetime="2019-11-19T16:49:59+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">VSLAM</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>四元数插值常见的有线性插值、球面线性插值等</p><h1 id="线性插值（Linear-Interpolation，简称Lerp）"><a href="#线性插值（Linear-Interpolation，简称Lerp）" class="headerlink" title="线性插值（Linear Interpolation，简称Lerp）"></a>线性插值（Linear Interpolation，简称Lerp）</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190923142118617.png#pic_center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190923142716322.png#pic_center"><br>四元数表示旋转时是单位四元数，这种插值方式，相当于我们是沿着一条直线（也就是圆上的一个弦）进行插值的，这样插值出来的四元数不是单位四元数</p><p>归一化线性插值（Normalized LinearInterpolation，简称Nlerp)<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190923142812617.png#pic_center"><br>有其他问题的。如下图所示，在同等时间内， vt 扫过的⻆度是不同的, vt 扫过的速度（或者说⻆速度）首先会不断地增加，到t = 0.50之后会开始减速，所以Nlerp插值不能保证均匀的⻆速度。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190923142853174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/09/23/%E5%9B%9B%E5%85%83%E7%B4%A0%E6%8F%92%E5%80%BC/#more" rel="contents">
+              <a class="btn" href="/2019/11/09/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -749,7 +859,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/31/EAI-Dashgo-D1%E5%B0%8F%E8%BD%A6-Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW-Gmapping%E5%BB%BA%E5%9B%BE%E4%B8%8E%E5%AF%BC%E8%88%AA/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -763,7 +873,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/08/31/EAI-Dashgo-D1%E5%B0%8F%E8%BD%A6-Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW-Gmapping%E5%BB%BA%E5%9B%BE%E4%B8%8E%E5%AF%BC%E8%88%AA/" class="post-title-link" itemprop="url">EAI Dashgo D1小车  Hokuyo激光雷达UTM-30LX-EW    Gmapping建图与导航</a>
+            <a href="/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/" class="post-title-link" itemprop="url">35.复杂链表的复制</a>
         </h1>
 
         <div class="post-meta">
@@ -773,14 +883,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-08-31 16:40:01" itemprop="dateCreated datePublished" datetime="2019-08-31T16:40:01+08:00">2019-08-31</time>
+              <time title="创建时间：2019-11-09 11:23:23" itemprop="dateCreated datePublished" datetime="2019-11-09T11:23:23+08:00">2019-11-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:45:37" itemprop="dateModified" datetime="2019-11-19T16:45:37+08:00">2019-11-19</time>
+                <time title="修改时间：2020-06-11 22:40:32" itemprop="dateModified" datetime="2020-06-11T22:40:32+08:00">2020-06-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -788,8 +898,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BF%80%E5%85%89SLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">激光SLAM</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -800,110 +910,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="建图"><a href="#建图" class="headerlink" title="建图"></a>建图</h1><p><strong>urg_lidar.launch</strong></p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- A simple launch file for the urg_node package. --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--  When using an IP-connected LIDAR, populate the "ip_address" parameter with the address of the LIDAR.</span></span><br><span class="line"><span class="comment">      Otherwise, leave it blank. If supported by your LIDAR, you may enable the publish_intensity</span></span><br><span class="line"><span class="comment">      and/or publish_multiecho options. --&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">node</span> <span class="attr">name</span>=<span class="string">"urg_node"</span> <span class="attr">pkg</span>=<span class="string">"urg_node"</span> <span class="attr">type</span>=<span class="string">"urg_node"</span> <span class="attr">output</span>=<span class="string">"screen"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ip_address"</span> <span class="attr">value</span>=<span class="string">""</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"serial_port"</span> <span class="attr">value</span>=<span class="string">"/dev/ttyACM0"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"serial_baud"</span> <span class="attr">value</span>=<span class="string">"115200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"frame_id"</span> <span class="attr">value</span>=<span class="string">"laser"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"calibrate_time"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"publish_intensity"</span> <span class="attr">value</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"publish_multiecho"</span> <span class="attr">value</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"angle_min"</span> <span class="attr">value</span>=<span class="string">"-1.5707963"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"angle_max"</span> <span class="attr">value</span>=<span class="string">"1.5707963"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">node</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/08/31/EAI-Dashgo-D1%E5%B0%8F%E8%BD%A6-Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW-Gmapping%E5%BB%BA%E5%9B%BE%E4%B8%8E%E5%AF%BC%E8%88%AA/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/29/Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW%E7%94%A8hector-slam%E5%BB%BA%E5%9B%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/29/Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW%E7%94%A8hector-slam%E5%BB%BA%E5%9B%BE/" class="post-title-link" itemprop="url">Hokuyo激光雷达UTM-30LX-EW用hector_slam建图</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-29 16:40:01" itemprop="dateCreated datePublished" datetime="2019-08-29T16:40:01+08:00">2019-08-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:43:43" itemprop="dateModified" datetime="2019-11-19T16:43:43+08:00">2019-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BF%80%E5%85%89SLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">激光SLAM</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>882</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -922,12 +929,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <ol>
-<li>编写接收scan topic的hector_slam_launch文件下的launch文件</li>
-</ol><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;launch&gt;</span><br><span class="line"> </span><br><span class="line">  &lt;<span class="keyword">include</span> file="$(find hector_mapping)/launch/mapping_default.launch"&gt;</span><br><span class="line">    &lt;arg <span class="type">name</span>="base_frame" <span class="keyword">value</span>="base_frame"/&gt;</span><br><span class="line">    &lt;arg <span class="type">name</span>="odom_frame" <span class="keyword">value</span>="base_frame"/&gt;  //要把odom值换成base_frame,这样就不需要odemetry,不然会报错</span><br><span class="line">  &lt;/<span class="keyword">include</span>&gt;</span><br><span class="line"> </span><br><span class="line">  &lt;<span class="keyword">include</span> file="$(find hector_geotiff)/launch/geotiff_mapper.launch"&gt;</span><br><span class="line">    &lt;arg <span class="type">name</span>="trajectory_source_frame_name" <span class="keyword">value</span>="base_frame"/&gt; </span><br><span class="line">  &lt;/<span class="keyword">include</span>&gt;</span><br><span class="line"> </span><br><span class="line">  &lt;node pkg="tf" <span class="keyword">type</span>="static_transform_publisher"       <span class="type">name</span>="base_frame_to_laser_broadcaster" args="0 0 0 0 0 0 base_frame laser 100"/&gt;</span><br><span class="line"> </span><br><span class="line">  &lt;node pkg="rviz" <span class="keyword">type</span>="rviz" <span class="type">name</span>="rviz"</span><br><span class="line">    args="-d $(find hector_slam_launch)/rviz_cfg/mapping_demo.rviz"/&gt;</span><br><span class="line"> </span><br><span class="line">&lt;/launch&gt;</span><br></pre></td></tr></table></figure>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>分为三步走：</p><ol>
+<li><p>给原来的链表的每个结点复制一个新节点并且插入到对应的后面 </p>
+</li>
+<li><p>利用老节点将新节点的random指针域置好</p>
+</li>
+<li><p>将链表还原,即拆成完整的两个链表</p>
+</li>
+</ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/08/29/Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW%E7%94%A8hector-slam%E5%BB%BA%E5%9B%BE/#more" rel="contents">
+              <a class="btn" href="/2019/11/09/leetcode/%E9%93%BE%E8%A1%A8/%E5%89%91%E6%8C%87offer/35-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -957,7 +969,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/28/ububntu16-ROS%E4%B8%AD%E4%BD%BF%E7%94%A8Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/08/34-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E8%B7%AF%E5%BE%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -971,7 +983,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/08/28/ububntu16-ROS%E4%B8%AD%E4%BD%BF%E7%94%A8Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW/" class="post-title-link" itemprop="url">ubuntu ROS中使用Hokuyo激光雷达UTM-30LX-EW</a>
+            <a href="/2019/11/08/34-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">34.二叉树中和为某一路径</a>
         </h1>
 
         <div class="post-meta">
@@ -981,14 +993,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-08-28 16:40:01" itemprop="dateCreated datePublished" datetime="2019-08-28T16:40:01+08:00">2019-08-28</time>
+              <time title="创建时间：2019-11-08 20:58:42" itemprop="dateCreated datePublished" datetime="2019-11-08T20:58:42+08:00">2019-11-08</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:42:27" itemprop="dateModified" datetime="2019-11-19T16:42:27+08:00">2019-11-19</time>
+                <time title="修改时间：2019-11-09 11:23:29" itemprop="dateModified" datetime="2019-11-09T11:23:29+08:00">2019-11-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -996,8 +1008,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BF%80%E5%85%89SLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">激光SLAM</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -1008,7 +1020,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>487</span>
+              <span>916</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1027,15 +1039,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h1><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install ros-kinetic-urg-<span class="keyword">node</span><span class="title"></span></span><br></pre></td></tr></table></figure><h1 id="设置ip地址"><a href="#设置ip地址" class="headerlink" title="设置ip地址"></a>设置ip地址</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ifconfig</span></span><br></pre></td></tr></table></figure><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190828194617159.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>台式机的网卡名称：eno1<br>添加一个静态的IP地址。</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/network/<span class="built_in">int</span>erfaces</span><br></pre></td></tr></table></figure><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190828194510638.png"><br>重启网卡；使之配置生效</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="regexp">/etc/i</span>nit.d<span class="regexp">/networking restart</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/08/28/ububntu16-ROS%E4%B8%AD%E4%BD%BF%E7%94%A8Hokuyo%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEUTM-30LX-EW/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)</p><h1 id><a href="#" class="headerlink" title=" "></a> </h1><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct TreeNode &#123;</span></span><br><span class="line"><span class="comment">	int val;</span></span><br><span class="line"><span class="comment">	struct TreeNode *left;</span></span><br><span class="line"><span class="comment">	struct TreeNode *right;</span></span><br><span class="line"><span class="comment">	TreeNode(int x) :</span></span><br><span class="line"><span class="comment">			val(x), left(NULL), right(NULL) &#123;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">&#125;;*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; p;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; FindPath(TreeNode* root,<span class="keyword">int</span> expectNumber) &#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        </span><br><span class="line">        q.push_back(root-&gt;val);</span><br><span class="line">        <span class="comment">//如果是叶结点，并且路径上结点的和等于输入的值</span></span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left==<span class="literal">NULL</span> &amp;&amp; root-&gt;right==<span class="literal">NULL</span> &amp;&amp; root-&gt;val==expectNumber)</span><br><span class="line">            p.push_back(q);</span><br><span class="line">        <span class="comment">//如果不是叶结点，则遍历它的子结点</span></span><br><span class="line">        <span class="keyword">if</span>(root-&gt;val&lt;expectNumber &amp;&amp; root-&gt;left!=<span class="literal">NULL</span>)</span><br><span class="line">            FindPath(root-&gt;left,expectNumber-root-&gt;val);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root-&gt;val!=<span class="literal">NULL</span> &amp;&amp; root-&gt;val&lt;expectNumber)</span><br><span class="line">            FindPath(root-&gt;right,expectNumber-root-&gt;val);</span><br><span class="line">        <span class="comment">//在路径上删除当前结点</span></span><br><span class="line">        q.pop_back();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -1060,7 +1064,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/28/ubuntu16-%E9%95%AD%E7%A5%9E%E6%99%BA%E8%83%BDC16%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/08/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/34.%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E8%B7%AF%E5%BE%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1074,7 +1078,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/08/28/ubuntu16-%E9%95%AD%E7%A5%9E%E6%99%BA%E8%83%BDC16%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">ubuntu 镭神智能C16驱动配置</a>
+            <a href="/2019/11/08/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/34.%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">34.二叉树中和为某一路径</a>
         </h1>
 
         <div class="post-meta">
@@ -1084,14 +1088,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-08-28 16:40:01" itemprop="dateCreated datePublished" datetime="2019-08-28T16:40:01+08:00">2019-08-28</time>
+              <time title="创建时间：2019-11-08 20:58:42" itemprop="dateCreated datePublished" datetime="2019-11-08T20:58:42+08:00">2019-11-08</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:48:11" itemprop="dateModified" datetime="2019-11-19T16:48:11+08:00">2019-11-19</time>
+                <time title="修改时间：2020-06-20 02:03:20" itemprop="dateModified" datetime="2020-06-20T02:03:20+08:00">2020-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1099,8 +1103,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BF%80%E5%85%89SLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">激光SLAM</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -1111,7 +1115,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>404</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1130,12 +1134,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <ol>
-<li>配置IP方式<br><a href="https://www.linuxidc.com/Linux/2012-09/71087.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2012-09/71087.htm</a></li>
-</ol><p>注 eh0为网卡的名称 ，不同设备的网卡名称略有区别。查看网卡名称方式如下</p><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ifconfig</span></span><br></pre></td></tr></table></figure><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190828133700254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>上图中enp2s0为我的电脑的网卡名称。<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/network/<span class="built_in">int</span>erfaces</span><br></pre></td></tr></table></figure><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190828160054220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>重启网卡；使之配置生效</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为<strong>从树的根结点</strong>开始往下一直<strong>到叶结点</strong>所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)</p><h1 id><a href="#" class="headerlink" title=" "></a> </h1><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">hasPathSum</span><span class="params">(TreeNode* root,<span class="keyword">int</span> sum)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(root=<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(!root-&gt;left &amp;&amp; !root-&gt;right)</span><br><span class="line">        <span class="keyword">return</span> sum==<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(hasPathSum(root-&gt;left,sum-root-&gt;val))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">if</span>(hasPathSum(root-&gt;right,sum-root-&gt;val))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/08/28/ubuntu16-%E9%95%AD%E7%A5%9E%E6%99%BA%E8%83%BDC16%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE/#more" rel="contents">
+              <a class="btn" href="/2019/11/08/leetcode/%E6%A0%91/%E5%89%91%E6%8C%87offer/34.%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E8%B7%AF%E5%BE%84/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1165,7 +1167,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/08/33-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1179,7 +1181,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/" class="post-title-link" itemprop="url">小觅双目+IMU联合标定</a>
+            <a href="/2019/11/08/33-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">33.二叉树的后序遍历序列</a>
         </h1>
 
         <div class="post-meta">
@@ -1188,24 +1190,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-08-23 16:33:38" itemprop="dateCreated datePublished" datetime="2019-08-23T16:33:38+08:00">2019-08-23</time>
+              <time title="创建时间：2019-11-08 19:52:44 / 修改时间：20:59:55" itemprop="dateCreated datePublished" datetime="2019-11-08T19:52:44+08:00">2019-11-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:37:27" itemprop="dateModified" datetime="2019-11-19T16:37:27+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
-                    <span itemprop="name">VSLAM</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -1216,14 +1212,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>9k</span>
+              <span>748</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -1235,10 +1231,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="安装Kalibr"><a href="#安装Kalibr" class="headerlink" title="安装Kalibr"></a>安装Kalibr</h1><p>Kalibr工程有两种，一种是已经编译好的包，叫CDE package,另一种是未经编译的源文件。<br>选择源码安装</p><h3 id="安装依赖项"><a href="#安装依赖项" class="headerlink" title="安装依赖项"></a>安装依赖项</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-setuptools <span class="keyword">python</span>-rosinstall ipython libeigen3-devlibboost-<span class="keyword">all</span>-dev doxygen libopencv-dev ros-indigo-vision-opencvros-indigo-image-transport-plugins ros-indigo-cmake-modulespython-software-properties software-properties-common libpoco-devpython-matplotlib <span class="keyword">python</span>-scipy <span class="keyword">python</span>-git <span class="keyword">python</span>-pip ipython libtbb-devlibblas-dev liblapack-dev <span class="keyword">python</span>-catkin-tools libv4l-dev</span><br></pre></td></tr></table></figure>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ul>
+<li>定义：二叉排序树 ( Binary Sort Tree)，又称为二叉查找树。它或者是一棵空树，或者是具有下列性质的二叉树。.</li>
+</ul><blockquote>
+<ul>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结构的值 </li>
+<li>若它的右子树不空 ，则右子树上所有结点的值均大于宫的根结点的值</li>
+<li>它的左、右子树也分别为二叉排序树。</li>
+</ul>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/#more" rel="contents">
+              <a class="btn" href="/2019/11/08/33-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1268,7 +1272,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1314,7 +1318,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1374,12 +1378,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">554k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">9:48</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -1474,56 +1478,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 

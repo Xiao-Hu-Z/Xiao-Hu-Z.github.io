@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/673.%20%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E4%B8%AA%E6%95%B0%20/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">VINS-Mono——后端优化</a>
+            <a href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/673.%20%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E4%B8%AA%E6%95%B0%20/" class="post-title-link" itemprop="url">leetcode/动态规划/673. 最长递增子序列的个数 </a>
         </h1>
 
         <div class="post-meta">
@@ -253,26 +253,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-29 20:43:40" itemprop="dateCreated datePublished" datetime="2019-10-29T20:43:40+08:00">2019-10-29</time>
+              <time title="创建时间：2020-06-23 01:10:58" itemprop="dateCreated datePublished" datetime="2020-06-23T01:10:58+08:00">2020-06-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 20:33:58" itemprop="dateModified" datetime="2019-10-30T20:33:58+08:00">2019-10-30</time>
+                <time title="修改时间：2020-06-15 22:45:56" itemprop="dateModified" datetime="2020-06-15T22:45:56+08:00">2020-06-15</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS-Mono</span>
-                  </a>
-                </span>
-            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -280,14 +269,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
+              <span>486</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -299,10 +288,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="状态向量"><a href="#状态向量" class="headerlink" title="状态向量"></a>状态向量</h1><p>VIO 紧耦合方案的主要思路就是通过将基于视觉构造的残差项和基于 IMU 构造的残差项放在一起构造成一个联合优化的问题，整个优化问题的最优解即可认为是比较准确的状态估计。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191029192151582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>为了限制优化变量的数目， VINS-Mono 采用了滑动窗口的形式， 滑动窗口中的全状态量包括滑动窗口内的n+1个关键帧时刻 IMU 坐标系的位置、姿态、姿态（旋转）、加速度计偏置、陀螺仪偏置， Camera 到 IMU 的外参， m +1个 3D 路标点的逆深度：</p>
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定一个未排序的整数数组，找到最长递增子序列的个数。</p><p>示例 1:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">输出: <span class="number">2</span></span><br><span class="line">解释: 有两个最长递增子序列，分别是 [<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">7</span>] 和[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>]。</span><br></pre></td></tr></table></figure><p>示例 2:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">5</span></span><br><span class="line">解释: 最长递增子序列的长度是<span class="number">1</span>，并且存在<span class="number">5</span>个子序列的长度为<span class="number">1</span>，因此输出<span class="number">5</span>。</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/29/VINs-Mono%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/#more" rel="contents">
+              <a class="btn" href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/673.%20%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E4%B8%AA%E6%95%B0%20/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -332,7 +321,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/674.%20%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E9%80%92%E5%A2%9E%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -346,7 +335,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/" class="post-title-link" itemprop="url">VINS-Mono——初始化</a>
+            <a href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/674.%20%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E9%80%92%E5%A2%9E%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">leetcode/动态规划/674. 最长连续递增序列</a>
         </h1>
 
         <div class="post-meta">
@@ -356,26 +345,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-29 17:31:40" itemprop="dateCreated datePublished" datetime="2019-10-29T17:31:40+08:00">2019-10-29</time>
+              <time title="创建时间：2020-06-23 01:10:58" itemprop="dateCreated datePublished" datetime="2020-06-23T01:10:58+08:00">2020-06-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:37:18" itemprop="dateModified" datetime="2019-10-30T11:37:18+08:00">2019-10-30</time>
+                <time title="修改时间：2020-06-15 22:41:26" itemprop="dateModified" datetime="2020-06-15T22:41:26+08:00">2020-06-15</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS-Mono</span>
-                  </a>
-                </span>
-            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -383,14 +361,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>21k</span>
+              <span>514</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>19 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -402,15 +380,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="估计器初始化"><a href="#估计器初始化" class="headerlink" title="估计器初始化"></a>估计器初始化</h1><ul>
-<li>初始化的原因是单目惯性紧耦合系统是一个非线性程度很高的系统，首先单目是无法获得空间中的绝对尺度，而IMU又必然存在偏置，在后面进行求解的时候还需要用到重力加速度（包括大小和方向），对于速度比较敏感的条件下，比如说无人机，又要精确的速度信息，因此，如何有效的在紧耦合系统处理之前计算出这些量，对整个紧耦合系统的鲁棒性有着重大的意义</li>
-<li>初始化要做的事其实说起来很简单，就是计算出绝对尺度s、陀螺仪偏置bg、加速度偏置ba、重力加速度G和每个IMU时刻的速度v</li>
-<li>VINS-Mono 的初始化采用松组合（loosely coupled）的方式获取初始值。 首先用 SFM求解滑动窗口内所有帧的位姿（以第一帧作为参考坐标系）和所有路标点的 3D 位置。然后将 SFM 的结果与 IMU 预积分的值进行对齐，实现对陀螺仪偏置的校正，再求解每一帧对应的速度，求解重力向量方向，恢复单目相机的尺度因子。</li>
-<li>需要注意的是，在初始化过程中，并没有对加速度计的偏置进行校正，这是因为重力是初始化过程中待求的量，而加速度计偏置与重力耦合，而且系统的加速度相对于重力加速度很小，所以加速度计偏置在初始化过程中很难观测，因此初始化过程中不考虑加速度计偏置的校正。</li>
-</ul>
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定一个未经排序的整数数组，找到最长且连续的的递增序列，并返回该序列的长度。</p><p>示例 1:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">输出: <span class="number">3</span></span><br><span class="line">解释: 最长连续递增序列是 [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>], 长度为<span class="number">3</span>。</span><br><span class="line">尽管 [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>] 也是升序的子序列, 但它不是连续的，因为<span class="number">5</span>和<span class="number">7</span>在原数组里被<span class="number">4</span>隔开。</span><br></pre></td></tr></table></figure><p>示例 2:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">1</span></span><br><span class="line">解释: 最长连续递增序列是 [<span class="number">2</span>], 长度为<span class="number">1</span>。</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/29/VINS-Mono%E2%80%94%E2%80%94%E5%88%9D%E5%A7%8B%E5%8C%96/#more" rel="contents">
+              <a class="btn" href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/674.%20%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E9%80%92%E5%A2%9E%E5%BA%8F%E5%88%97/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -440,7 +413,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/121.%20%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -454,7 +427,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/" class="post-title-link" itemprop="url">17.打印从1到最大的n位数</a>
+            <a href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/121.%20%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/" class="post-title-link" itemprop="url">leetcode/动态规划/121. 买卖股票的最佳时机</a>
         </h1>
 
         <div class="post-meta">
@@ -464,250 +437,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-29 14:37:09" itemprop="dateCreated datePublished" datetime="2019-10-29T14:37:09+08:00">2019-10-29</time>
+              <time title="创建时间：2020-06-23 01:10:58" itemprop="dateCreated datePublished" datetime="2020-06-23T01:10:58+08:00">2020-06-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-31 15:23:09" itemprop="dateModified" datetime="2019-10-31T15:23:09+08:00">2019-10-31</time>
+                <time title="修改时间：2020-06-17 01:02:19" itemprop="dateModified" datetime="2020-06-17T01:02:19+08:00">2020-06-17</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目："><a href="#题目：" class="headerlink" title="题目："></a><strong>题目：</strong></h1><p>输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
-<li><p>用一个循环从1开始逐个打印，但当n很大时，有可能用整型(int)或长整型(long)都会溢出。</p>
-</li>
-<li><p>字符串模拟运算的解法，<strong>用字符串或者数组表达大数</strong></p>
-<blockquote>
-<p>把字符串中的每一个数字都初始化为’0’<br>每一次为字符串表示的数字加1，再打印出来</p>
-</blockquote>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/17-%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/" class="post-title-link" itemprop="url">16.数组的整数次方</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-29 14:35:11" itemprop="dateCreated datePublished" datetime="2019-10-29T14:35:11+08:00">2019-10-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 10:52:27" itemprop="dateModified" datetime="2019-10-30T10:52:27+08:00">2019-10-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。</p><p>保证base和exponent不同时为0</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
-<li><p>当指数exponent为正</p>
-</li>
-<li><p>当指数为负，可以先对指数取绝对值，算出次方的结果后取倒数，要讨论底数是否为0</p>
-<blockquote>
-<p>底数base不为0</p>
-<p>底数base为0，对0求倒数，导致程序出错，需要进行特殊处理，这里采用全局变量</p>
-<p><img alt="1572402654504" data-src="/home/xiaohu/.config/Typora/typora-user-images/1572402654504.png"></p>
-</blockquote>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/16.%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/15.%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/29/15.%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/" class="post-title-link" itemprop="url">15.二进制中1的个数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-29 11:42:07" itemprop="dateCreated datePublished" datetime="2019-10-29T11:42:07+08:00">2019-10-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:25:10" itemprop="dateModified" datetime="2019-10-30T11:25:10+08:00">2019-10-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -734,20 +472,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。</p><h1 id="二进制的5种位运算"><a href="#二进制的5种位运算" class="headerlink" title="二进制的5种位运算"></a>二进制的5种位运算</h1><blockquote>
-<p>与（&amp;）</p>
-<p>或（|）</p>
-<p>异或（^)</p>
-<p>左移(&lt;&lt;)  ：左移n位时，做左边的n位被丢弃，最右边不是那个补上n个0</p>
-<p>右移(&gt;&gt;)  ：右移n位时，最右边的n位被丢弃,左边分两种情况</p>
-<blockquote>
-<p>1.如果数字为正，右移最左边补n个0</p>
-<p>2.如果数字为负，右移最左边补n个1      </p>
-</blockquote>
-</blockquote>
+          <h1 id="题"><a href="#题" class="headerlink" title="题"></a>题</h1><p>给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。</p><p>如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。</p><p>注意：你不能在买入股票前卖出股票。</p><p>示例 1:</p><p>示</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">7</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>]</span><br><span class="line">输出: <span class="number">5</span></span><br><span class="line">解释: 在第 <span class="number">2</span> 天（股票价格 = <span class="number">1</span>）的时候买入，在第 <span class="number">5</span> 天（股票价格 = <span class="number">6</span>）的时候卖出，最大利润 = <span class="number">6</span><span class="number">-1</span> = <span class="number">5</span> 。</span><br><span class="line">     注意利润不能是 <span class="number">7</span><span class="number">-1</span> = <span class="number">6</span>, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/29/15.%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/#more" rel="contents">
+              <a class="btn" href="/2020/06/23/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/121.%20%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -777,7 +505,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/29/14-%E5%89%AA%E7%BB%B3%E5%AD%90/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/05/07/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -791,7 +519,242 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/29/14-%E5%89%AA%E7%BB%B3%E5%AD%90/" class="post-title-link" itemprop="url">14.剪绳子</a>
+            <a href="/2020/05/07/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/" class="post-title-link" itemprop="url">随机抽样一致RANSAC-Random-Sample-Consensus</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-07 11:12:23" itemprop="dateCreated datePublished" datetime="2020-05-07T11:12:23+08:00">2020-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:39:20" itemprop="dateModified" datetime="2019-10-30T11:39:20+08:00">2019-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="算法简介："><a href="#算法简介：" class="headerlink" title="算法简介："></a>算法简介：</h1><p>随机抽样一致算法（RANdom SAmple Consensus，RANSAC）。它采用迭代的方式从一组包含离群的被观测数据中估算出数学模型的参数。RANSAC算法的基本假设是样本中包含正确数据(inliers，可以被模型描述的数据)，也包含异常数据(outliers，偏离正常范围很远、无法适应数学模型的数据)，即数据集中含有噪声。这些异常数据可能是由于错误的测量、错误的假设、错误的计算等产生的。同时RANSAC也假设，给定一组正确的数据，存在可以计算出符合这些数据的模型参数的方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/07/%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E4%B8%80%E8%87%B4RANSAC-Random-Sample-Consensus/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/05/07/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/07/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">IMU测量模型、运动模型、误差模型</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-07 11:12:23" itemprop="dateCreated datePublished" datetime="2020-05-07T11:12:23+08:00">2020-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-30 11:38:12" itemprop="dateModified" datetime="2019-10-30T11:38:12+08:00">2019-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
+                    <span itemprop="name">VINS-Mono</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VINS-Mono/VIO/" itemprop="url" rel="index">
+                    <span itemprop="name">VIO</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="IMU测量模型"><a href="#IMU测量模型" class="headerlink" title="IMU测量模型"></a>IMU测量模型</h1><ul>
+<li><p>MEMS 加速度计工作原理<br>测量原理可以用一个简单的质量块 + 弹簧 + 指示计来表示<br>加速度计测量值$a_m$为弹簧拉力对应的加速度</p>
+<script type="math/tex; mode=display">a_m=\frac{f}{m}=a-g</script><p>其中m为质量块质量，a为物体在世界（惯性）坐标系下的实际加速度。</p>
+</li>
+<li><p>陀螺仪测量原理<br>陀螺仪的测量值即为IMU在body坐标系下的旋转角速度，要通过运动学模型转换到惯性坐标系下 ，按测量原理分有振动陀螺，光纤陀螺等。</p>
+<p>低端 MEMS 陀螺上一般采用振动陀螺原理，通过测量 Coriolisforce 来间接得到角速度。</p>
+<blockquote>
+<p>在旋转坐标系中，运动的物体受到科氏力作用<br>MEMS 陀螺仪：一个主动运动轴 + 一个敏感轴<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017192448388.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h1 id="IMU运动模型"><a href="#IMU运动模型" class="headerlink" title="IMU运动模型"></a>IMU运动模型</h1><h2 id="旋转量求导"><a href="#旋转量求导" class="headerlink" title="旋转量求导"></a>旋转量求导</h2><p>首先，如下图所示，考虑一个从原点出发的向量 r 绕单位轴 u 旋转，角速度大小为 θ˙。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191017155511191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>角速度矢量可以表示为${\boldsymbol \omega}=\dot{\theta}u$，易得向量 r 末端点 P 的速度矢量，即 r的时间一阶导为</p>
+<script type="math/tex; mode=display">\frac{d{r}}{dt} = {\boldsymbol \omega} \times {r}</script><p>坐标系 {B} 绕单位轴 u 旋转，如上所述，其三个轴的时间一阶导同样为</p>
+<script type="math/tex; mode=display">\frac{d{\bf i}_B}{dt} = {\boldsymbol \omega} \times {\bf i}_B, \frac{d{\bf j}_B}{dt} = {\boldsymbol \omega} \times {\bf j}_B, \frac{d{\bf k}_B}{dt} = {\boldsymbol \omega} \times {\bf k}_B</script><p>$[ {\bf i}_B \quad {\bf j}_B \quad {\bf k}_B ]$ 实际上就是坐标系 {B} 相对于参考坐标系的旋转矩阵 R，R的时间一阶导为</p>
+<script type="math/tex; mode=display">\dot{\bf R} =  [ {\boldsymbol \omega} \times {\bf i}_B \quad {\boldsymbol \omega} \times {\bf j}_B \quad {\boldsymbol \omega} \times {\bf k}_B ] = {\boldsymbol \omega} \times {\bf R}</script><p>叉乘运算可以转化为负对称矩阵的乘法：</p>
+<script type="math/tex; mode=display">\dot{\bf R} = {\boldsymbol \omega}^{\land} {\bf R}</script><p>其中负对称矩阵${\boldsymbol \omega}^{\land}$为</p>
+<script type="math/tex; mode=display">% <![CDATA[
+\quad {\boldsymbol \omega}^{\land}= \begin{bmatrix}0 & -\omega_3 & \omega_2\\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0\end{bmatrix} %]]></script><p>这里的角速度 ω 是在参考坐标系下表达的，角速度也经常表达在体坐标系 {B} 下，记为${}^B{\boldsymbol \omega} = {\bf R}^T{\boldsymbol \omega}$，即${\boldsymbol \omega} = {\bf R}{}^B{\boldsymbol \omega}$<br>上式也可以写作：</p>
+<script type="math/tex; mode=display">\dot{\bf R} =w^{\land}R=(R^Bw)^{\land}R=R{}^{\land}wR^TR= R({}^Bw)^{\land}</script></blockquote>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/07/IMU%E6%B5%8B%E9%87%8F%E6%A8%A1%E5%9E%8B%E3%80%81%E8%BF%90%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81%E8%AF%AF%E5%B7%AE%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8811%EF%BC%89%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8811%EF%BC%89%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/" class="post-title-link" itemprop="url">C ++ 学习（11）文件输入和输出</a>
         </h1>
 
         <div class="post-meta">
@@ -802,7 +765,313 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-29 10:45:41 / 修改时间：14:10:33" itemprop="dateCreated datePublished" datetime="2019-10-29T10:45:41+08:00">2019-10-29</time>
+              <time title="创建时间：2019-11-19 17:30:24 / 修改时间：17:30:41" itemprop="dateCreated datePublished" datetime="2019-11-19T17:30:24+08:00">2019-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>873</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019062610063696.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在头文件iostream中定义有两个流类：输入流类istream和输出流类ostream,且用这两个类定义了流对象cin和cout:</p><p>Istream cin;      ostream cout;</p><p>C++的iostream与C的printf/scanf的区别</p><ol>
+<li><p>类型处理更安全、智能，printf中对付int、float等说明符比较麻烦</p>
+</li>
+<li><p>扩展性更强，iostream使用的&lt;&lt;、&gt;&gt;操作符都是可重载，只要重载相关的运算符就可以；</p>
+<ol>
+<li>流风格的写法也比较自然简洁</li>
+</ol>
+</li>
+<li><p>printf/scanf的速度比cin/cout快</p>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8811%EF%BC%89%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8810%EF%BC%89C-11-%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8810%EF%BC%89C-11-%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">C ++ 学习（10）C++11 智能指针的使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-19 17:29:03 / 修改时间：17:29:27" itemprop="dateCreated datePublished" datetime="2019-11-19T17:29:03+08:00">2019-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h1><p>C++程序设计中使用new从堆（自由存储区）分配内存，等不需要时，应使用delete将其释放。C++11中引入了智能指针的概念，方便管理堆内存。使用普通指针，容易造成堆内存泄露（忘记释放），二次释放，程序发生异常时内存泄露等问题等，使用智能指针能更好的管理堆内存。<br>智能指针在C++11版本之后提供，包含在头文件<memory>中，shared_ptr、unique_ptr、weak_ptr</memory></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8810%EF%BC%89C-11-%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/" class="post-title-link" itemprop="url">C++ 学习（9）——string</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-18 10:17:02 / 修改时间：14:42:38" itemprop="dateCreated datePublished" datetime="2019-11-18T10:17:02+08:00">2019-11-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>C++处理字符串的方式有两种</p><ul>
+<li><p>来自c语言，常称为C-风格字符串<br>可以将字符串存储在char数组中，C-风格字符串特殊性质：以空字符（\0)结尾，用来标记字符串的结尾</p>
+</li>
+<li><p>基于string类型库的方法</p>
+</li>
+</ul><p>strin类使用简单， 提供了将字符串作为一种数据类型的表示方法</p><p>  为了在我们的程序中使用string类型，我们必须包含头文件 &lt; string&gt;</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/17/50-%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/17/50-%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">50.第一次只出现一次的字符</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-17 20:23:33 / 修改时间：20:25:03" itemprop="dateCreated datePublished" datetime="2019-11-17T20:23:33+08:00">2019-11-17</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -822,7 +1091,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
+              <span>83</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -841,18 +1110,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h1><p>给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n&gt;1并且m&gt;1)每段绳子的长度记为k[0],k[1],…,k[m].请问k[0]<em>k[1]</em>…*k[m]可能的最大乘积是多少？例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.</p><h1 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h1><ul>
-<li>$O(n^2)$时间和$O(n)$空间的动态规划</li>
-<li>$O(1)$时间和空间的贪婪算法</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/14-%E5%89%AA%E7%BB%B3%E5%AD%90/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>在一个字符串(0&lt;=字符串长度&lt;=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）.</p>
       
     </div>
     
@@ -877,7 +1135,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/17/49-%E4%B8%91%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -891,7 +1149,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">数据结构与算法——排序</a>
+            <a href="/2019/11/17/49-%E4%B8%91%E6%95%B0/" class="post-title-link" itemprop="url">49.丑数</a>
         </h1>
 
         <div class="post-meta">
@@ -900,24 +1158,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-10-27 13:16:28" itemprop="dateCreated datePublished" datetime="2019-10-27T13:16:28+08:00">2019-10-27</time>
+              <time title="创建时间：2019-11-17 19:20:10 / 修改时间：20:22:09" itemprop="dateCreated datePublished" datetime="2019-11-17T19:20:10+08:00">2019-11-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:24:46" itemprop="dateModified" datetime="2019-10-30T11:24:46+08:00">2019-10-30</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Data-Structures-and-Algorithms/" itemprop="url" rel="index">
-                    <span itemprop="name">Data Structures and Algorithms</span>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
                   </a>
                 </span>
             </span>
@@ -928,325 +1180,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>8.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="术语说明："><a href="#术语说明：" class="headerlink" title="术语说明："></a>术语说明：</h1><ul>
-<li>稳定：如果a原本在b前面，而a=b，排序之后a仍然在b的前面；</li>
-<li>不稳定：如果a原本在b的前面，而a=b，排序之后a可能会出现在b的后面；</li>
-<li>内排序：所有排序操作都在内存中完成；</li>
-<li>外排序：由于数据太大，因此把数据放在磁盘中，而排序通过磁盘和内存的数据传输才能进行；</li>
-<li>时间复杂度： 一个算法执行所耗费的时间。</li>
-<li>空间复杂度：运行完一个程序所需内存的大小。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">数据结构与算法——查找</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-27 13:16:28" itemprop="dateCreated datePublished" datetime="2019-10-27T13:16:28+08:00">2019-10-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-08 20:05:07" itemprop="dateModified" datetime="2019-11-08T20:05:07+08:00">2019-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Data-Structures-and-Algorithms/" itemprop="url" rel="index">
-                    <span itemprop="name">Data Structures and Algorithms</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>查找定义：查找（Searching）就是根据给定的某个值，在查找表中确定一个其关键字等于给定值的数据元素（或记录）。</p><blockquote>
-<p>查找表（Search Table）是由同一类型的数据元素（或记录）构成的集合。</p>
-</blockquote><p>查找又根据操作方式不同分为静态查找和动态查找两种，前者是仅获取数据不进行其他操作，后者则需要动态改变数据，比如在查找过程中插入新数据，或者删除某个已存在的数据。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/" class="post-title-link" itemprop="url">VINS-Mono——预积分</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-25 21:49:20" itemprop="dateCreated datePublished" datetime="2019-10-25T21:49:20+08:00">2019-10-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-30 11:40:21" itemprop="dateModified" datetime="2019-10-30T11:40:21+08:00">2019-10-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VINS-Mono/" itemprop="url" rel="index">
-                    <span itemprop="name">VINS-Mono</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>为了加深理解，参考崔华坤的《VINS论文推导及代码解析》，把相关公式推到一遍。</p><p>intergration_base.h：IMU预积分<br>imu_factor.h：IMU残差、雅可比</p><h1 id="IMU-测量方程"><a href="#IMU-测量方程" class="headerlink" title="IMU 测量方程."></a>IMU 测量方程.</h1><p>忽略地球旋转， IMU 测量方程为</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191024214341590.png#pic_center"></p><h1 id="预积分方程"><a href="#预积分方程" class="headerlink" title="预积分方程"></a>预积分方程</h1><h2 id="IMU-integration-in-world-frame"><a href="#IMU-integration-in-world-frame" class="headerlink" title="IMU integration in world frame"></a>IMU integration in world frame</h2><p>将第 k 帧和第 k+1 帧之间的所有 IMU 进行积分，可得第 k+1 帧的位置、速度和旋转<br>（PVQ），作为视觉估计的初始值，这里的旋转采用的四元数。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/25/VINS-Mono%E2%80%94%E2%80%94%E9%A2%84%E7%A7%AF%E5%88%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">Ubuntu16下Github+Hexo搭建博客教程</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-23 22:15:34" itemprop="dateCreated datePublished" datetime="2019-10-23T22:15:34+08:00">2019-10-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-25 15:02:58" itemprop="dateModified" datetime="2019-10-25T15:02:58+08:00">2019-10-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">hexo</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>1.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1265,10 +1199,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>﻿博客网址</p><p>==<a href="https://xiao-hu.com.cn/">https://xiao-hu.com.cn/</a>==</p><h1 id="安装git、nodejs"><a href="#安装git、nodejs" class="headerlink" title="安装git、nodejs"></a>安装git、nodejs</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure><p>升级nodejs版本，目前的最新版本v10.6.0<br>参考：<a href="https://blog.csdn.net/u010277553/article/details/80938829" target="_blank" rel="noopener">Ubuntu16 升级nodejs版本</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install n -g</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br></pre></td></tr></table></figure><br>加速下载：<a href="https://blog.csdn.net/ibmall/article/details/81390639" target="_blank" rel="noopener">npm 安装 hexo 卡住问题解决</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>法1：</p><p>超时</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetUglyNumber_Solution</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(index&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> i,j;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">1</span>;index&gt;<span class="number">0</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            j=i;</span><br><span class="line">            <span class="keyword">while</span>(j%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">                j/=<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">while</span>(j%<span class="number">3</span>==<span class="number">0</span>)</span><br><span class="line">                j/=<span class="number">3</span>;</span><br><span class="line">            <span class="keyword">while</span>(j%<span class="number">5</span>==<span class="number">0</span>)</span><br><span class="line">                j/=<span class="number">5</span>;</span><br><span class="line">            <span class="keyword">if</span>(j==<span class="number">1</span>)</span><br><span class="line">                index--;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> i<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/23/Ubuntu16%E4%B8%8BGithub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2019/11/17/49-%E4%B8%91%E6%95%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1298,7 +1232,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1344,7 +1278,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1404,12 +1338,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">554k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">9:48</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

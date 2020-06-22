@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/06/ORB-SLAM2%E2%80%94%E2%80%94LocalMapping%E7%BA%BF%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -243,7 +243,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/06/ORB-SLAM2%E2%80%94%E2%80%94LocalMapping%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">ORB-SLAM2——LocalMapping线程</a>
+            <a href="/2020/06/23/leetcode/%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">leetcode/树/二叉树</a>
         </h1>
 
         <div class="post-meta">
@@ -253,26 +253,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-06 16:01:02" itemprop="dateCreated datePublished" datetime="2019-11-06T16:01:02+08:00">2019-11-06</time>
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 16:02:55" itemprop="dateModified" datetime="2019-11-19T16:02:55+08:00">2019-11-19</time>
+                <time title="修改时间：2020-06-20 16:34:22" itemprop="dateModified" datetime="2020-06-20T16:34:22+08:00">2020-06-20</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
-                    <span itemprop="name">ORB-SLAM2</span>
-                  </a>
-                </span>
-            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -280,111 +269,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>28k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>25 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h1><p>LocalMapping线程负责对新加入的KeyFrames和MapPoints筛选融合，剔除冗余的KeyFrames和MapPoints，维护稳定的KeyFrame集合，传给后续的LoopClosing线程。<br>主要的功能点在：</p><ul>
-<li>处理新的关键帧ProcessNewKeyFrame()</li>
-<li>剔除不合格地图点MapPointCulling()</li>
-<li>三角化恢复新地图点CreateNewMapPoints()</li>
-<li>融合当前帧与相邻帧重复的地图点SearchInNeighbors()</li>
-<li>局部BA优化LocalBundleAdjustment()</li>
-<li>剔除冗余关键帧KeyFrameCulling()</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/06/ORB-SLAM2%E2%80%94%E2%80%94LocalMapping%E7%BA%BF%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">29.顺时针打印矩阵</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-05 14:59:44 / 修改时间：20:05:59" itemprop="dateCreated datePublished" datetime="2019-11-05T14:59:44+08:00">2019-11-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>984</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -403,509 +288,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>定义2个变量保存行数和列数，定义4个变量保存边界值，然后使用4个循环就可以了</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/05/29-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/05/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/05/28-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">28.对称的二叉树</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-05 14:32:15 / 修改时间：14:59:59" itemprop="dateCreated datePublished" datetime="2019-11-05T14:32:15+08:00">2019-11-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>49</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>请实现一个函数，用来判断一颗二叉树是不是对称的。如果一颗二叉树和它的镜像一样，那么他是对称的。</p>
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/" class="post-title-link" itemprop="url">ORB-SLAM2——Tracking</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-04 20:59:45" itemprop="dateCreated datePublished" datetime="2019-11-04T20:59:45+08:00">2019-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-14 15:11:01" itemprop="dateModified" datetime="2019-11-14T15:11:01+08:00">2019-11-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
-                    <span itemprop="name">ORB-SLAM2</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>47k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>43 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="整体流程图"><a href="#整体流程图" class="headerlink" title="整体流程图"></a>整体流程图</h1><p>作为ORB-SLAM2里三大线程中的第一个，Tracking线程接收传感器（摄像头）传来的每一帧，并将处理的关键帧传递给LocalMapping线程。Tracking线程其实是系统里的主线程，通过反复调用Track函数进行。<br>Tracking模块主要作用：</p><ul>
-<li>单目地图的初始化</li>
-<li>当前帧的位姿估计</li>
-<li>当前帧的局部地图跟踪</li>
-<li>生成候选关键帧</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94Tracking/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/" class="post-title-link" itemprop="url">ORB-SLAM2——系统入口System</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-04 19:12:42 / 修改时间：20:58:49" itemprop="dateCreated datePublished" datetime="2019-11-04T19:12:42+08:00">2019-11-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
-                    <span itemprop="name">ORB-SLAM2</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191104191938848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
- </p><p>在主函数中，我们创建了一个ORB_SLAM2::System的对象SLAM，这个时候就会进入到SLAM系统的主接口System.cc。这个代码是所有调用SLAM系统的主入口。</p><h1 id="system-h"><a href="#system-h" class="headerlink" title="system.h"></a>system.h</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">System</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    <span class="keyword">enum</span> eSensor&#123;</span><br><span class="line">        MONOCULAR=<span class="number">0</span>,</span><br><span class="line">        STEREO=<span class="number">1</span>,</span><br><span class="line">        RGBD=<span class="number">2</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.</span></span><br><span class="line">    System(<span class="keyword">const</span> <span class="built_in">string</span> &amp;strVocFile, <span class="keyword">const</span> <span class="built_in">string</span> &amp;strSettingsFile, <span class="keyword">const</span> eSensor sensor, <span class="keyword">const</span> <span class="keyword">bool</span> bUseViewer = <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking函数:输出相机位姿</span></span><br><span class="line">    <span class="comment">// Proccess the given stereo frame. Images must be synchronized and rectified.</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackStereo</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;imLeft, <span class="keyword">const</span> cv::Mat &amp;imRight, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Process the given rgbd frame. Depthmap must be registered to the RGB frame.</span></span><br><span class="line">    <span class="comment">// Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Input depthmap: Float (CV_32F).</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackRGBD</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> cv::Mat &amp;depthmap, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Proccess the given monocular frame</span></span><br><span class="line">    <span class="comment">// Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.</span></span><br><span class="line">    <span class="comment">// Returns the camera pose (empty if tracking fails).</span></span><br><span class="line">    cv::<span class="function">Mat <span class="title">TrackMonocular</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;im, <span class="keyword">const</span> <span class="keyword">double</span> &amp;timestamp)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This stops local mapping thread (map building) and performs only camera tracking.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ActivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// This resumes local mapping thread and performs SLAM again.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DeactivateLocalizationMode</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Returns true if there have been a big map change (loop closure, global BA)</span></span><br><span class="line">    <span class="comment">// since last call to this function</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">MapChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset the system (clear map)</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Reset</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// All threads will be requested to finish.</span></span><br><span class="line">    <span class="comment">// It waits until all threads have finished.</span></span><br><span class="line">    <span class="comment">// This function must be called before saving the trajectory.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Shutdown</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save keyframe poses in the TUM RGB-D dataset format.</span></span><br><span class="line">    <span class="comment">// This method works for all sensor input.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveKeyFrameTrajectoryTUM</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save camera trajectory in the KITTI dataset format.</span></span><br><span class="line">    <span class="comment">// Only for stereo and RGB-D. This method does not work for monocular.</span></span><br><span class="line">    <span class="comment">// Call first Shutdown()</span></span><br><span class="line">    <span class="comment">// See format details at: http://www.cvlibs.net/datasets/kitti/eval_odometry.php</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveTrajectoryKITTI</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> Save/Load functions</span></span><br><span class="line">    <span class="comment">// SaveMap(const string &amp;filename);</span></span><br><span class="line">    <span class="comment">// LoadMap(const string &amp;filename);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Information from most recent processed frame</span></span><br><span class="line">    <span class="comment">// You can call this right after TrackMonocular (or stereo or RGBD)</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetTrackingState</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; GetTrackedMapPoints();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; GetTrackedKeyPointsUn();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Input sensor</span></span><br><span class="line">    eSensor mSensor;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ORB vocabulary used for place recognition and feature matching.</span></span><br><span class="line">    ORBVocabulary* mpVocabulary;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// KeyFrame database for place recognition (relocalization and loop detection).</span></span><br><span class="line">    KeyFrameDatabase* mpKeyFrameDatabase;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Map structure that stores the pointers to all KeyFrames and MapPoints.</span></span><br><span class="line">    Map* mpMap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracker. It receives a frame and computes the associated camera pose.</span></span><br><span class="line">    <span class="comment">// It also decides when to insert a new keyframe, create some new MapPoints and</span></span><br><span class="line">    <span class="comment">// performs relocalization if tracking fails.</span></span><br><span class="line">    Tracking* mpTracker;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Local Mapper. It manages the local map and performs local bundle adjustment.</span></span><br><span class="line">    LocalMapping* mpLocalMapper;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Loop Closer. It searches loops with every new keyframe. If there is a loop it performs</span></span><br><span class="line">    <span class="comment">// a pose graph optimization and full bundle adjustment (in a new thread) afterwards.</span></span><br><span class="line">    LoopClosing* mpLoopCloser;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The viewer draws the map and the current camera pose. It uses Pangolin.</span></span><br><span class="line">    Viewer* mpViewer;</span><br><span class="line"></span><br><span class="line">    FrameDrawer* mpFrameDrawer;</span><br><span class="line">    MapDrawer* mpMapDrawer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// System threads: Local Mapping, Loop Closing, Viewer.</span></span><br><span class="line">    <span class="comment">// The Tracking thread "lives" in the main execution thread that creates the System object.</span></span><br><span class="line">    <span class="built_in">std</span>::thread* mptLocalMapping;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptLoopClosing;</span><br><span class="line">    <span class="built_in">std</span>::thread* mptViewer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset flag</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexReset;</span><br><span class="line">    <span class="keyword">bool</span> mbReset;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Change mode flags</span></span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexMode;</span><br><span class="line">    <span class="keyword">bool</span> mbActivateLocalizationMode;</span><br><span class="line">    <span class="keyword">bool</span> mbDeactivateLocalizationMode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tracking state</span></span><br><span class="line">    <span class="keyword">int</span> mTrackingState;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;MapPoint*&gt; mTrackedMapPoints;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cv::KeyPoint&gt; mTrackedKeyPointsUn;</span><br><span class="line">    <span class="built_in">std</span>::mutex mMutexState;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E5%85%A5%E5%8F%A3System/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">ORB-SLAM2——整体框架</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-04 19:08:34 / 修改时间：19:10:07" itemprop="dateCreated datePublished" datetime="2019-11-04T19:08:34+08:00">2019-11-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ORB-SLAM2/" itemprop="url" rel="index">
-                    <span itemprop="name">ORB-SLAM2</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191104184711727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><p> ORB_SLAM2由3+1个平行线程组成，包括跟踪、局部建图、回环检测以及在回环检测后的全局BA优化。之所以说是3+1，因为第四个线程仅在回环检测并确认后才执行。</p><p>三个主要并行线程：<br>Tracking：寻找局部地图特征点并进行匹配，运用纯运动BA最小化重投影误差，定位每帧相机位姿。<br>Local Mapping：运用局部BA算法优化相机位姿和特征点云。<br>Loop Closing：检测回环并通过位姿图优化消除累计漂移误差。在位姿图优化后会启动第4个线程执行全局BA算法，计算整个系统最优结构和运动结果。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/ORB-SLAM2%E2%80%94%E2%80%94%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/" class="post-title-link" itemprop="url">C++ 学习（1）——vector</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-04 18:18:28" itemprop="dateCreated datePublished" datetime="2019-11-04T18:18:28+08:00">2019-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-08 17:01:13" itemprop="dateModified" datetime="2019-11-08T17:01:13+08:00">2019-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一、什么是vector？"><a href="#一、什么是vector？" class="headerlink" title="一、什么是vector？"></a>一、什么是vector？</h1><p>向量（Vector）是一个封装了动态大小数组的顺序容器（Sequence Container）。跟任意其它类型容器一样，它能够存放各种类型的对象。可以简单的认为，向量是一个能够存放任意类型的动态数组。 </p><h1 id="二、容器特性"><a href="#二、容器特性" class="headerlink" title="二、容器特性"></a>二、容器特性</h1><ol>
-<li><p>顺序序列</p>
-<p>顺序容器中的元素按照严格的线性顺序排序。可以通过元素在序列中的位置访问对应的元素。</p>
+          <h1 id="二叉搜索树："><a href="#二叉搜索树：" class="headerlink" title="二叉搜索树："></a>二叉搜索树：</h1><ul>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结构的值</li>
+<li>若它的右子树不空 ，则右子树上所有结点的值均大于它的根结点的值</li>
+<li>它的左、右子树也分别为二叉搜索树。</li>
+</ul><p>通过<strong>中序遍历</strong>即可得出<strong>有序的序列</strong>， 构造一棵二叉搜索树的目的:为了提高查找和插入删除关键字的速度</p><h1 id="平衡二叉树-AVL树-："><a href="#平衡二叉树-AVL树-：" class="headerlink" title="平衡二叉树(AVL树)："></a>平衡二叉树(AVL树)：</h1><ul>
+<li><p>平衡二叉树是二叉搜索树的一种，其特点：左右子树的高度之差的绝对值不超过1，左右子树高度之差被称为平衡因子，每次插入一个新的值的时候，都要检查二叉树的平衡，也就是平衡调整</p>
 </li>
-</ol>
+<li><p>将二叉树上结点的左子树深度减去右子树深度的值称为平衡因子BF (Balanoe Factor)，平衡因乎只可能是-1、0和 1</p>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/04/C-%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94vector/#more" rel="contents">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%A0%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -935,7 +330,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%A0%91/257.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -949,7 +344,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">27.二叉树的镜像</a>
+            <a href="/2020/06/23/leetcode/%E6%A0%91/257.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">leetcode/树/257. 二叉树的所有路径</a>
         </h1>
 
         <div class="post-meta">
@@ -959,26 +354,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-04 15:02:06" itemprop="dateCreated datePublished" datetime="2019-11-04T15:02:06+08:00">2019-11-04</time>
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-05 14:32:26" itemprop="dateModified" datetime="2019-11-05T14:32:26+08:00">2019-11-05</time>
+                <time title="修改时间：2020-06-20 11:43:56" itemprop="dateModified" datetime="2020-06-20T11:43:56+08:00">2020-06-20</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -986,193 +370,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>操作给定的二叉树，将其变换为源二叉树的镜像。</p><p>输入描述:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">二叉树的镜像定义：源二叉树 </span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">6</span>   <span class="number">10</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">5</span>  <span class="number">7</span> <span class="number">9</span> <span class="number">11</span></span><br><span class="line">    	镜像二叉树</span><br><span class="line">    	    <span class="number">8</span></span><br><span class="line">    	   /  \</span><br><span class="line">    	  <span class="number">10</span>   <span class="number">6</span></span><br><span class="line">    	 / \  / \</span><br><span class="line">    	<span class="number">11</span> <span class="number">9</span> <span class="number">7</span>  <span class="number">5</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/27-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/04/26-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/26-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">26.树的子结构</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-04 14:58:09 / 修改时间：15:00:08" itemprop="dateCreated datePublished" datetime="2019-11-04T14:58:09+08:00">2019-11-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>918</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>注意检测空指针</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct TreeNode &#123;</span></span><br><span class="line"><span class="comment">	int val;</span></span><br><span class="line"><span class="comment">	struct TreeNode *left;</span></span><br><span class="line"><span class="comment">	struct TreeNode *right;</span></span><br><span class="line"><span class="comment">	TreeNode(int x) :</span></span><br><span class="line"><span class="comment">			val(x), left(NULL), right(NULL) &#123;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">&#125;;*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">HasSubtree</span><span class="params">(TreeNode* pRoot1, TreeNode* pRoot2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">bool</span> result=<span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(pRoot1!=<span class="literal">NULL</span>&amp;&amp; pRoot2!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">abs</span>(pRoot1-&gt;val-pRoot2-&gt;val)&lt;<span class="number">1e-8</span>)</span><br><span class="line">                result=Tree1HaveTree2(pRoot1,pRoot2);</span><br><span class="line">            <span class="keyword">if</span>(!result)</span><br><span class="line">                result=HasSubtree(pRoot1-&gt;left,pRoot2);</span><br><span class="line">            <span class="keyword">if</span>(!result)</span><br><span class="line">                result=HasSubtree(pRoot1-&gt;right,pRoot2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">Tree1HaveTree2</span><span class="params">(TreeNode* pRoot1,TreeNode* pRoot2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pRoot2==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(pRoot1==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">abs</span>(pRoot1-&gt;val-pRoot2-&gt;val)&gt;=<span class="number">1e-8</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> Tree1HaveTree2(pRoot1-&gt;left,pRoot2-&gt;left) &amp;&amp; Tree1HaveTree2(pRoot1-&gt;right,pRoot2-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  
-
-  
-
-
-
-
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/03/25-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="xiaohu">
-      <meta itemprop="description" content="博观而约取,厚积而薄发">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaohu博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/03/25-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8%E8%A1%A8/" class="post-title-link" itemprop="url">25.合并两个排序的链表表</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-03 10:31:44 / 修改时间：12:59:11" itemprop="dateCreated datePublished" datetime="2019-11-03T10:31:44+08:00">2019-11-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index">
-                    <span itemprop="name">剑指offer</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1191,10 +389,757 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>如果有一个链表为空，则直接返回另外一个链表；否则就对两个链表的每个元素进行大小判断，建立一个新的合并链表，把元素依次放进去，直到一个链表为空，这时把另外一个链表的剩余部分添加到合并链表的尾部即可。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1>
+          <h4 id="257-二叉树的所有路径"><a href="#257-二叉树的所有路径" class="headerlink" title="257. 二叉树的所有路径"></a><a href="https://leetcode-cn.com/problems/binary-tree-paths/" target="_blank" rel="noopener">257. 二叉树的所有路径</a></h4><p>给定一个二叉树，返回所有从根节点到叶子节点的路径。</p><p>说明: 叶子节点是指没有子节点的节点。</p><p>示例:</p><p>输入:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   <span class="number">1</span></span><br><span class="line"> /   \</span><br><span class="line"><span class="number">2</span>     <span class="number">3</span></span><br><span class="line"> \</span><br><span class="line">  <span class="number">5</span></span><br><span class="line"></span><br><span class="line">输出: [<span class="string">"1-&gt;2-&gt;5"</span>, <span class="string">"1-&gt;3"</span>]</span><br><span class="line"></span><br><span class="line">解释: 所有根节点到叶子节点的路径为: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">5</span>, <span class="number">1</span>-&gt;<span class="number">3</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/03/25-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8%E8%A1%A8/#more" rel="contents">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%A0%91/257.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%A0%91/101.%20Symmetric%20Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%A0%91/101.%20Symmetric%20Tree/" class="post-title-link" itemprop="url">leetcode/树/101. Symmetric Tree</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 23:19:50" itemprop="dateModified" datetime="2020-06-19T23:19:50+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>794</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).</p><p>For example, this binary tree [1,2,2,3,4,4,3] is symmetric:</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%A0%91/101.%20Symmetric%20Tree/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%A0%91/100.%20Same%20Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%A0%91/100.%20Same%20Tree/" class="post-title-link" itemprop="url">leetcode/树/100. Same Tree</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 22:32:26" itemprop="dateModified" datetime="2020-06-19T22:32:26+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>Given two binary trees, write a function to check if they are the same or not.</p><p>Two binary trees are considered the same if they are structurally identical and the nodes have the same value.<br><strong>Example 1:</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%A0%91/100.%20Same%20Tree/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/75.%20%E9%A2%9C%E8%89%B2%E5%88%86%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/75.%20%E9%A2%9C%E8%89%B2%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">leetcode/排序/75. 颜色分类</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 01:43:17" itemprop="dateModified" datetime="2020-06-19T01:43:17+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="75-颜色分类"><a href="#75-颜色分类" class="headerlink" title="75. 颜色分类"></a><a href="https://leetcode-cn.com/problems/sort-colors/" target="_blank" rel="noopener">75. 颜色分类</a></h4><p>给定一个包含红色、白色和蓝色，一共 <code>n</code> 个元素的数组，<strong>原地</strong>对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p><p>此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。</p><p><strong>注意</strong>:不能使用代码库中的排序函数来解决这道题。</p><p><strong>示例</strong>:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>]</span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/75.%20%E9%A2%9C%E8%89%B2%E5%88%86%E7%B1%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">leetcode/排序/排序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 00:54:05" itemprop="dateModified" datetime="2020-06-19T00:54:05+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="术语说明："><a href="#术语说明：" class="headerlink" title="术语说明："></a>术语说明：</h1><ul>
+<li>稳定：如果a原本在b前面，而a=b，排序之后a仍然在b的前面；</li>
+<li>不稳定：如果a原本在b的前面，而a=b，排序之后a可能会出现在b的后面；</li>
+<li>内排序：所有排序操作都在内存中完成；</li>
+<li>外排序：由于数据太大，因此把数据放在磁盘中，而排序通过磁盘和内存的数据传输才能进行；</li>
+<li>时间复杂度： 一个算法执行所耗费的时间。</li>
+<li>空间复杂度：运行完一个程序所需内存的大小。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/147.%20%E5%AF%B9%E9%93%BE%E8%A1%A8%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/147.%20%E5%AF%B9%E9%93%BE%E8%A1%A8%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">leetcode/排序/147. 对链表进行插入排序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 14:59:14" itemprop="dateModified" datetime="2020-06-19T14:59:14+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="147-对链表进行插入排序"><a href="#147-对链表进行插入排序" class="headerlink" title="147. 对链表进行插入排序"></a><a href="https://leetcode-cn.com/problems/insertion-sort-list/" target="_blank" rel="noopener">147. 对链表进行插入排序</a></h4><p>对链表进行插入排序。</p><p><img alt="img" data-src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif"></p><p>插入排序的动画演示如上。从第一个元素开始，该链表可以被认为已经部分排序（用黑色表示）。<br>每次迭代时，从输入数据中移除一个元素（用红色表示），并原地将其插入到已排好序的链表中。</p><p><strong>插入排序算法：</strong></p><p>插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。<br>每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。<br>重复直到所有输入数据插入完为止。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/147.%20%E5%AF%B9%E9%93%BE%E8%A1%A8%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/148.%20%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/148.%20%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">leetcode/排序/148. 排序链表</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:11:00" itemprop="dateCreated datePublished" datetime="2020-06-23T01:11:00+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 16:36:25" itemprop="dateModified" datetime="2020-06-19T16:36:25+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="148-排序链表"><a href="#148-排序链表" class="headerlink" title="148. 排序链表"></a><a href="https://leetcode-cn.com/problems/sort-list/" target="_blank" rel="noopener">148. 排序链表</a></h4><p>在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。</p><p>示例 1:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">4</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>-&gt;<span class="number">3</span></span><br><span class="line">输出: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span></span><br></pre></td></tr></table></figure><p>示例 2:</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">-1</span>-&gt;<span class="number">5</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>-&gt;<span class="number">0</span></span><br><span class="line">输出: <span class="number">-1</span>-&gt;<span class="number">0</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>-&gt;<span class="number">5</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/148.%20%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/56.%20%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/56.%20%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/" class="post-title-link" itemprop="url">leetcode/排序/56. 合并区间</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:10:59" itemprop="dateCreated datePublished" datetime="2020-06-23T01:10:59+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 00:58:04" itemprop="dateModified" datetime="2020-06-19T00:58:04+08:00">2020-06-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>811</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="56-合并区间"><a href="#56-合并区间" class="headerlink" title="56. 合并区间"></a><a href="https://leetcode-cn.com/problems/merge-intervals/" target="_blank" rel="noopener">56. 合并区间</a></h1><p>给出一个区间的集合，请合并所有重叠的区间。</p><p>示例 1:</p><blockquote>
+<p>输入: [[1,3],[2,6],[8,10],[15,18]]<br>输出: [[1,6],[8,10],[15,18]]<br>解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].</p>
+</blockquote><p>示例 2:</p><blockquote>
+<p>输入: [[1,4],[4,5]]<br>输出: [[1,5]]<br>解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/56.%20%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95c++(vector)%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95c++(vector)%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">leetcode/排序/排序算法c++(vector)实现</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-23 01:10:59" itemprop="dateCreated datePublished" datetime="2020-06-23T01:10:59+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-18 21:49:54" itemprop="dateModified" datetime="2020-06-18T21:49:54+08:00">2020-06-18</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>@[toc]<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191115190306423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20191115190315308.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p><h1 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h1><h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>依次比较相邻两元素，若前一元素大于后一元素则交换之，直至最后一个元素即为最大；然后重新从首元素开始重复同样的操作，直至倒数第二个元素即为次大元素；依次类推。如同水中的气泡，依次将最大或最小元素气泡浮出水面。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bubblesort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//若flag为true说明有过数据交换，否则停止循环</span></span><br><span class="line">    <span class="keyword">bool</span> flag=<span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;v.size() &amp;&amp; flag;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        flag=<span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=v.size()<span class="number">-2</span>;j&gt;=i;j--)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(v[j]&gt;v[j+<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                swap(v[j],v[j+<span class="number">1</span>]);</span><br><span class="line">                flag=<span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">3</span>,<span class="number">44</span>,<span class="number">35</span>,<span class="number">5</span>,<span class="number">47</span>,<span class="number">15</span>,<span class="number">36</span>,<span class="number">26</span>,<span class="number">27</span>,<span class="number">2</span>,<span class="number">46</span>,<span class="number">4</span>,<span class="number">19</span>,<span class="number">50</span>,<span class="number">48</span>&#125;;</span><br><span class="line"></span><br><span class="line">    bubblesort(v);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> x:v)</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;x&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/23/leetcode/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95c++(vector)%E5%AE%9E%E7%8E%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1224,7 +1169,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1270,7 +1215,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1330,12 +1275,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">554k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">9:48</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -1430,56 +1375,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
