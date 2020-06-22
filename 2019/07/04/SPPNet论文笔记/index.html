@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Abstract 当前深度卷积神经网络（CNNs）都需要输入的图像尺寸固定（比如224×224），这种人为的需要导致面对任意尺寸和比例的图像或子图像时降低识别的精度(因为要经过crop&#x2F;warp） 空间金字塔池化”(spatial pyramid pooling,)的池化策略以消除上述限制。SPP-net的网络结构能够产生固定大小的表示（representation）不管输入图像的尺寸或比例。 使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SPPNet论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;04&#x2F;SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="Abstract 当前深度卷积神经网络（CNNs）都需要输入的图像尺寸固定（比如224×224），这种人为的需要导致面对任意尺寸和比例的图像或子图像时降低识别的精度(因为要经过crop&#x2F;warp） 空间金字塔池化”(spatial pyramid pooling,)的池化策略以消除上述限制。SPP-net的网络结构能够产生固定大小的表示（representation）不管输入图像的尺寸或比例。 使">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704202635434.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704203627122.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704213955436.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019070509053438.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190705095007529.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704215821465.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704220622358.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704221748996.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704222709940.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704222735191.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704222807282.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T09:08:38.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704202635434.png">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SPPNet论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SPPNet论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-04 17:06:55" itemprop="dateCreated datePublished" datetime="2019-07-04T17:06:55+08:00">2019-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:08:38" itemprop="dateModified" datetime="2019-11-19T17:08:38+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><ol>
+<li>当前深度卷积神经网络（CNNs）都需要输入的图像尺寸固定（比如224×224），这种人为的需要导致面对任意尺寸和比例的图像或子图像时降低识别的精度(因为要经过crop/warp）</li>
+<li>空间金字塔池化”(spatial pyramid pooling,)的池化策略以消除上述限制。SPP-net的网络结构能够产生固定大小的表示（representation）不管输入图像的尺寸或比例。</li>
+<li>使用SPP-net，只需要从整张图片计算一次特征图（feature map），然后对任意尺寸的区域（子图像）进行特征池化以产生一个固定尺寸的表示用于训练检测器。这个方法避免了反复计算卷积特征。<h1 id="1-INTRODUCTION"><a href="#1-INTRODUCTION" class="headerlink" title="1 INTRODUCTION"></a>1 INTRODUCTION</h1></li>
+<li>CNNs在训练和测试时一个技术问题：需要输入的图像尺寸是固定的（比如224×224），限制了输入图像的长宽比和缩放尺度。当遇到任意尺寸的图像是，都是先将图像适应成固定尺寸，方法包括裁剪和变。但裁剪会导致信息的丢失，变形会导致位置信息的扭曲变形，就会影响识别的精度<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704202635434.png"></li>
+<li><p><strong>为什么CNNs需要一个固定的输入尺寸</strong>？<br>卷积层的参数和输入大小无关，它仅仅是一个卷积核在图像上滑动，不管输入图像多大都没关系，只是对不同大小的图片卷积出不同大小的特征图，但是全连接层的参数就和输入图像大小有关，因为它要把输入的所有像素点连接起来,需要指定输入层神经元个数和输出层神经元个数，所以需要规定输入的feature的大小。</p>
+</li>
+<li><p>SPP层放在最后一个卷积层之后。SPP层对特征图进行池化，并产生固定长度的输出，这个输出再喂给全连接层<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704203627122.png"></p>
+</li>
+<li>SPP有几个突出的优点：.<br> （1） SPP能在输入尺寸任意的情况下产生固定大小的输出，而以前的深度网络[3]中的滑窗池化(sliding window pooling)则不能<br> （2）SPP使用了多层空间箱(bin)，而滑窗池化则只用了一个窗口尺寸。多级池化对于物体的变形有十分强的鲁棒性。<br> （3）由于其对输入的灵活性，SPP可以池化从各种尺度抽取出来的特征</li>
+<li>SPP-net不仅仅让测试阶段允许任意尺寸的输入能够产生表示(representations)，也允许训练阶段的图像可以有各种尺寸和缩放尺度。使用各种尺寸的图像进行训练可以提高尺度不变性，以及减少过拟合。</li>
+<li>SPP的优点是与各类CNN设计是正交的，SPP对不同的CNN架构都有提升，可以帮助提升更复杂的（更大、更深）的卷积架构</li>
+<li>在目标检测方面，SPP-net也表现优异.基于SPP-net的系统（建立在R-CNN流水线上）比R-CNN计算卷积特征要快24-120倍，而精度却更高。</li>
+</ol><a id="more"></a>
+<h1 id="2-Deep-networks-with-spatial-pyramid-pooling"><a href="#2-Deep-networks-with-spatial-pyramid-pooling" class="headerlink" title="2 Deep networks with spatial pyramid pooling"></a>2 Deep networks with spatial pyramid pooling</h1><h2 id="2-1-Convolutional-Layers-and-Feature-Maps"><a href="#2-1-Convolutional-Layers-and-Feature-Maps" class="headerlink" title="2.1 Convolutional Layers and Feature Maps"></a>2.1 Convolutional Layers and Feature Maps</h2><p>在颇受欢迎的七层架构中中，前五层是卷积层，其中一些后面跟着池化层。从他们也使用滑窗的角度来看，池化层也可以认为是“卷积层”。最后两层是全连接的，跟着一个N路softmax输出，其中N是类别的数量。上述的深度网络需要一个固定大小的图像尺寸,固定尺寸的要求仅仅是因为全连接层的存在导致的<br>卷积层接受任意尺寸的输入。卷积层使用滑动的特征过滤器，它们的输出基本保持了原始输入的比例关系,它们的输出就是特征图</p>
+<h2 id="2-2-The-Spatial-Pyramid-Pooling-Layer"><a href="#2-2-The-Spatial-Pyramid-Pooling-Layer" class="headerlink" title="2.2 The Spatial Pyramid Pooling Layer"></a>2.2 The Spatial Pyramid Pooling Layer</h2><ol>
+<li><p>卷积层接受任意大小的输入，所以他们的输出也是各种大小。而分类器（SVM/softmax）或者全连接层需要固定的输入大小的向量,这种向量可以使用the Bag-of-Words (BoW)方法通过池化特征来生成。空间金字塔池化对BoW进行了改进，使得通过池化可以保留局部空间块（local spatial bins）的信息。这些空间块的尺寸和图像的尺寸是成比例的，所以这样块的数量是固定的了。</p>
+</li>
+<li><p>为了让我们的神经网络适应任意尺寸的图像输入，我们用一个空间金字塔池化层替换掉了最后一个池化层（最后一个卷积层之后的pool5）。空间金字塔的输出是一个kM维向量，M代表块的数量，k代表最后一层卷积层的过滤器的数量。这个固定维度的向量就是全连接层的输入。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704213955436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"> </p>
+</li>
+<li>黑色图片代表卷积之后的特征图，接着我们以不同大小的块来提取特征，分别是4<em>4，2</em>2，1*1，将这三张网格放到下面这张特征图上，就可以得到16+4+1=21种不同的块(Spatial bins)，我们从这21个块中，每个块提取出一个特征，这样刚好就是我们要提取的21维特征向量。这种以不同的大小格子的组合方式来池化的过程就是空间金字塔池化（SPP）。比如，要进行空间金字塔最大池化，其实就是从这21个图片块中，分别计算每个块的最大值，从而得到一个输出单元，最终得到一个21维特征的输出。</li>
+<li>空间金字塔最大池化（SPP-Max）的过程，其实就是从这21个图片块中，分别计算每个块的最大值，从而得到一个输出特征向量（跟上一层卷积核深度一样可能是256）。最后把一张任意大小的图片转换成了一个固定大小的21维特征（当然你可以设计其它维数的输出，增加金字塔的层数，或者改变划分网格的大小）。上面的三种不同刻度的划分，每一种刻度我们称之为金字塔的一层，使用多个不同刻度的层，可以提高我们所提取特征的鲁棒性。每一个图片块大小我们称之为：Sliding Windows Size了。如果你希望，金字塔的某一层输出n*n个特征，那么你就要用Windows Size大小为：(w/n,h/n)进行池化了。具体的SPP过程如下图5所示：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019070509053438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></li>
+<li>例如上图，所以Conv5计算出的feature map也是任意大小的，现在经过SPP之后，就可以变成固定大小的输出了，以上图为例，一共可以输出（16+4+1）*256的特征。<h1 id="2-3-Training-the-Network"><a href="#2-3-Training-the-Network" class="headerlink" title="2.3 Training the Network"></a>2.3 Training the Network</h1><strong>单尺寸训练：</strong><br>从理论上讲，SPP-Net支持直接以多尺度的原始图片作为输入后直接反向传播（Backpropagation）。实际上（Actually），Caffe等实现中，为了计算的方便，GPU,CUDA等比较适合固定尺寸的输入，所以训练的时候输入的图片是固定了尺度了的。以$224<em>224$的输入为例：在Conv5之后的特征图为：13x13</em>256（a<em>a</em>c）；金字塔层bins:   n<em>n；将pooling层作为Sliding window pooling。Windows_size=[a/n] 向上取整 ， Stride_size=[a/n]向下取整。得到的特征是n</em>n个特征向量（向量的长度是256）。对于pool 3<em>3:      Windows_size=5 的计算公式是：[13/3]向上取整=5 ，Stride_size= 4的计算公式是：[13/3]向下取整。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190705095007529.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><strong>多尺寸训练：</strong><br>使用两个尺度进行训练：224</em>224 和180*180，训练的时候，对于接受180输入的网络，我们实现另一个固定尺寸的网络。本例中，conv5输出的特征图尺寸是axa=10×10。我们仍然使用win = 上取整[a/n]，str = 下取整[a/n]，实现每个金字塔池化层。这个180网络的空间金字塔层的输出的大小就和224网络的一样了。训练过程中，我们通过使用共享参数的两个固定尺寸的网络实现了不同输入尺寸的SPP-net，为了降低从一个网络（比如224）向另一个网络（比如180）切换的开销，即用224的图片训练一个epoch，之后180的图片训练一个epoch，交替地进行。<br>多尺寸训练的主要目的是在保证已经充分利用现在被较好优化的固定尺寸网络实现的同时，模拟不同的输入尺寸。除了上述两个尺度的实现，我们也在每个epoch中测试了不同的sxs输入，s是从180到224之间均匀选取的<br>上面的单尺寸或多尺寸解析度只用于训练。在测试阶段，是直接对各种尺寸的图像应用SPP-net的。</li>
+</ol>
+<h1 id="3-SPP-NET-for-image-classification"><a href="#3-SPP-NET-for-image-classification" class="headerlink" title="3 SPP-NET for image classification"></a>3 SPP-NET for image classification</h1><h2 id="3-1-Experiments-on-ImageNet-2012-Classification"><a href="#3-1-Experiments-on-ImageNet-2012-Classification" class="headerlink" title="3.1 Experiments on ImageNet 2012 Classification"></a>3.1 Experiments on ImageNet 2012 Classification</h2><h3 id="3-1-1-Baseline-Network-Architectures-基准网络架构"><a href="#3-1-1-Baseline-Network-Architectures-基准网络架构" class="headerlink" title="3.1.1 Baseline Network Architectures(基准网络架构)"></a>3.1.1 Baseline Network Architectures(基准网络架构)</h3><p>对已有网络增加SPP层提升系能，包括ZF-5,Convnet-5,Overfeat-5/7，单尺度和多尺度输入图像的实验结果top-1及top-5 error如下表所示，第一个提出多尺度输入图像训练网络 </p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704215821465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h3 id="3-1-2-Multi-level-Pooling-Improves-Accuracy"><a href="#3-1-2-Multi-level-Pooling-Improves-Accuracy" class="headerlink" title="3.1.2 Multi-level Pooling Improves Accuracy"></a>3.1.2 Multi-level Pooling Improves Accuracy</h3><p>表2(b)中我们显示了使用单尺寸训练的结果。训练和测试尺寸都是224×224.这些网络中，卷积网络都和他们的基准网络有相同的结构，只是最后卷积层之后的池化层，被替换成了SPP层.表2中的结果我们使用了4层金字塔，{6x6, 3×3, 2×2, 1x1}(总共50个块)。为了公平比较，我们仍然使用标准的10-view预测法，每个view都是一个224×224的裁切。表2（b）中的结果显示了明显的性能提升。有趣的是，最大的提升（top-1 error，1.65%）来自于精度最高的网络架构。既然我们一直使用相同10个裁切view。这些提升只能是来自于多层次池化。<br>多层次池化带来的提升不只是因为更多的参数；而是因为多层次池化对对象的变形和空间布局更加鲁棒[15]。为了说明这个，我们使用一个不同的4层金字塔（4×4, 3×3, 2×2, 1×1}，共30个块）训练另一个ZF-5网络。这个网络有更少的参数，因为他的全连接层fc6有30×256维输入而不是36×256维。 网络的top-1/top-5错误率分别是35.06/14.04和50块的金字塔网络相近，明显好于非SPP基准网络（35.99/14.76）。</p>
+<h3 id="3-1-3-Multi-size-Training-Improves-Accuracy"><a href="#3-1-3-Multi-size-Training-Improves-Accuracy" class="headerlink" title="3.1.3 Multi-size Training Improves Accuracy"></a>3.1.3 Multi-size Training Improves Accuracy</h3><p>表2（c）展示了多尺寸训练的结果。训练尺寸是224和180，测试尺寸是224。我们还使用标准的10-view预测法。所有架构的top-1/top-5错误率进一步下降。SPP-net(Overfeat-7)的Top-1 错误率降到29.68%，比非SPP网络低了2.33%，比单尺寸训练降低了0.68%。除了使用180和224两个尺寸，我们还随机选了[180;224]之间多个尺寸。SPP-net(Overfeat-7)的top1/5错误30.06%/10.96%。Top-1错误率比两尺寸版本有所下降，可能因为224这个尺寸（测试时用的尺寸）被更少的访问到。但结果仍然比但尺寸版本要好。<br>        之前的CNN解决方案也处理了不同尺寸问题，但他们主要是基于测试。在Overfeat和Howard的方法中，单一网络在测试解决被应用于不同的尺度，然后将分支平均。Howard进一步在低/高两个分辨率图像区域上训练了两个不同的网络，然后平均分支。据我们所知，我们是第一个对不同尺寸训练单一网络的方法。</p>
+<h3 id="3-1-4-Full-image-Representations-Improve-Accuracy"><a href="#3-1-4-Full-image-Representations-Improve-Accuracy" class="headerlink" title="3.1.4 Full-image Representations Improve Accuracy"></a>3.1.4 Full-image Representations Improve Accuracy</h3><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704220622358.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>接下来我们研究全图像视角的准确度。我们将图像保持比例不变的情况下缩放到min(w;h)=256。SPP-net应用到一整张图像上。为了公平比较，我们也计算中央224×224裁切这单一视图（上述评估都用过）的准确度。单视图比较的准确度见表3。验证了ZF-5/Overfeat-7，top-1错误率在全视图表示中全部下降。这说明保持完整内容的重要性。即使网络训练时只使用了正方形图像，却也可以很好地适应其他的比例。<br>对比表2和表3我们发现，结合多种视图大体上要好于全图像视图。然而全视图图像的表示仍然有价值。首先，经验上看，即使结合几十个视图，额外增加两个全图像视角（带翻转）仍然可以提高准确度大约0.2%。其次，全图像视图从方法论上讲与传统方法保持了一致，这些方法中对整张图像进行编码的SIFT向量被池化在一起。第三，在其他一些应用中，比如图像恢复，相似度评分需要图像表示而不是分类得分。一个全图像的表示就会成为首选。</p>
+<p><strong>SPP-Net与R-CNN的对比</strong><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704221748996.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>对于R-CNN，整个过程是：</p>
+<ul>
+<li>首先通过选择性搜索，对待检测的图片进行搜索出~2000个候选窗口。 特征提取非常耗时<ul>
+<li>把这2k个候选窗口的图片都缩放到227*227，然后分别输入CNN中，每个proposal提取出一个特征向量，也就是说利用CNN对每个proposal进行提取特征向量。 </li>
+<li>把上面每个候选窗口的对应特征向量，利用SVM算法进行分类识别。 </li>
+</ul>
+</li>
+</ul>
+<p>而对于SPP-Net，整个过程是：</p>
+<ul>
+<li>首先通过选择性搜索，对待检测的图片进行搜索出2000个候选窗口。这一步和R-CNN一样。<ul>
+<li>特征提取阶段。这一步就是和R-CNN最大的区别了，这一步骤的具体操作如下：把整张待检测的图片，输入CNN中，进行一次性特征提取，得到feature maps，然后在feature maps中找到各个候选框的区域，再对各个候选框采用金字塔空间池化，提取出固定长度的特征向量。而R-CNN输入的是每个候选框，然后在进入CNN，因为SPP-Net只需要一次对整张图片进行特征提取，速度会大大提升。</li>
+<li>最后一步也是和R-CNN一样，采用SVM算法进行特征向量分类识别。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Mapping a Window to Feature Maps</strong><br>我们知道，在原图中的proposal,经过多层卷积之后，位置还是相对于原图不变的（如下图所示），那现在需要解决的问题就是，如何能够将原图上的proposal,映射到卷积之后得到的特征图上，因为在此之后我们要对proposal进行金字塔池化。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704222709940.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">对于映射关系，论文中给出了一个公式：<br>假设(x’,y’)表示特征图上的坐标点，坐标点(x,y)表示原输入图片上的点，那么它们之间有如下转换关系，这种映射关心与网络结构有关： (x,y)=(S<em>x’,S</em>y’)<br>反过来，我们希望通过(x,y)坐标求解(x’,y’)，那么计算公式如下：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704222735191.png"><br>其中S就是CNN中所有的strides的乘积，包含了池化、卷积的stride。<br>比如，对于下图的集中网络结构，S的计算如下：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704222807282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<p>参考：<a href="https://blog.csdn.net/v1_vivian/article/details/73275259" target="_blank" rel="noopener">https://blog.csdn.net/v1_vivian/article/details/73275259</a><br><a href="https://www.cnblogs.com/xiaoboge/p/10567869.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiaoboge/p/10567869.html</a><br>论文原文：<a href="https://arxiv.org/abs/1406.4729" target="_blank" rel="noopener">https://arxiv.org/abs/1406.4729</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="SPPNet论文笔记">https://xiao-hu.com.cn/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="yolo v3 论文笔记">
+                  <i class="fa fa-chevron-left"></i> yolo v3 论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/05/VGG/" rel="prev" title="VGG">
+                  VGG <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-INTRODUCTION"><span class="nav-number">2.</span> <span class="nav-text">1 INTRODUCTION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Deep-networks-with-spatial-pyramid-pooling"><span class="nav-number">3.</span> <span class="nav-text">2 Deep networks with spatial pyramid pooling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Convolutional-Layers-and-Feature-Maps"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 Convolutional Layers and Feature Maps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-The-Spatial-Pyramid-Pooling-Layer"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 The Spatial Pyramid Pooling Layer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3-Training-the-Network"><span class="nav-number">4.</span> <span class="nav-text">2.3 Training the Network</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-SPP-NET-for-image-classification"><span class="nav-number">5.</span> <span class="nav-text">3 SPP-NET for image classification</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Experiments-on-ImageNet-2012-Classification"><span class="nav-number">5.1.</span> <span class="nav-text">3.1 Experiments on ImageNet 2012 Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-Baseline-Network-Architectures-基准网络架构"><span class="nav-number">5.1.1.</span> <span class="nav-text">3.1.1 Baseline Network Architectures(基准网络架构)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-Multi-level-Pooling-Improves-Accuracy"><span class="nav-number">5.1.2.</span> <span class="nav-text">3.1.2 Multi-level Pooling Improves Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-3-Multi-size-Training-Improves-Accuracy"><span class="nav-number">5.1.3.</span> <span class="nav-text">3.1.3 Multi-size Training Improves Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-4-Full-image-Representations-Improve-Accuracy"><span class="nav-number">5.1.4.</span> <span class="nav-text">3.1.4 Full-image Representations Improve Accuracy</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

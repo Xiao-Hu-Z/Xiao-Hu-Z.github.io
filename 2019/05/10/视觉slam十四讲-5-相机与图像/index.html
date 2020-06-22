@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1 针孔相机模型相机是将三维世界坐标系中的坐标点映射到二维图像平面的过程能够用一个几何过程描述，最简单模型称为针孔模型。因为相机镜头透镜的存在，使得光线投影到成像平面过程中产生了畸变。1.1 针孔相机模型 针孔相机模型模型的建立：设 O−x−y−z 为相机坐标系，O 为摄像机的光心，也是针孔模型中的针孔。现实世界的空间点 P，经过小孔 O 投影之后，落在物理成像平面 O′−x′−y′O′−x′−y">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视觉slam十四讲   5.相机与图像">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;05&#x2F;10&#x2F;%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-5-%E7%9B%B8%E6%9C%BA%E4%B8%8E%E5%9B%BE%E5%83%8F&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="1 针孔相机模型相机是将三维世界坐标系中的坐标点映射到二维图像平面的过程能够用一个几何过程描述，最简单模型称为针孔模型。因为相机镜头透镜的存在，使得光线投影到成像平面过程中产生了畸变。1.1 针孔相机模型 针孔相机模型模型的建立：设 O−x−y−z 为相机坐标系，O 为摄像机的光心，也是针孔模型中的针孔。现实世界的空间点 P，经过小孔 O 投影之后，落在物理成像平面 O′−x′−y′O′−x′−y">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619161118673.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619165014245.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619164304556.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619165910747.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619170715129.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019061917475311.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619172926711.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619173413343.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619173711878.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619173756796.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619175323423.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619180050660.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619180102507.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619181054272.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619181152573.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619193548295.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619194212871.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619204112624.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619203722247.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619203836659.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619195744627.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619195725290.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T08:12:01.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190619161118673.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/05/10/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-5-%E7%9B%B8%E6%9C%BA%E4%B8%8E%E5%9B%BE%E5%83%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>视觉slam十四讲   5.相机与图像 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/05/10/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-5-%E7%9B%B8%E6%9C%BA%E4%B8%8E%E5%9B%BE%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          视觉slam十四讲   5.相机与图像
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-10 16:09:00" itemprop="dateCreated datePublished" datetime="2019-05-10T16:09:00+08:00">2019-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:12:01" itemprop="dateModified" datetime="2019-11-19T16:12:01+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-针孔相机模型"><a href="#1-针孔相机模型" class="headerlink" title="1 针孔相机模型"></a>1 针孔相机模型</h1><p>相机是将三维世界坐标系中的坐标点映射到二维图像平面的过程能够用一个几何过程描述，最简单模型称为<strong>针孔模型</strong>。<br>因为相机镜头透镜的存在，使得光线投影到成像平面过程中产生了<strong>畸变</strong>。</p><h2 id="1-1-针孔相机模型"><a href="#1-1-针孔相机模型" class="headerlink" title="1.1 针孔相机模型"></a>1.1 针孔相机模型</h2><ol>
+<li>针孔相机模型模型的建立：设 O−x−y−z 为相机坐标系，O 为摄像机的光心，也是针孔模型中的针孔。现实世界的空间点 P，经过小孔 O 投影之后，落在物理成像平面 O′−x′−y′O′−x′−y′ 上，成像点为 P′ 。设 P 的坐标为 [X,Y,Z]T，P′ 为 [X′,Y′,Z′]T，并且设物理成像平面到小孔的距离为 f（焦距）。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619161118673.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><script type="math/tex; mode=display">\frac{Z}{f}=-\frac{X}{X'}=-\frac{Y}{Y'}</script> 将成像平面对称至镜头前方，有：<script type="math/tex; mode=display">\frac{Z}{f}=\frac{X}{X'}=\frac{Y}{Y'}</script> 所以：<script type="math/tex; mode=display">X'=f\frac{X}{Z}$$   $$Y'=f\frac{Y}{Z}</script></li>
+</ol><a id="more"></a>
+
+<p>​                                          </p>
+<ol>
+<li><p>在相机中，最终获得的是一个个的像素，这需要在成像平面上对像进行采样和量化，设在物理成像平面上固定着一个像素平面 o−u−v，得到了 P′ 的像素坐标： [u,v]T，像素坐标系与成像平面之间，相差了一个缩放和一个原点的平移。</p>
+<pre><code>                                   &lt;div align=center&gt; ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190619162628449.png)   
+                                                             ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190619163041281.png)
+</code></pre><p><strong>矩阵形式：</strong><br> <div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619165014245.png"></div></p>
+</li>
+<li><p>中间的量组成的矩阵称为相机的内参数矩阵（Camera Intrinsics） K ，通常情况下，相机的内参在出厂之后是固定的，不会在使用过程中发生变化。有时需要自己确定相机的参数，称为标定。         <div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619164304556.png"></div></p>
+</li>
+<li><p>相机坐标P是由它的世界坐标Pw变换而来，由于相机运动，所以P的坐标应该是它的世界坐标Pw。<br>相机位姿由外参数R,t决定 。相比于不变的内参，外参随着相机运动发生改变 ，同时也是 SLAM中待估计的目标，代表着机器人的轨迹。<br>右侧的TPw是把一个世界坐标系下的齐次坐标转为相机坐标系，为了使它与K相乘，把最后以为进行归一化处理。即P 在相机归一化平面上的投影：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619165910747.png"></div></p>
+<p>  Pc可以看成二维的齐次坐标，称为归一化坐标，，它位于相机前方z=1的平面上，叫做归一化平面。</p>
+</li>
+<li><p><strong>变换过程总结</strong>：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619170715129.png"></div></p>
+</li>
+</ol>
+<h2 id="1-2-畸变"><a href="#1-2-畸变" class="headerlink" title="1.2 畸变"></a>1.2 畸变</h2><ol>
+<li><p>为了获得良好的成像效果，在相机前方加入透镜，其影响：</p>
+<p>  （1）透镜自身的形状对光线传播的影响<br>  （2）在机械组装过程中，透镜和成像平面不可能完全平行，使得光线穿过透镜投影到成像面时的位置发生变化。</p>
+</li>
+</ol>
+<ol>
+<li><p>径向畸变：由透镜形状引起，越靠近图像的边缘，这种现象越明显。径向畸变分为<strong>桶形畸变</strong>和<strong>枕形畸变</strong>，穿过图像中心和光轴有交点的直线还能保持形状不变。</p>
+<pre><code>   （1）桶形畸变是由于图像放大率随着离光轴的距离增加而减小。
+   （2）枕形畸变是由于图像放大率随着离光轴的距离增加而增加。   &lt;div align=center&gt;          ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190619172313930.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70)
+</code></pre></li>
+<li><p>切向畸变：在相机的组装过程中由于不能使得透镜和成像面严格平行而导致的畸变。<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019061917475311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></div></p>
+</li>
+<li><p>r表示平面任意一点p与坐标原点的距离，θ表示与水平轴的夹角。径向畸变可看成坐标点沿着长度方向发生了变化 δr , 也就是其距离原点的长度发生了变化。切向畸变可以看成坐标点沿着切线方向发生了变化，也就是水平夹角发生了变化 δθ 。</p>
+<ol>
+<li><p>径向畸变的纠正：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619172926711.png"></div></p>
+<p>其中 [x,y]T是归一化平面点的坐标，[xcorrected,ycorrected]T是畸变后的点的坐标。<br>对于畸变较小的图像中心区域，畸变纠正主要是 k1 起作用。而对于畸变较大的边缘区域主要是 k2起作用。普通摄像头用这两个系数就能很好的纠正径向畸变。对畸变很大的摄像头，比如鱼眼镜头，可以加入 k3畸变项对畸变进行纠正。</p>
+</li>
+</ol>
+</li>
+<li><p>切向畸变的纠正：   <div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619173413343.png"></div></p>
+</li>
+<li><p>对于相机坐标系中的一点 P(X,Y,Z)P(X,Y,Z)，我们能够通过五个畸变系数找到这个点在像素平面上的正确位置:<br>（1）将三维空间点投影到归一化图像平面。设它的归一化坐标为 [x,y]T<br>（2）对归一化平面上的点进行径向畸变和切向畸变纠正。<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619173711878.png"><br>（3）将纠正后的点通过内参数矩阵投影到像素平面，得到该点在图像上的正确位置。<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619173756796.png"></div></div></p>
+</li>
+<li><p>单目相机的成像过程：<br>（1）首先，世界坐标系下有一个固定的点 P，世界坐标为 Pw。<br> （2）由于相机在运动，它的运动由 R,t或变换矩阵 T∈SE(3）描述。P 的相机坐标为P˜c=RPw+t。<br>（3）这时的 P˜c仍有 X,Y,Z三个量，把它们投影到归一化平面 Z = 1 上，得到 P 的归一化相机坐标： Pc=[X/Z,Y/Z,1]T<br>（4）最后， P 的归一化坐标经过内参后，对应到它的像素坐标： Puv=KPc。</p>
+</li>
+</ol>
+<h2 id="1-3-双目相机模型"><a href="#1-3-双目相机模型" class="headerlink" title="1.3 双目相机模型"></a>1.3 双目相机模型</h2><ol>
+<li>仅根据一个像素，无法确定这个空间点的具体位置，因为，从相机光心到归一化平面连线上的所有点，都可以投影至该像素上，深度确定时，才能确切地知道它的空间位置。</li>
+<li><p>双目相机原理：通过同步采集左右相机的图像，计算图像间视差，来估计每一个像素的深度。<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619175323423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></div></p>
+</li>
+<li><p>双目相机深度公式<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619180050660.png"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619180102507.png"></div></p>
+<p>  d 为左右图的横坐标之差，称为视差（Disparity）。根据视差，我们可以估计一个像素离相机的距离。视差与距离成反比：视差越大，距离越近。当基线越长时，双目最大能测到的距离b就会变远。</p>
+<h2 id="1-4-RGB-D-相机模型"><a href="#1-4-RGB-D-相机模型" class="headerlink" title="1.4 RGB-D 相机模型"></a>1.4 RGB-D 相机模型</h2></li>
+<li><p>RGB-D 相机按原理可分为两大类</p>
+<p> (1)通过<strong>红外结构光</strong>（Structured Light）来测量像素距离。 Kinect 1 代、 Project Tango 1 代、 Intel RealSense 等<br> (2)通过<strong>飞行时间法</strong>（Time-of-flight, ToF）原理测量像素距离。 Kinect 2 代和一些现有的 ToF 传感器等</p>
+<h1 id="2-图像"><a href="#2-图像" class="headerlink" title="2 图像"></a>2 图像</h1><p>在数学中，图像可以用一个矩阵来描述，在计算机中，它们占据一段连续的磁盘或内存空间，可以用二维数组来表示<br><strong>计算机中图像的表示</strong></p>
+</li>
+<li>在一张灰度图中，每个像素位置 (x,y)(x,y) 对应到一个灰度值 II，所以一张宽度为 w，高度为 h 的图像，数学形式可以记成一个矩阵：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619181054272.png"></div></li>
+<li>用 0−2550−255 之间的数，即一个 unsigned char，一个字节来表达灰度的大小。<br>一张宽度为 640，高度为 480 分辨率的灰图度就可以这样表示：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> image[<span class="number">480</span>][<span class="number">640</span>];</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>图像的宽度和列数，对应着 X 轴；而图像的行数或高度，则对应着它的 Y 轴<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619181152573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></div></p>
+<p>如果我们讨论一个位于 x, y 处的像素，那么它在程序中的访问方式应该是：</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#它对应着灰度值 I(x,y)的读数。请注意这里的 x 和 y 的顺序。</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> pixel = image[y][x];</span><br></pre></td></tr></table></figure>
+<ol>
+<li>RGB-D 相机的量程通常在十几米范围左右，采用十六位整数（C++ 中的 unsigned short）来记录一个深度图的信息，最大可表示65米。</li>
+<li>彩色图像有 R,G,B 三个数值，每一个数值就称为一个通道，通常情况下，每一个通道占8位。OpenCV中的顺序是 B,G,R。<h1 id="3-实践：图像的存取与访问"><a href="#3-实践：图像的存取与访问" class="headerlink" title="3 实践：图像的存取与访问"></a>3 实践：图像的存取与访问</h1><h2 id="3-1-安装Opencv"><a href="#3-1-安装Opencv" class="headerlink" title="3.1 安装Opencv"></a>3.1 安装Opencv</h2><h2 id="3-2-操作Opencv图像"><a href="#3-2-操作Opencv图像" class="headerlink" title="3.2 操作Opencv图像"></a>3.2 操作Opencv图像</h2></li><li>imageBasics.cpp</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 读取argv[1]指定的图像</span></span><br><span class="line">    cv::Mat image;</span><br><span class="line">    image = cv::imread ( argv[<span class="number">1</span>] ); <span class="comment">//cv::imread函数读取指定路径下的图像</span></span><br><span class="line">    <span class="comment">// 判断图像文件是否正确读取</span></span><br><span class="line">    <span class="keyword">if</span> ( image.data == <span class="literal">nullptr</span> ) <span class="comment">//数据不存在,可能是文件不存在</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span>&lt;&lt;<span class="string">"文件"</span>&lt;&lt;argv[<span class="number">1</span>]&lt;&lt;<span class="string">"不存在."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 文件顺利读取, 首先输出一些基本信息</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"图像宽为"</span>&lt;&lt;image.cols&lt;&lt;<span class="string">",高为"</span>&lt;&lt;image.rows&lt;&lt;<span class="string">",通道数为"</span>&lt;&lt;image.channels()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    cv::imshow ( <span class="string">"image"</span>, image );      <span class="comment">// 用cv::imshow显示图像</span></span><br><span class="line">    cv::waitKey ( <span class="number">0</span> );                  <span class="comment">// 暂停程序,等待一个按键输入</span></span><br><span class="line">    <span class="comment">// 判断image的类型</span></span><br><span class="line">    <span class="keyword">if</span> ( image.type() != CV_8UC1 &amp;&amp; image.type() != CV_8UC3 )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 图像类型不符合要求</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"请输入一张彩色图或灰度图."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历图像, 请注意以下遍历方式亦可使用于随机像素访问</span></span><br><span class="line">    <span class="comment">// 使用 std::chrono 来给算法计时</span></span><br><span class="line">    chrono::steady_clock::time_point t1 = chrono::steady_clock::now();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">size_t</span> y=<span class="number">0</span>; y&lt;image.rows; y++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 用cv::Mat::ptr获得图像的行指针</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span>* row_ptr = image.ptr&lt;<span class="keyword">unsigned</span> <span class="keyword">char</span>&gt; ( y );  <span class="comment">// row_ptr是第y行的头指针</span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">size_t</span> x=<span class="number">0</span>; x&lt;image.cols; x++ )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 访问位于 x,y 处的像素</span></span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">char</span>* data_ptr = &amp;row_ptr[ x*image.channels() ]; <span class="comment">// data_ptr 指向待访问的像素数据</span></span><br><span class="line">            <span class="comment">// 输出该像素的每个通道,如果是灰度图就只有一个通道</span></span><br><span class="line">            <span class="keyword">for</span> ( <span class="keyword">int</span> c = <span class="number">0</span>; c != image.channels(); c++ )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">char</span> data = data_ptr[c]; <span class="comment">// data为I(x,y)第c个通道的值</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    chrono::steady_clock::time_point t2 = chrono::steady_clock::now();</span><br><span class="line">    chrono::duration&lt;<span class="keyword">double</span>&gt; time_used = chrono::duration_cast&lt;chrono::duration&lt;<span class="keyword">double</span>&gt;&gt;( t2-t1 );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"遍历图像用时："</span>&lt;&lt;time_used.count()&lt;&lt;<span class="string">" 秒。"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关于 cv::Mat 的拷贝</span></span><br><span class="line">    <span class="comment">// 直接赋值并不会拷贝数据</span></span><br><span class="line">    cv::Mat image_another = image;</span><br><span class="line">    <span class="comment">// 修改 image_another 会导致 image 发生变化</span></span><br><span class="line">    image_another ( cv::Rect ( <span class="number">0</span>,<span class="number">0</span>,<span class="number">100</span>,<span class="number">100</span> ) ).setTo ( <span class="number">0</span> ); <span class="comment">// 将左上角100*100的块置零</span></span><br><span class="line">    cv::imshow ( <span class="string">"image"</span>, image );</span><br><span class="line">    cv::waitKey ( <span class="number">0</span> );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 使用clone函数来拷贝数据</span></span><br><span class="line">    cv::Mat image_clone = image.clone();</span><br><span class="line">    image_clone ( cv::Rect ( <span class="number">0</span>,<span class="number">0</span>,<span class="number">100</span>,<span class="number">100</span> ) ).setTo ( <span class="number">255</span> );</span><br><span class="line">    cv::imshow ( <span class="string">"image"</span>, image );</span><br><span class="line">    cv::imshow ( <span class="string">"image_clone"</span>, image_clone );</span><br><span class="line">    cv::waitKey ( <span class="number">0</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对于图像还有很多基本的操作,如剪切,旋转,缩放等,限于篇幅就不一一介绍了,请参看OpenCV官方文档查询每个函数的调用方法.</span></span><br><span class="line">    cv::destroyAllWindows();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><li>CMakeLists.txt</li></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required( VERSION <span class="number">2.8</span> )</span><br><span class="line">project( imageBasics )</span><br><span class="line"></span><br><span class="line"># 添加c++ <span class="number">11</span>标准支持</span><br><span class="line"><span class="built_in">set</span>( CMAKE_CXX_FLAGS <span class="string">"-std=c++11"</span> )</span><br><span class="line"></span><br><span class="line"># 寻找OpenCV库</span><br><span class="line">find_package( OpenCV REQUIRED )</span><br><span class="line"># 添加头文件</span><br><span class="line">include_directories( $&#123;OpenCV_INCLUDE_DIRS&#125; )</span><br><span class="line"></span><br><span class="line">add_executable( imageBasics imageBasics.cpp )</span><br><span class="line"># 链接OpenCV库</span><br><span class="line">target_link_libraries( imageBasics $&#123;OpenCV_LIBS&#125; )</span><br></pre></td></tr></table></figure>
+<p>测试执行如下操作：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line"><span class="function"><span class="title">cmake</span></span> ..</span><br><span class="line">make</span><br><span class="line"><span class="function"><span class="title">cd</span></span> ..</span><br><span class="line">build/imageBasics ubuntu.png</span><br></pre></td></tr></table></figure><br>结果如图：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619193548295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h1 id="4-实践：拼接点云"><a href="#4-实践：拼接点云" class="headerlink" title="4 实践：拼接点云"></a>4 实践：拼接点云</h1><p>本节程序提供了五张 RGB-D 图像，并且知道了每个图像的内参和外参。根据 RGB-D 图像和相机内参，可以计算任何一个像素在相机坐标系下的位置。根据相机位姿，又能计算这些像素在世界坐标系下的位置。如果把所有像素的空间坐标都求出来，相当于构建一张类似于地图的东西。</p>
+<p>在 color/下有 1.png 到 5.png五张 RGB 图，而在 depth/下有五张对应的深度图。同时， pose.txt 文件给出了五张图像的相机位姿（以 Tw c 形式）。位姿记录的形式是平移向量加旋转四元数：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619194212871.png"></div></p>
+<p>完成两件事：<br> (1). 根据内参计算一对 RGB-D 图像对应的点云；<br> (2). 根据各张图的相机位姿（也就是外参），把点云加起来，组成地图。</p>
+<p><li> joinMap.cpp<br>注释参考：<a href="https://www.cnblogs.com/newneul/p/8407369.html" target="_blank" rel="noopener">https://www.cnblogs.com/newneul/p/8407369.html</a></li></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Geometry&gt; </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/format.hpp&gt;  // for formating strings</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pcl/point_types.h&gt; </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pcl/io/pcd_io.h&gt; </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pcl/visualization/pcl_visualizer.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//用vector&lt;cv::Mat&gt;和vector&lt;Eigen::Isometry3d&gt;定义图片变量和相机位姿</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;cv::Mat&gt; colorImgs, depthImgs;    <span class="comment">// 彩色图和深度图</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;Eigen::Isometry3d, Eigen::aligned_allocator&lt;Eigen::Isometry3d&gt;&gt; poses;         <span class="comment">// 相机位姿</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//先设地址，位姿地址就一个</span></span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span><span class="params">(<span class="string">"./pose.txt"</span>)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!fin)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span>&lt;&lt;<span class="string">"请在有pose.txt的目录下运行此程序"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        boost::<span class="function">format <span class="title">fmt</span><span class="params">( <span class="string">"./%s/%d.%s"</span> )</span></span>; <span class="comment">//图像文件格式</span></span><br><span class="line">        <span class="comment">//找到图像存储的路径，然后放入先前创建好的vector中</span></span><br><span class="line">        colorImgs.push_back( cv::imread( (fmt%<span class="string">"color"</span>%(i+<span class="number">1</span>)%<span class="string">"png"</span>).str() ));</span><br><span class="line">        depthImgs.push_back( cv::imread( (fmt%<span class="string">"depth"</span>%(i+<span class="number">1</span>)%<span class="string">"pgm"</span>).str(), <span class="number">-1</span> )); <span class="comment">// 使用-1读取原始图像</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//位姿数据里面定义的有7个量，前面3个是位移，后面四个是四元数，最后一个是实部</span></span><br><span class="line">        <span class="keyword">double</span> data[<span class="number">7</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">auto</span>&amp; d:data )<span class="comment">//auto自动类型转换</span></span><br><span class="line">            <span class="comment">//文件流类型的变量fin将pose.txt中的数据给了d数组,将上面的每个图片的外参都给了d</span></span><br><span class="line">            fin&gt;&gt;d;</span><br><span class="line">        Eigen::<span class="function">Quaterniond <span class="title">q</span><span class="params">( data[<span class="number">6</span>], data[<span class="number">3</span>], data[<span class="number">4</span>], data[<span class="number">5</span>] )</span></span>;</span><br><span class="line">        Eigen::<span class="function">Isometry3d <span class="title">T</span><span class="params">(q)</span></span>; <span class="comment">//变换矩阵初始化旋转部分</span></span><br><span class="line">        T.pretranslate( Eigen::Vector3d( data[<span class="number">0</span>], data[<span class="number">1</span>], data[<span class="number">2</span>] ));<span class="comment">//变换矩阵初始化平移向量部分</span></span><br><span class="line">        poses.push_back( T ); <span class="comment">//存储变换矩阵到位姿数组</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 计算点云并拼接</span></span><br><span class="line">    <span class="comment">// 相机内参 </span></span><br><span class="line">    <span class="keyword">double</span> cx = <span class="number">325.5</span>;</span><br><span class="line">    <span class="keyword">double</span> cy = <span class="number">253.5</span>;</span><br><span class="line">    <span class="keyword">double</span> fx = <span class="number">518.0</span>;</span><br><span class="line">    <span class="keyword">double</span> fy = <span class="number">519.0</span>;</span><br><span class="line">    <span class="keyword">double</span> depthScale = <span class="number">1000.0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"正在将图像转换为点云..."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 定义点云使用的格式：这里用的是XYZRGB</span></span><br><span class="line">    <span class="keyword">typedef</span> pcl::PointXYZRGB PointT; </span><br><span class="line">    <span class="keyword">typedef</span> pcl::PointCloud&lt;PointT&gt; PointCloud;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//新建一个点云,PointCoud::Ptr是一个智能指针类 通过构造函数初始化指针指向的申请的空间</span></span><br><span class="line">    <span class="comment">//pointCloud 是一个智能指针类型的对象 </span></span><br><span class="line">    PointCloud::<span class="function">Ptr <span class="title">pointCloud</span><span class="params">( <span class="keyword">new</span> PointCloud )</span></span>; </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"转换图像中: "</span>&lt;&lt;i+<span class="number">1</span>&lt;&lt;<span class="built_in">endl</span>; </span><br><span class="line">        cv::Mat color = colorImgs[i]; </span><br><span class="line">        cv::Mat depth = depthImgs[i];</span><br><span class="line">        Eigen::Isometry3d T = poses[i];</span><br><span class="line">        <span class="comment">/*对图像像素进行坐标转换，将图像的坐标通过内参矩阵K转换为相机坐标系下的坐标，之后通过外参矩阵T 转化为世界坐标系下的坐标*/</span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> v=<span class="number">0</span>; v&lt;color.rows; v++ )</span><br><span class="line">            <span class="keyword">for</span> ( <span class="keyword">int</span> u=<span class="number">0</span>; u&lt;color.cols; u++ )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">unsigned</span> <span class="keyword">int</span> d = depth.ptr&lt;<span class="keyword">unsigned</span> <span class="keyword">short</span>&gt; ( v )[u]; <span class="comment">// 深度值</span></span><br><span class="line">                <span class="keyword">if</span> ( d==<span class="number">0</span> ) <span class="keyword">continue</span>; <span class="comment">// 为0表示没有测量到</span></span><br><span class="line">                Eigen::Vector3d point; </span><br><span class="line">                point[<span class="number">2</span>] = <span class="keyword">double</span>(d)/depthScale; <span class="comment">//对实际尺度的一个缩放</span></span><br><span class="line">                point[<span class="number">0</span>] = (u-cx)*point[<span class="number">2</span>]/fx;</span><br><span class="line">                point[<span class="number">1</span>] = (v-cy)*point[<span class="number">2</span>]/fy; </span><br><span class="line">                Eigen::Vector3d pointWorld = T*point;<span class="comment">//将相机坐标系转换为世界坐标系</span></span><br><span class="line">                <span class="comment">//将世界坐标系下的坐标用pcl专门的点云格式存储起来</span></span><br><span class="line">                <span class="comment">//定义一个pcl点p.这个p有六个值，x,y,z，b,g,r</span></span><br><span class="line">                PointT p ;</span><br><span class="line">                p.x = pointWorld[<span class="number">0</span>];</span><br><span class="line">                p.y = pointWorld[<span class="number">1</span>];</span><br><span class="line">                p.z = pointWorld[<span class="number">2</span>];</span><br><span class="line">                p.b = color.data[ v*color.step+u*color.channels() ];</span><br><span class="line">                p.g = color.data[ v*color.step+u*color.channels()+<span class="number">1</span> ];</span><br><span class="line">                p.r = color.data[ v*color.step+u*color.channels()+<span class="number">2</span> ];</span><br><span class="line">                pointCloud-&gt;points.push_back( p );</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//这里有可能深度图中某些像素没有深度信息，那么就是包含无效的像素，所以先置为假，但是如果设置成true的话 也没有看出来有什么不一样的地方pointCloud-&gt;is_dense = false;</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"点云共有"</span>&lt;&lt;pointCloud-&gt;size()&lt;&lt;<span class="string">"个点."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//拼接点云,点云是指针形式</span></span><br><span class="line">    <span class="comment">//获取pointCloud指向的对象 这个就当做获取普通指针指向的对象来理解，这个对象是在定义的时候new出来的一段内存空间。</span></span><br><span class="line">    pcl::io::savePCDFileBinary(<span class="string">"map.pcd"</span>, *pointCloud );</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>容器的基本使用：<a href="http://blog.csdn.net/ws_20100/article/details/50829327" target="_blank" rel="noopener">http://blog.csdn.net/ws_20100/article/details/50829327</a><br>计算位于 (u, v)，深度为 d 的像素，在相机坐标系下的位置。并根据外参把它们变换到世界坐标。我们知道相机坐标 pc 到像素坐标 (u, v, d) 的关系为：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619204112624.png"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619203722247.png"></div></p>
+<p>反推 pc 的形式亦非常简单。设 pc=[x,y,z]那么：<div align="center">  </div></p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619203836659.png"></p>
+<p><li>CMakeLists.txt</li></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required( VERSION <span class="number">2.8</span> )</span><br><span class="line">project( joinMap )</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>( CMAKE_BUILD_TYPE Release )</span><br><span class="line"><span class="built_in">set</span>( CMAKE_CXX_FLAGS <span class="string">"-std=c++11 -O3"</span> )</span><br><span class="line"></span><br><span class="line"><span class="meta"># opencv </span></span><br><span class="line">find_package( OpenCV REQUIRED )</span><br><span class="line">include_directories( $&#123;OpenCV_INCLUDE_DIRS&#125; )</span><br><span class="line"></span><br><span class="line"><span class="meta"># eigen </span></span><br><span class="line">include_directories( <span class="string">"/usr/include/eigen3/"</span> )</span><br><span class="line"></span><br><span class="line"><span class="meta"># pcl </span></span><br><span class="line">find_package( PCL REQUIRED COMPONENT common io )</span><br><span class="line">include_directories( $&#123;PCL_INCLUDE_DIRS&#125; )</span><br><span class="line">add_definitions( $&#123;PCL_DEFINITIONS&#125; )</span><br><span class="line"><span class="built_in">list</span>(REMOVE_ITEM PCL_LIBRARIES <span class="string">"vtkproj4"</span>)</span><br><span class="line"></span><br><span class="line">add_executable( joinMap joinMap.cpp )</span><br><span class="line">target_link_libraries( joinMap $&#123;OpenCV_LIBS&#125; $&#123;PCL_LIBRARIES&#125; )</span><br></pre></td></tr></table></figure>
+<p>执行如下操作：<br><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mkdir</span> <span class="string">build</span></span><br><span class="line"><span class="attr">cd</span> <span class="string">build</span></span><br><span class="line"><span class="attr">cmake</span> <span class="string">..</span></span><br><span class="line"><span class="attr">make</span></span><br><span class="line"><span class="attr">cd</span> <span class="string">..</span></span><br><span class="line"><span class="attr">build/joinMap</span></span><br><span class="line"><span class="attr">pcl_viewer</span> <span class="string">map.pcd</span></span><br></pre></td></tr></table></figure><br>结果如图：<div align="center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190619195744627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="未完待续！" data-src="https://img-blog.csdnimg.cn/20190619195725290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></div></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/05/10/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-5-%E7%9B%B8%E6%9C%BA%E4%B8%8E%E5%9B%BE%E5%83%8F/" title="视觉slam十四讲   5.相机与图像">https://xiao-hu.com.cn/2019/05/10/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-5-%E7%9B%B8%E6%9C%BA%E4%B8%8E%E5%9B%BE%E5%83%8F/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/04/19/%E8%A7%86%E8%A7%89slam-%E5%8D%81%E5%9B%9B%E8%AE%B2-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="视觉slam 十四讲 环境配置">
+                  <i class="fa fa-chevron-left"></i> 视觉slam 十四讲 环境配置
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/05/15/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-6-%E9%9D%9E%E7%BA%BF%E6%80%A7%E4%BC%98%E5%8C%96/" rel="prev" title="视觉slam十四讲  6.非线性优化">
+                  视觉slam十四讲  6.非线性优化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-针孔相机模型"><span class="nav-number">1.</span> <span class="nav-text">1 针孔相机模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-针孔相机模型"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 针孔相机模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-畸变"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 畸变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-双目相机模型"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 双目相机模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-RGB-D-相机模型"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 RGB-D 相机模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-图像"><span class="nav-number">2.</span> <span class="nav-text">2 图像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-实践：图像的存取与访问"><span class="nav-number">3.</span> <span class="nav-text">3 实践：图像的存取与访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-安装Opencv"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 安装Opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-操作Opencv图像"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 操作Opencv图像</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-实践：拼接点云"><span class="nav-number">4.</span> <span class="nav-text">4 实践：拼接点云</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

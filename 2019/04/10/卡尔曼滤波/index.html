@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="英文原文卡尔曼滤波器简介——追踪介绍什么是卡尔曼滤波?　　你可以在任何含有不确定信息的动态系统中使用卡尔曼滤波，对系统下一步的走向做出有根据的预测，即使伴随着各种干扰，卡尔曼滤波总是能指出真实发生的情况在连续变化的系统中使用卡尔曼滤波是非常理想的，它具有占用内存小的优点（除了前一个状态量外，不需要保留其它历史数据），并且速度很快，很适合应用于实时问题和嵌入式系统。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卡尔曼滤波（KF）">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;04&#x2F;10&#x2F;%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="英文原文卡尔曼滤波器简介——追踪介绍什么是卡尔曼滤波?　　你可以在任何含有不确定信息的动态系统中使用卡尔曼滤波，对系统下一步的走向做出有根据的预测，即使伴随着各种干扰，卡尔曼滤波总是能指出真实发生的情况在连续变化的系统中使用卡尔曼滤波是非常理想的，它具有占用内存小的优点（除了前一个状态量外，不需要保留其它历史数据），并且速度很快，很适合应用于实时问题和嵌入式系统。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817112851953.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817125216840.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113154367.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113216117.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113318171.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113330252.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113439985.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113545696.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113632588.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113718375.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817132507870.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113851764.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019081711393516.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817113940124.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114029226.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114058531.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114125142.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114142974.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114158765.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817114212747.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:updated_time" content="2019-11-19T08:27:03.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190817112851953.png#pic_center">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>卡尔曼滤波（KF） | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卡尔曼滤波（KF）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-10 16:22:51" itemprop="dateCreated datePublished" datetime="2019-04-10T16:22:51+08:00">2019-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:27:03" itemprop="dateModified" datetime="2019-11-19T16:27:03+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">滤波算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/" target="_blank" rel="noopener">英文原文</a></p><h1 id="卡尔曼滤波器简介——追踪介绍"><a href="#卡尔曼滤波器简介——追踪介绍" class="headerlink" title="卡尔曼滤波器简介——追踪介绍"></a>卡尔曼滤波器简介——追踪介绍</h1><p><strong>什么是卡尔曼滤波?</strong>　　<br>你可以在任何含有<strong>不确定信息</strong>的动态系统中使用卡尔曼滤波，对系统下一步的走向做出<strong>有根据的预测</strong>，即使伴随着各种干扰，卡尔曼滤波总是能指出真实发生的情况</p><p>在连续变化的系统中使用卡尔曼滤波是非常理想的，它具有占用内存小的优点（除了前一个状态量外，不需要保留其它历史数据），并且速度很快，很适合应用于实时问题和嵌入式系统。</p><a id="more"></a>
+
+
+<p>自动驾驶汽车使用激光雷达跟踪其他车辆，如何找到其他车辆？我想找到其他车辆的原因是我不想和其他车辆发生碰撞。</p>
+<p>为了进行评估 我们必须得先明白如何解释传感器数据。不知是明白其他车辆在那，还要知道速度是多少，这样你就可以避免与他们进行碰撞，这对行人和其他物体也很重要。</p>
+<p>知道其他车在那里，并且对他们将要去那里做出预测。</p>
+<p>卡尔曼滤波是一个非常流行的系统状态估计的方法，他和概率定位相当相似，我们之前学过的蒙特卡罗定位方法，主要区别是 卡尔曼是对一个连续状态进行估计，而蒙特卡罗将世界分成很多离散的小块，作为结果，卡尔曼给我们一个单峰分布，蒙特卡罗是多峰分布。这两种方法都适用与定位和对其他车辆的追踪。事实上粒子滤波也适用于定位和预测，粒子滤波是连续多峰分布的。</p>
+<p><strong>卡尔曼滤波器的美妙之处在于，它将不够准确的传感器测量结果和不够准确的运动预测相结合，得到一个筛选后的位置估计值，这个估计值比所有仅来自传感器读数或运动预测的估计值更好。</strong></p>
+<h2 id="1-卡尔曼滤波原理"><a href="#1-卡尔曼滤波原理" class="headerlink" title="1.卡尔曼滤波原理"></a>1.卡尔曼滤波原理</h2><p>卡尔曼滤波假设两个变量（位置和速度，在这个例子中）都是随机的，并且服从高斯分布。每个变量都有一个均值 μ，表示随机分布的中心（最可能的状态），以及方差，表示不确定性</p>
+<h3 id="1-1-使用矩阵来描述问题"><a href="#1-1-使用矩阵来描述问题" class="headerlink" title="1.1 使用矩阵来描述问题"></a>1.1 使用矩阵来描述问题</h3><p>我们基于高斯分布来建立状态变量，所以在时刻 k 需要两个信息：最佳估计（即均值，其它地方常用 μ 表示），以及协方差矩阵。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817112851953.png#pic_center"><br>（当然，在这里我们只用到了位置和速度，实际上这个状态可以包含多个变量，代表任何你想表示的信息）。接下来，我们需要根据当前状态（k-1 时刻）来预测下一状态（k 时刻）。记住，我们并不知道对下一状态的所有预测中哪个是“真实”的，但我们的预测函数并不在乎。它对所有的可能性进行预测，并给出新的高斯分布。<br>我们可以用矩阵Fk来表示这个预测过程：</p>
+<p>　　它将我们原始估计中的每个点都移动到了一个新的预测位置，如果原始估计是正确的话，这个新的预测位置就是系统下一步会移动到的位置。那我们又如何用矩阵来预测下一个时刻的位置和速度呢？下面用一个基本的运动学公式来表示：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817125216840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>现在，我们有了一个预测矩阵来表示下一时刻的状态，但是，我们仍然不知道怎么更新协方差矩阵。此时，我们需要引入另一个公式，如果我们将分布中的每个点都乘以矩阵 A，那么它的协方差矩阵 这里写图片描述 会怎样变化呢？很简单，下面给出公式：　　<br>　<img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113154367.png#pic_center"><br>结合方程（4）和（3）得到<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113216117.png#pic_center"></p>
+<h3 id="1-2-外部控制量"><a href="#1-2-外部控制量" class="headerlink" title="1.2 外部控制量"></a>1.2 外部控制量</h3><p>我们并没有捕捉到一切信息，可能存在外部因素会对系统进行控制，带来一些与系统自身状态没有相关性的改变。 　　</p>
+<p>以火车的运动状态模型为例，火车司机可能会操纵油门，让火车加速。相同地，在我们机器人这个例子中，导航软件可能会发出一个指令让轮子转向或者停止。如果知道这些额外的信息，我们可以用一个向量Uk来表示，将它加到我们的预测方程中做修正。</p>
+<p>假设由于油门的设置或控制命令，我们知道了期望的加速度a，根据基本的运动学方程可以得到：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113318171.png#pic_center"><br>以矩阵的形式表示就是：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113330252.png#pic_center"><br>$B_k$称为控制矩阵，$U_k$称为控制向量（对于没有外部控制的简单系统来说，这部分可以忽略）。让我们再思考一下，如果我们的预测并不是100%准确的，该怎么办呢？</p>
+<h3 id="1-3-外部干扰"><a href="#1-3-外部干扰" class="headerlink" title="1.3 外部干扰"></a>1.3 外部干扰</h3><p>如果这些状态量是基于系统自身的属性或者已知的外部控制作用来变化的，则不会出现什么问题。 　　</p>
+<p>但是，如果存在未知的干扰呢？例如，假设我们跟踪一个四旋翼飞行器，它可能会受到风的干扰，如果我们跟踪一个轮式机器人，轮子可能会打滑，或者路面上的小坡会让它减速。这样的话我们就不能继续对这些状态进行跟踪，如果没有把这些外部干扰考虑在内，我们的预测就会出现偏差。 　</p>
+<p>在每次预测之后，我们可以添加一些新的不确定性来建立这种与“外界”（即我们没有跟踪的干扰）之间的不确定性模型：</p>
+<p>原始估计中的每个状态变量更新到新的状态后，仍然服从高斯分布。我们可以说Xk-1的每个状态变量移动到了一个新的服从高斯分布的区域，协方差为Qk。换句话说就是，我们将这些没有被跟踪的干扰当作协方差为Qk的噪声来处理。</p>
+<p>这产生了具有不同协方差（但是具有相同的均值）的新的高斯分布。</p>
+<p>我们通过简单地添加Qk得到扩展的协方差，下面给出预测步骤的完整表达式:<img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113439985.png#pic_center"><br>由上式可知，<strong>新的最优估计</strong>是根据<strong>上一最优估计预测</strong>得到的，并<strong>加上已知外部控制量的修正</strong>。 　　而<strong>新的不确定性</strong>由<strong>上一不确定性预测</strong>得到，并<strong>加上外部环境的干扰</strong>。</p>
+<p>好了，我们对系统可能的动向有了一个模糊的估计，用$x_k$和$P_k$ 来表示。如果再结合传感器的数据会怎样呢？</p>
+<h3 id="1-4-用测量值来修正估计值"><a href="#1-4-用测量值来修正估计值" class="headerlink" title="1.4 用测量值来修正估计值"></a>1.4 用测量值来修正估计值</h3><p>我们可能会有多个传感器来测量系统当前的状态，哪个传感器具体测量的是哪个状态变量并不重要，也许一个是测量位置，一个是测量速度，每个传感器间接地告诉了我们一些状态信息。</p>
+<p>注意，传感器读取的数据的单位和尺度有可能与我们要跟踪的状态的单位和尺度不一样，我们用矩阵Hk来表示传感器的数据。</p>
+<p>我们可以计算出传感器读数的分布，用之前的表示方法如下式所示<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113545696.png#pic_center"><br>卡尔曼滤波的一大优点就是能处理传感器噪声，换句话说，我们的传感器或多或少都有点不可靠，并且原始估计中的每个状态可以和一定范围内的传感器读数对应起来</p>
+<p>从测量到的传感器数据中，我们大致能猜到系统当前处于什么状态。但是由于存在不确定性，某些状态可能比我们得到的读数更接近真实状态。</p>
+<p>我们将这种不确定性（例如：传感器噪声）用协方差Rk 表示，该分布的均值就是我们读取到的传感器数据，称之为$z_k$。</p>
+<p>现在我们有了两个高斯分布，一个是在预测值附近，一个是在传感器读数附近。</p>
+<p>我们必须在预测值和传感器测量值之间找到最优解</p>
+<p>那么，我们最有可能的状态是什么呢？对于任何可能的读数(z1,z2)，有两种情况：（1）传感器的测量值；（2）由前一状态得到的预测值。如果我们想知道这两种情况都可能发生的概率，将这两个高斯分布相乘就可以了。<img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113632588.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>剩下的就是重叠部分了，这个重叠部分的均值就是两个估计最可能的值，也就是给定的所有信息中的最优估计。 　</p>
+<p>把两个具有不同均值和方差的高斯分布相乘，你会得到一个新的具有独立均值和方差的高斯分布！下面用公式讲解</p>
+<h4 id="1-4-1-融合高斯分布"><a href="#1-4-1-融合高斯分布" class="headerlink" title="1.4.1 融合高斯分布"></a>1.4.1 融合高斯分布</h4><p>一维高斯分布来分析比较简单点<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113718375.png#pic_center"><br>两个服从高斯分布的函数相乘<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817132507870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>重新归一化，使总概率为1，可以得到：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113851764.png#pic_center"><br>将式（11）中的两个式子相同的部分用 k 表示<br>下面进一步将式（12）和（13）写成矩阵的形式，如果 Σ 表示高斯分布的协方差，u 表示每个维度的均值，则：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019081711393516.png#pic_center"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817113940124.png#pic_center"><br>矩阵K称为卡尔曼增益</p>
+<h4 id="1-4-2-整合公式"><a href="#1-4-2-整合公式" class="headerlink" title="1.4.2 整合公式"></a>1.4.2 整合公式</h4><p>预测部分：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114029226.png#pic_center"><br>测量部分：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114058531.png#pic_center"><br>将它们放到式（15）中算出它们之间的重叠部分<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114125142.png#pic_center"><br>由式（14）可得卡尔曼增益为：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114142974.png#pic_center"><br>将式（16）和式（17）得：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114158765.png#pic_center"><br>$x_k’$就是新的最优估计，我们可以将它和$P_k’$放到下一个预测和更新方程中不断迭代。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190817114212747.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><p>当方差很小时，分布具有更高的确定性,如果我们用无人驾驶汽车追踪另一輛汽车，应该选择那一个高斯分布？<br>应选择方差小的，确定性高</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(mu, sigma2, x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>/sqrt(<span class="number">2.</span>*pi*sigma2) * exp(<span class="number">-.5</span>*(x-mu)**<span class="number">2</span> / sigma2)</span><br></pre></td></tr></table></figure>
+<p><strong>New Mean and Variance</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(mean1,var1,mean2,var2)</span>:</span></span><br><span class="line">    new_mean=(var2*mean1+var1*mean2)/(var1+var2)</span><br><span class="line">    new_var=<span class="number">1</span>/(<span class="number">1</span>/var1+<span class="number">1</span>/var2)</span><br><span class="line">    <span class="keyword">return</span>[new_mean,new_var]</span><br></pre></td></tr></table></figure>
+<p><strong>Predict Function</strong><br>卡尔曼过滤器，即使没有测量物体的速度，也可以通过物体的位置变化，得到物体的速度，进而预测追踪的物体以该速度出现的下一个位置。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(mean1,var1,mean2,var2)</span>:</span></span><br><span class="line">    new_mean=mean1+mean2</span><br><span class="line">    new_var=var1+var2</span><br><span class="line">    <span class="keyword">return</span> [new_mean,new_var]</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">measurements=[<span class="number">5.</span>,<span class="number">6.</span>,<span class="number">7.</span>,<span class="number">9.</span>,<span class="number">10.</span>]</span><br><span class="line">motion=[<span class="number">1.</span>,<span class="number">1.</span>,<span class="number">2.</span>,<span class="number">1.</span>,<span class="number">1.</span>]</span><br><span class="line">measurement_sig=<span class="number">4.</span></span><br><span class="line">motion_sig=<span class="number">2.</span></span><br><span class="line">mu=<span class="number">0.</span></span><br><span class="line">sig=<span class="number">10000.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Please print out ONLY the final values of the mean</span></span><br><span class="line"><span class="comment">#and the variance in a list [mu, sig]. </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Insert code here</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(len(measurements)):</span><br><span class="line">    [mu,sig]=update(mu,sig,measurements[n],measurement_sig)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'update:'</span>,[mu,sig])</span><br><span class="line">    [mu,sig]=predict(mu,sig,motion[n],motion_sig)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'predict:'</span>,[mu,sig])</span><br><span class="line"></span><br><span class="line">print( [mu, sig])</span><br><span class="line"></span><br><span class="line"><span class="comment">#update: [4.998000799680128, 3.9984006397441023]</span></span><br><span class="line"><span class="comment"># predict: [5.998000799680128, 5.998400639744102]</span></span><br><span class="line"><span class="comment"># update: [5.999200191953932, 2.399744061425258]</span></span><br><span class="line"><span class="comment"># predict: [6.999200191953932, 4.399744061425258]</span></span><br><span class="line"><span class="comment"># update: [6.999619127420922, 2.0951800575117594]</span></span><br><span class="line"><span class="comment"># predict: [8.999619127420921, 4.09518005751176]</span></span><br><span class="line"><span class="comment"># update: [8.999811802788143, 2.0235152416216957]</span></span><br><span class="line"><span class="comment"># predict: [9.999811802788143, 4.023515241621696]</span></span><br><span class="line"><span class="comment"># update: [9.999906177177365, 2.0058615808441944]</span></span><br><span class="line"><span class="comment"># predict: [10.999906177177365, 4.005861580844194]</span></span><br><span class="line"><span class="comment"># [10.999906177177365, 4.005861580844194]</span></span><br></pre></td></tr></table></figure>
+<p>这段代码部署了整个卡尔曼滤波器，它检查了所有测量元素并默认测量值的个数为运动的n次幂，它使用update 递归公式更新mu和sigma. 如果我们导入第n个测量值和测量不确定性，他会对运动进行同样的操作，这里的预测部分，它使用第n个运动和运动不确定性递归地更新mu和sigma 并把这些全部打印出来。</p>
+<p>在跟踪应用程序中，卡尔曼滤波器最令人惊奇的功能之一是即使他没有直接测量，他也能得出对象的速度</p>
+<p>然后根据速度预测出该速度出现的未来位置。这就是卡尔曼滤波器在人工智能和控制理论方面成为流行的原因。</p>
+<h3 id="Kalman-Filter-Land"><a href="#Kalman-Filter-Land" class="headerlink" title="Kalman Filter Land"></a>Kalman Filter Land</h3><p><strong>多变量高斯分布</strong><br>比如，当机器人的位置有多个维度，每一个维度都是高斯分布时，这个位置变量即服从多维高斯分布。不用去关注它的概率分布公式是啥，没用。它的均值是一个向量，方差为协方差矩阵，反应各维度两两之间的（线性）相关性。举个例子，当我们得知二维高斯变量的两个变量的相关系数为正，那么当x大于均值时，它的y也很可能大于均值，在概率分布上表现为右上方倾斜的等高线图</p>
+<p><strong>More Kalman Filters</strong><br>对车辆状态（state）的估计：1.location（observation） 2.velocity（hidden）。我们假设，当前的速度等于上一次的速度，由之前的分布，得出当前可能的概率分布。再通过当前观测到的位置信息推断出隐藏的速度信息。以此方式，不断更新位置概率分布，这很关键！通过假设和一系列的位置，可以不断地推断出速度信息~~~（这是一个Bayes Rule)</p>
+<h3 id="Kalman-Filter-Design"><a href="#Kalman-Filter-Design" class="headerlink" title="Kalman Filter Design"></a>Kalman Filter Design</h3><ol>
+<li>状态转换函数:表示从当前状态到后一个状态的过程<br>Nx1 的新状态向量 = nxn 状态转换矩阵 * nx1 的当前状态向量<br>nxn 状态转换矩阵 被称为 F （在后续代码中）</li>
+<li>测量函数<br>Z = 1xn 矩阵 * nx1状态向量<br>这里的 1xn矩阵被称为 H（在后续代码中）</li>
+<li><p>卡尔曼滤波器的实际更新方程<br>下面讲一些代码中会出现的相关变量名的含义：</p>
+<blockquote>
+<p>x  估计值<br>P 不确定性协方差矩阵<br>F 状态转换矩阵<br>u 移动向量<br>Z 测量值<br>H 测量方程<br>R  测量噪声<br>K 卡尔曼增益<br>I   单位矩阵</p>
+</blockquote>
+</li>
+</ol>
+<p>   预测(prediction)过程：</p>
+<pre><code>   x’ = F*x + u               预测新的x值
+
+   p’ = F*P*FT                预测新的P值，其中FT表示F的转置矩阵
+</code></pre><p>   测量更新过程（measurementupdate）：</p>
+<pre><code>   y = Z – H*x                  y表示误差（error）
+
+   S = H*P*HT + R               y被映射到S中
+
+   K = P*HT*S-1                 K通常被称为卡尔曼增益，S-1 是S的反转矩阵
+
+   x’ = x + (K * y)
+
+   p’ = (I – K*H)*P
+</code></pre><p>一维空间的运动估计，其中state包含位置和速度，是一个二维变量。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Write a function 'kalman_filter' that implements a multi-</span></span><br><span class="line"><span class="comment"># dimensional Kalman Filter for the example given</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 定义，实现矩阵的各种操作</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">matrix</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># implements basic operations of a matrix class</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        self.value = value</span><br><span class="line">        self.dimx = len(value)</span><br><span class="line">        self.dimy = len(value[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">if</span> value == [[]]:</span><br><span class="line">            <span class="comment"># (1, 0)</span></span><br><span class="line">            self.dimx = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zero</span><span class="params">(self, dimx, dimy)</span>:</span></span><br><span class="line">        <span class="comment"># check if valid dimensions</span></span><br><span class="line">        <span class="keyword">if</span> dimx &lt; <span class="number">1</span> <span class="keyword">or</span> dimy &lt; <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Invalid sizeof matrix"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.dimx = dimx</span><br><span class="line">            self.dimy = dimy</span><br><span class="line">            self.value = [[<span class="number">0</span> <span class="keyword">for</span> row <span class="keyword">in</span> range(dimy)] <span class="keyword">for</span> col <span class="keyword">in</span> range(dimx)]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">identity</span><span class="params">(self, dim)</span>:</span></span><br><span class="line">        <span class="comment"># check if valid dimension</span></span><br><span class="line">        <span class="keyword">if</span> dim &lt; <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Invalid sizeof matrix"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.dimx = dim</span><br><span class="line">            self.dimy = dim</span><br><span class="line">            self.value = [[<span class="number">0</span> <span class="keyword">for</span> row <span class="keyword">in</span> range(dim)] <span class="keyword">for</span> col <span class="keyword">in</span> range(dim)]</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(dim):</span><br><span class="line">                self.value[i][i] = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">            print(self.value[i])</span><br><span class="line">        print(<span class="string">' '</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="comment"># check if correct dimensions</span></span><br><span class="line">        <span class="keyword">if</span> self.dimx != other.dimx <span class="keyword">or</span> self.dimy != other.dimy:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Matrices must be of equal dimensions to add"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># add if correct dimensions</span></span><br><span class="line">            res = matrix([[]])</span><br><span class="line">            res.zero(self.dimx, self.dimy)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.dimy):</span><br><span class="line">                    res.value[i][j] = self.value[i][j] + other.value[i][j]</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sub__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="comment"># check if correct dimensions</span></span><br><span class="line">        <span class="keyword">if</span> self.dimx != other.dimx <span class="keyword">or</span> self.dimy != other.dimy:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Matrices must be of equal dimensions to subtract"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># subtract if correct dimensions</span></span><br><span class="line">            res = matrix([[]])</span><br><span class="line">            res.zero(self.dimx, self.dimy)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.dimy):</span><br><span class="line">                    res.value[i][j] = self.value[i][j] - other.value[i][j]</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__mul__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="comment"># check if correct dimensions</span></span><br><span class="line">        <span class="keyword">if</span> self.dimy != other.dimx:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Matrices must be m*n and n*p to multiply"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># multiply if correct dimensions</span></span><br><span class="line">            res = matrix([[]])</span><br><span class="line">            res.zero(self.dimx, other.dimy)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(other.dimy):</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(self.dimy):</span><br><span class="line">                        res.value[i][j] += self.value[i][k] * other.value[k][j]</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transpose</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># compute transpose</span></span><br><span class="line">        res = matrix([[]])</span><br><span class="line">        res.zero(self.dimy, self.dimx)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.dimy):</span><br><span class="line">                res.value[j][i] = self.value[i][j]</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Thanks to Ernesto P. Adorio for use of Cholesky and CholeskyInverse functions</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Cholesky</span><span class="params">(self, ztol=<span class="number">1.0e-5</span>)</span>:</span></span><br><span class="line">        <span class="comment"># Computes the upper triangular Cholesky factorization of</span></span><br><span class="line">        <span class="comment"># a positive definite matrix.</span></span><br><span class="line">        res = matrix([[]])</span><br><span class="line">        res.zero(self.dimx, self.dimx)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dimx):</span><br><span class="line">            S = sum([(res.value[k][i])**<span class="number">2</span> <span class="keyword">for</span> k <span class="keyword">in</span> range(i)])</span><br><span class="line">            d = self.value[i][i] - S</span><br><span class="line">            <span class="keyword">if</span> abs(d) &lt; ztol:</span><br><span class="line">                res.value[i][i] = <span class="number">0.0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> d &lt; <span class="number">0.0</span>:</span><br><span class="line">                    <span class="keyword">raise</span> ValueError(<span class="string">"Matrix not positive-definite"</span>)</span><br><span class="line">                res.value[i][i] = sqrt(d)</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, self.dimx):</span><br><span class="line">                S = sum([res.value[k][i] * res.value[k][j] <span class="keyword">for</span> k <span class="keyword">in</span> range(self.dimx)])</span><br><span class="line">                <span class="keyword">if</span> abs(S) &lt; ztol:</span><br><span class="line">                    S = <span class="number">0.0</span></span><br><span class="line">                res.value[i][j] = (self.value[i][j] - S)/res.value[i][i]</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CholeskyInverse</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># Computes inverse of matrix given its Cholesky upper Triangular</span></span><br><span class="line">        <span class="comment"># decomposition of matrix.</span></span><br><span class="line">        res = matrix([[]])</span><br><span class="line">        res.zero(self.dimx, self.dimx)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Backward step for inverse.</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> reversed(range(self.dimx)):</span><br><span class="line">            tjj = self.value[j][j]</span><br><span class="line">            S = sum([self.value[j][k]*res.value[j][k] <span class="keyword">for</span> k <span class="keyword">in</span> range(j+<span class="number">1</span>, self.dimx)])</span><br><span class="line">            res.value[j][j] = <span class="number">1.0</span>/tjj**<span class="number">2</span> - S/tjj</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(j)):</span><br><span class="line">                res.value[j][i] = res.value[i][j] = -sum([self.value[i][k]*res.value[k][j] <span class="keyword">for</span> k <span class="keyword">in</span> range(i+<span class="number">1</span>, self.dimx)])/self.value[i][i]</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inverse</span><span class="params">(self)</span>:</span></span><br><span class="line">        aux = self.Cholesky()</span><br><span class="line">        res = aux.CholeskyInverse()</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> repr(self.value)</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Implement the filter function below</span></span><br><span class="line"><span class="comment"># 用均值x 和 协方差P 描述分布的情况，迭代就是不断地更新这两个量</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kalman_filter</span><span class="params">(x, P)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> range(len(measurements)):</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># measurement update</span></span><br><span class="line">        Z = matrix([[measurements[n]]])</span><br><span class="line">        y = Z - (H * x)  <span class="comment"># error</span></span><br><span class="line">        S = H * P * H.transpose() + R</span><br><span class="line">        K = P * H.transpose() * S.inverse()</span><br><span class="line">        </span><br><span class="line">        x = x + (K * y)</span><br><span class="line">        P = (I - (K * H)) * P</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># prediction</span></span><br><span class="line">        x = F * x + u</span><br><span class="line">        P = F * P * F.transpose()</span><br><span class="line">        </span><br><span class="line">        print(<span class="string">'x= '</span>)</span><br><span class="line">        x.show()</span><br><span class="line">        <span class="keyword">print</span> (<span class="string">'P= '</span>)</span><br><span class="line">        P.show()</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> x,P</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="comment"># use the code below to test your filter!</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">measurements = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]  <span class="comment"># Z</span></span><br><span class="line"> </span><br><span class="line">x = matrix([[<span class="number">0.</span>], [<span class="number">0.</span>]]) <span class="comment"># initial state (location and velocity)            # estimate</span></span><br><span class="line">P = matrix([[<span class="number">1000.</span>, <span class="number">0.</span>], [<span class="number">0.</span>, <span class="number">1000.</span>]]) <span class="comment"># initial uncertainty 协方差矩阵     # uncertainty convariance</span></span><br><span class="line"><span class="comment"># 计算下一时刻 状态state 的prediction需要的变量</span></span><br><span class="line">u = matrix([[<span class="number">0.</span>], [<span class="number">0.</span>]]) <span class="comment"># external motion                # motion vector</span></span><br><span class="line">F = matrix([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">0</span>, <span class="number">1.</span>]]) <span class="comment"># next state function     # state transition matrix</span></span><br><span class="line"><span class="comment"># 计算 measurement update需要的变量</span></span><br><span class="line">H = matrix([[<span class="number">1.</span>, <span class="number">0.</span>]])                                    <span class="comment"># measurement function 取x轴坐标值</span></span><br><span class="line">R = matrix([[<span class="number">1.</span>]]) <span class="comment"># measurement uncertainty              # measurement noise方差</span></span><br><span class="line"> </span><br><span class="line">I = matrix([[<span class="number">1.</span>, <span class="number">0.</span>], [<span class="number">0.</span>, <span class="number">1.</span>]]) <span class="comment"># identity matrix</span></span><br><span class="line"> </span><br><span class="line">print(kalman_filter(x, P))</span><br><span class="line"></span><br><span class="line">x= </span><br><span class="line"><span class="comment"># [0.9990009990009988]</span></span><br><span class="line"><span class="comment"># [0.0]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># P= </span></span><br><span class="line"><span class="comment"># [1000.9990009990012, 1000.0]</span></span><br><span class="line"><span class="comment"># [1000.0, 1000.0]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># x= </span></span><br><span class="line"><span class="comment"># [2.998002993017953]</span></span><br><span class="line"><span class="comment"># [0.9990019950129659]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># P= </span></span><br><span class="line"><span class="comment"># [4.990024935169789, 2.9930179531228447]</span></span><br><span class="line"><span class="comment"># [2.9930179531228305, 1.9950129660888933]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># x= </span></span><br><span class="line"><span class="comment"># [3.9996664447958645]</span></span><br><span class="line"><span class="comment"># [0.9999998335552873]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># P= </span></span><br><span class="line"><span class="comment"># [2.3318904241194827, 0.9991676099921091]</span></span><br><span class="line"><span class="comment"># [0.9991676099921067, 0.49950058263974184]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># ([[3.9996664447958645], [0.9999998335552873]], [[2.3318904241194827, 0.9991676099921091], [0.9991676099921067, 0.49950058263974184]])</span></span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上的情况是一维空间，在Google自动驾驶车中，用的是二维空间，有x,y的位置及其速度，相应的，状态转移矩阵也就变成4*4了。<br>【注：感觉Kalman filter的精华在于引入了速度，对物体state进行了预先prediction，再结合实际measure到的位置，确定state，在这个过程中，间接求得了速度】</p>
+<h3 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h3><p>扩展到2D的程序，很小的改动。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"### 4-dimensional example ###"</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter</span><span class="params">(x, P)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> range(len(measurements)):</span><br><span class="line">        <span class="comment"># 注意 这里改变了顺序，先预测，再measurement</span></span><br><span class="line">        <span class="comment"># prediction</span></span><br><span class="line">        x = (F * x) + u</span><br><span class="line">        P = F * P * F.transpose()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># measurement update</span></span><br><span class="line">        Z = matrix([measurements[n]])</span><br><span class="line">        y = Z.transpose() - (H * x)</span><br><span class="line">        S = H * P * H.transpose() + R</span><br><span class="line">        K = P * H.transpose() * S.inverse()</span><br><span class="line">        x = x + (K * y)</span><br><span class="line">        P = (I - (K * H)) * P</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">'x= '</span>) </span><br><span class="line">    x.show()</span><br><span class="line">    print(<span class="string">'P= '</span>)</span><br><span class="line">    P.show()</span><br><span class="line"> </span><br><span class="line">measurements = [[<span class="number">5.</span>, <span class="number">10.</span>], </span><br><span class="line">                [<span class="number">6.</span>, <span class="number">8.</span>], </span><br><span class="line">                [<span class="number">7.</span>, <span class="number">6.</span>], </span><br><span class="line">                [<span class="number">8.</span>, <span class="number">4.</span>], </span><br><span class="line">                [<span class="number">9.</span>, <span class="number">2.</span>], </span><br><span class="line">                [<span class="number">10.</span>, <span class="number">0.</span>]]</span><br><span class="line">initial_xy = [<span class="number">4.</span>, <span class="number">12.</span>]</span><br><span class="line"> </span><br><span class="line"><span class="comment"># measurements = [[1., 4.], </span></span><br><span class="line"><span class="comment">#                 [6., 0.], </span></span><br><span class="line"><span class="comment">#                 [11., -4.], </span></span><br><span class="line"><span class="comment">#                 [16., -8.]]</span></span><br><span class="line"><span class="comment"># initial_xy = [-4., 8.]</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># measurements = [[1., 17.], </span></span><br><span class="line"><span class="comment">#                 [1., 15.], </span></span><br><span class="line"><span class="comment">#                 [1., 13.], </span></span><br><span class="line"><span class="comment">#                 [1., 11.]]</span></span><br><span class="line"><span class="comment"># initial_xy = [1., 19.]</span></span><br><span class="line"> </span><br><span class="line">dt = <span class="number">0.1</span></span><br><span class="line"> </span><br><span class="line">x = matrix([[initial_xy[<span class="number">0</span>]], [initial_xy[<span class="number">1</span>]], [<span class="number">0.</span>], [<span class="number">0.</span>]]) <span class="comment"># initial state (location and velocity)</span></span><br><span class="line">u = matrix([[<span class="number">0.</span>], [<span class="number">0.</span>], [<span class="number">0.</span>], [<span class="number">0.</span>]]) <span class="comment"># external motion</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#### fill this in, remember to use the matrix() function!: ####</span></span><br><span class="line"> </span><br><span class="line">P =  matrix([[<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1000.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1000.</span>]]) <span class="comment"># initial uncertainty: 0 for positions x and y, 1000 for the two velocities</span></span><br><span class="line">F =  matrix([[<span class="number">1.</span>,<span class="number">0.</span>,dt,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">1.</span>,<span class="number">0.</span>,dt],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1.</span>]])   <span class="comment"># next state function: generalize the 2d version to 4d</span></span><br><span class="line">H =  matrix([[<span class="number">1.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">1.</span>,<span class="number">0.</span>,<span class="number">0.</span>]])   <span class="comment"># measurement function: reflect the fact that we observe x and y but not the two velocities</span></span><br><span class="line">R =  matrix([[<span class="number">0.1</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.1</span>]])        <span class="comment"># measurement uncertainty: use 2x2 matrix with 0.1 as main diagonal</span></span><br><span class="line">I =  matrix([[<span class="number">1.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">1.</span>,<span class="number">0.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1.</span>,<span class="number">0.</span>],</span><br><span class="line">             [<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">0.</span>,<span class="number">1.</span>]])   <span class="comment"># 4d identity matrix</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">###### DO NOT MODIFY ANYTHING HERE #######</span></span><br><span class="line"> </span><br><span class="line">filter(x, P)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">### <span class="number">4</span>-dimensional example ###</span><br><span class="line">x= </span><br><span class="line">[<span class="number">9.999340731787717</span>]</span><br><span class="line">[<span class="number">0.001318536424568617</span>]</span><br><span class="line">[<span class="number">9.998901219646193</span>]</span><br><span class="line">[<span class="number">-19.997802439292386</span>]</span><br><span class="line"> </span><br><span class="line">P= </span><br><span class="line">[<span class="number">0.03955609273706198</span>, <span class="number">0.0</span>, <span class="number">0.06592682122843721</span>, <span class="number">0.0</span>]</span><br><span class="line">[<span class="number">0.0</span>, <span class="number">0.03955609273706198</span>, <span class="number">0.0</span>, <span class="number">0.06592682122843721</span>]</span><br><span class="line">[<span class="number">0.06592682122843718</span>, <span class="number">0.0</span>, <span class="number">0.10987803538073201</span>, <span class="number">0.0</span>]</span><br><span class="line">[<span class="number">0.0</span>, <span class="number">0.06592682122843718</span>, <span class="number">0.0</span>, <span class="number">0.10987803538073201</span>]</span><br></pre></td></tr></table></figure>
+<p>关于motion vecter u 的含义：有可能车辆不是匀速运动，而是有一个加速度。</p>
+<p>关于measurement noise R 的含义：对位置测量的准确性。</p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" title="卡尔曼滤波（KF）">https://xiao-hu.com.cn/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" rel="next" title="机器学习练习 6 - 支持向量机">
+                  <i class="fa fa-chevron-left"></i> 机器学习练习 6 - 支持向量机
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/04/15/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" rel="prev" title="扩展卡尔曼滤波(EKF)">
+                  扩展卡尔曼滤波(EKF) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#卡尔曼滤波器简介——追踪介绍"><span class="nav-number">1.</span> <span class="nav-text">卡尔曼滤波器简介——追踪介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-卡尔曼滤波原理"><span class="nav-number">1.1.</span> <span class="nav-text">1.卡尔曼滤波原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-使用矩阵来描述问题"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 使用矩阵来描述问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-外部控制量"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 外部控制量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-外部干扰"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 外部干扰</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-用测量值来修正估计值"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 用测量值来修正估计值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-1-融合高斯分布"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">1.4.1 融合高斯分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-2-整合公式"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">1.4.2 整合公式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-代码"><span class="nav-number">1.2.</span> <span class="nav-text">2. 代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kalman-Filter-Land"><span class="nav-number">1.2.1.</span> <span class="nav-text">Kalman Filter Land</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kalman-Filter-Design"><span class="nav-number">1.2.2.</span> <span class="nav-text">Kalman Filter Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.2.3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作业"><span class="nav-number">1.2.4.</span> <span class="nav-text">作业</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="C++处理字符串的方式有两种 来自c语言，常称为C-风格字符串可以将字符串存储在char数组中，C-风格字符串特殊性质：以空字符（\0)结尾，用来标记字符串的结尾  基于string类型库的方法  strin类使用简单， 提供了将字符串作为一种数据类型的表示方法  为了在我们的程序中使用string类型，我们必须包含头文件 &amp;lt; string&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 学习（9）——string">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;11&#x2F;18&#x2F;C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="C++处理字符串的方式有两种 来自c语言，常称为C-风格字符串可以将字符串存储在char数组中，C-风格字符串特殊性质：以空字符（\0)结尾，用来标记字符串的结尾  基于string类型库的方法  strin类使用简单， 提供了将字符串作为一种数据类型的表示方法  为了在我们的程序中使用string类型，我们必须包含头文件 &amp;lt; string&amp;gt;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-18T06:42:38.017Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++ 学习（9）——string | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ 学习（9）——string
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-18 10:17:02 / 修改时间：14:42:38" itemprop="dateCreated datePublished" datetime="2019-11-18T10:17:02+08:00">2019-11-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>C++处理字符串的方式有两种</p><ul>
+<li><p>来自c语言，常称为C-风格字符串<br>可以将字符串存储在char数组中，C-风格字符串特殊性质：以空字符（\0)结尾，用来标记字符串的结尾</p>
+</li>
+<li><p>基于string类型库的方法</p>
+</li>
+</ul><p>strin类使用简单， 提供了将字符串作为一种数据类型的表示方法</p><p>  为了在我们的程序中使用string类型，我们必须包含头文件 &lt; string&gt;</p><a id="more"></a>
+
+
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt; //注意这里不是string.h string.h是C字符串头文件</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="声明一个C-字符串"><a href="#声明一个C-字符串" class="headerlink" title="声明一个C++字符串"></a>声明一个C++字符串</h1><p>声明一个字符串变量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> Str;</span><br></pre></td></tr></table></figure>
+<p>string是一个类，有构造函数和析构函数，上面的声明没有传入参数，所以就直接使用了string的默认的构造函数，这个函数所作的就是把Str初始化为一个空字符串。</p>
+<ul>
+<li>String类的构造函数：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> str   <span class="comment">//生成空字符串</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(str)</span> <span class="comment">//生成字符串为str的复制品</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(str, strbegin,<span class="built_in">strlen</span>)</span> <span class="comment">//将字符串str中从下标strbegin开始、长度为strlen的部分作为字符串初值</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(cstr)</span> <span class="comment">//将C字符串作为s的初值</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(cstr, char_len)</span><span class="comment">//以C_string类型cstr的前char_len个字符串作为字符串s的初值</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(num ,c)</span><span class="comment">//生成num个c字符的字符串</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(str, stridx)</span><span class="comment">//将字符串str中从下标stridx开始到字符串结束的位置作为字符串初值</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>String类的析构函数：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~<span class="built_in">string</span>() <span class="comment">//销毁所有字符，释放内存</span></span><br></pre></td></tr></table></figure>
+<h1 id="字符串操作函数"><a href="#字符串操作函数" class="headerlink" title="字符串操作函数"></a>字符串操作函数</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">=,assign()     <span class="comment">//赋以新值</span></span><br><span class="line"></span><br><span class="line">swap()     <span class="comment">//交换两个字符串的内容</span></span><br><span class="line"></span><br><span class="line">+=,append(),push_back() <span class="comment">//在尾部添加字符</span></span><br><span class="line"></span><br><span class="line">insert() <span class="comment">//插入字符</span></span><br><span class="line"></span><br><span class="line">erase() <span class="comment">//删除字符</span></span><br><span class="line"></span><br><span class="line">clear() <span class="comment">//删除全部字符</span></span><br><span class="line"></span><br><span class="line">replace() <span class="comment">//替换字符</span></span><br><span class="line"></span><br><span class="line">+ <span class="comment">//串联字符串</span></span><br><span class="line"></span><br><span class="line">==,!=,&lt;,&lt;=,&gt;,&gt;=,compare()    <span class="comment">//比较字符串</span></span><br><span class="line"></span><br><span class="line">size(),length()    <span class="comment">//返回字符数量</span></span><br><span class="line"></span><br><span class="line">max_size() <span class="comment">//返回字符的可能最大个数</span></span><br><span class="line"></span><br><span class="line">empty()    <span class="comment">//判断字符串是否为空</span></span><br><span class="line"></span><br><span class="line">capacity() <span class="comment">//返回重新分配之前的字符容量</span></span><br><span class="line"></span><br><span class="line">reserve() <span class="comment">//保留一定量内存以容纳一定数量的字符</span></span><br><span class="line"></span><br><span class="line">[ ], at() <span class="comment">//存取单一字符</span></span><br><span class="line"></span><br><span class="line">&gt;&gt;,getline() <span class="comment">//从stream读取某值</span></span><br><span class="line"></span><br><span class="line">&lt;&lt;    <span class="comment">//将谋值写入stream</span></span><br><span class="line"></span><br><span class="line">copy() <span class="comment">//将某值赋值为一个C_string</span></span><br><span class="line"></span><br><span class="line">c_str() <span class="comment">//将内容以C_string返回</span></span><br><span class="line"></span><br><span class="line">data() <span class="comment">//将内容以字符数组形式返回</span></span><br><span class="line"></span><br><span class="line">substr() <span class="comment">//返回某个子字符串</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//查找函数</span></span><br><span class="line">begin() end() <span class="comment">//提供类似STL的迭代器支持</span></span><br><span class="line">rbegin() rend() <span class="comment">//逆向迭代器</span></span><br><span class="line">get_allocator() <span class="comment">//返回配置器</span></span><br></pre></td></tr></table></figure>
+<h2 id="C-字符串和C字符串的转换"><a href="#C-字符串和C字符串的转换" class="headerlink" title="C++字符串和C字符串的转换"></a>C++字符串和C字符串的转换</h2><p>C ++提供的由C++字符串得到对应的C_string的方法是使用data()、c_str()和copy()，</p>
+<blockquote>
+<ul>
+<li>data()以字符数组的形式返回字符串内容，但并不添加’/0’。</li>
+<li>c_str()返回一个以‘/0’结尾的字符数组</li>
+<li>copy()则把字符串的内容复制或写入既有的c_string或 字符数组内。</li>
+</ul>
+</blockquote>
+<p>C++字符串并不以’/0’结尾。我的建议是在程序中能使用C++字符串就使用，除非万不得已不选用c_string。  </p>
+<h2 id="string的大小和容量"><a href="#string的大小和容量" class="headerlink" title="string的大小和容量"></a>string的大小和容量</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">empty() <span class="comment">//判断字符串是否为空</span></span><br><span class="line">    </span><br><span class="line">size()、length()<span class="comment">//返回string对象的字符个数，他们执行效果相同。</span></span><br><span class="line"></span><br><span class="line">max_size()     <span class="comment">//返回string对象最多包含的字符数，超出会抛出length_error异常</span></span><br><span class="line"></span><br><span class="line">capacity()     <span class="comment">//重新分配内存之前，string对象能包含的最大字符数</span></span><br></pre></td></tr></table></figure>
+<h2 id="string的字符串比较"><a href="#string的字符串比较" class="headerlink" title="string的字符串比较"></a>string的字符串比较</h2><p>C ++字符串支持常见的比较操作符（&gt;,&gt;=,&lt;,&lt;=,==,!=），甚至支持string与C-string的比较(如 str&lt;”hello”)。在使用&gt;,&gt;=,&lt;,&lt;=这些操作符的时候是根据“当前字符特性”将字符按字典顺序进行逐一得 比较。字典排序靠前的字符小，比较的顺序是从前向后比较，遇到不相等的字符就按这个位置上的两个字符的比较结果确定两个字符串的大小。</p>
+<p>另一个功能强大的比较函数是成员函数compare()，他支持多参数处理，支持用索引值和长度定位子串来进行比较。他返回一个整数来表示比较结果，返回值意义如下：0-相等 〉0-大于 &lt;0-小于。举例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// (A的ASCII码是65，a的ASCII码是97)</span></span><br><span class="line">    <span class="comment">// 前面减去后面的ASCII码，&gt;0返回1，&lt;0返回-1，相同返回0</span></span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">A</span><span class="params">(<span class="string">"aBcd"</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">B</span><span class="params">(<span class="string">"Abcd"</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">C</span><span class="params">(<span class="string">"123456"</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">D</span><span class="params">(<span class="string">"123dfg"</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// "aBcd" 和 "Abcd"比较------ a &gt; A</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"A.compare(B)："</span> &lt;&lt; A.compare(B)&lt;&lt; <span class="built_in">endl</span>;   <span class="comment">// 结果：1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// "cd" 和 "Abcd"比较------- c &gt; A</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"A.compare(2, 3, B):"</span> &lt;&lt;A.compare(<span class="number">2</span>, <span class="number">3</span>, B)&lt;&lt; <span class="built_in">endl</span>;   <span class="comment">// 结果：1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// "cd" 和 "cd"比较 </span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"A.compare(2, 3, B, 2, 3):"</span> &lt;&lt; A.compare(<span class="number">2</span>, <span class="number">3</span>, B, <span class="number">2</span>, <span class="number">3</span>) &lt;&lt; <span class="built_in">endl</span>;<span class="comment">// 结果：0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 由结果看出来：0表示下标，3表示长度</span></span><br><span class="line">    <span class="comment">// "123" 和 "123"比较 </span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"C.compare(0, 3, D, 0, 3)"</span> &lt;&lt;C.compare(<span class="number">0</span>, <span class="number">3</span>, D, <span class="number">0</span>, <span class="number">3</span>) &lt;&lt; <span class="built_in">endl</span>;<span class="comment">// 结果：0</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="string的插入与删除"><a href="#string的插入与删除" class="headerlink" title="string的插入与删除"></a>string的插入与删除</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> &amp;<span class="title">insert</span><span class="params">(<span class="keyword">int</span> p0, <span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;</span><br><span class="line"><span class="function"><span class="built_in">string</span> &amp;<span class="title">insert</span><span class="params">(<span class="keyword">int</span> p0, <span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(iterator p)</span></span>;<span class="comment">//删除字符串中p所指的字符</span></span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(iterator first, iterator last)</span></span>;<span class="comment">//删除字符串中迭代器区间[first,last)上所有字符</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">string</span>&amp; <span class="title">erase</span><span class="params">(<span class="keyword">size_t</span> pos = <span class="number">0</span>, <span class="keyword">size_t</span> len = npos)</span></span>;<span class="comment">//删除字符串中从索引位置pos开始的len个字符</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;<span class="comment">//删除字符串中所有字符</span></span><br></pre></td></tr></table></figure>
+<h2 id="string拼接字符串：append-amp-操作符"><a href="#string拼接字符串：append-amp-操作符" class="headerlink" title="string拼接字符串：append() &amp; + 操作符"></a>string拼接字符串：append() &amp; + 操作符</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s+=str;<span class="comment">//加个字符串</span></span><br><span class="line">s+=”my name is jiayp”;<span class="comment">//加个C字符串</span></span><br><span class="line">s+=<span class="string">'a'</span>;<span class="comment">//加个字符</span></span><br><span class="line">s.append(str);</span><br><span class="line">s.append(str,<span class="number">1</span>,<span class="number">3</span>);<span class="comment">//不解释了 同前面的函数参数assign的解释</span></span><br><span class="line">s.append(str,<span class="number">2</span>,<span class="built_in">string</span>::npos)<span class="comment">//把字符串str从索引值2开始到结尾拼接到s尾</span></span><br><span class="line">s.append(“my name is jiayp”);</span><br><span class="line">s.append(“nico”,<span class="number">5</span>)<span class="comment">//把'n' ‘I' ‘c' ‘o' ‘/0'拼接到s尾</span></span><br><span class="line">s.append(<span class="number">5</span>,<span class="string">'x'</span>)<span class="comment">//把五个x拼接到s尾</span></span><br><span class="line">s.push_back(‘a');<span class="comment">//这个函数只能增加单个字符</span></span><br></pre></td></tr></table></figure>
+<h2 id="string的字符替换"><a href="#string的字符替换" class="headerlink" title="string的字符替换"></a>string的字符替换</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span>&amp; <span class="title">replace</span><span class="params">(<span class="keyword">size_t</span> pos, <span class="keyword">size_t</span> n, <span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;<span class="comment">//将当前字符串从pos索引开始的n个字符，替换成字符串s</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">string</span>&amp; <span class="title">replace</span><span class="params">(<span class="keyword">size_t</span> pos, <span class="keyword">size_t</span> n, <span class="keyword">size_t</span> n1, <span class="keyword">char</span> c)</span></span>; <span class="comment">//将当前字符串从pos索引开始的n个字符，替换成n1个字符c</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">string</span>&amp; <span class="title">replace</span><span class="params">(iterator i1, iterator i2, <span class="keyword">const</span> <span class="keyword">char</span>* s)</span></span>;<span class="comment">//将当前字符串[i1,i2)区间中的字符串替换为字符串s</span></span><br></pre></td></tr></table></figure>
+<h2 id="string查找：find"><a href="#string查找：find" class="headerlink" title="string查找：find"></a>string查找：find</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">char</span> c, <span class="keyword">int</span> pos = <span class="number">0</span>)</span> <span class="keyword">const</span></span>;<span class="comment">//从pos开始查找字符c在当前字符串的位置</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> pos = <span class="number">0</span>)</span> <span class="keyword">const</span></span>;<span class="comment">//从pos开始查找字符串s在当前串中的位置</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> pos, <span class="keyword">int</span> n)</span> <span class="keyword">const</span></span>;<span class="comment">//从pos开始查找字符串s中前n个字符在当前串中的位置</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;s, <span class="keyword">int</span> pos = <span class="number">0</span>)</span> <span class="keyword">const</span></span>;<span class="comment">//从pos开始查找字符串s在当前串中的位置</span></span><br><span class="line"><span class="comment">//查找成功时返回所在位置，失败返回string::npos的值</span></span><br></pre></td></tr></table></figure>
+<h2 id="string的排序：sort-s-begin-s-end"><a href="#string的排序：sort-s-begin-s-end" class="headerlink" title="string的排序：sort(s.begin(),s.end())"></a>string的排序：sort(s.begin(),s.end())</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test9</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> s = <span class="string">"cdefba"</span>;</span><br><span class="line">    sort(s.begin(),s.end());</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"s:"</span>&lt;&lt;s&lt;&lt;<span class="built_in">endl</span>;     <span class="comment">// 结果：abcdef</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="string类的迭代器处理"><a href="#string类的迭代器处理" class="headerlink" title="string类的迭代器处理"></a>string类的迭代器处理</h2><p>string类提供了向前和向后遍历的迭代器iterator，迭代器提供了访问各个字符的语法，类似于指针操作，迭代器不检查范围。</p>
+<p>用string::iterator或string::const_iterator声明迭代器变量，const_iterator不允许改变迭代的内容。常用迭代器函数有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_iterator <span class="title">begin</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line"><span class="function">iterator <span class="title">begin</span><span class="params">()</span></span>;                <span class="comment">//返回string的起始位置</span></span><br><span class="line"><span class="function">const_iterator <span class="title">end</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line"><span class="function">iterator <span class="title">end</span><span class="params">()</span></span>;                    <span class="comment">//返回string的最后一个字符后面的位置</span></span><br><span class="line"><span class="function">const_iterator <span class="title">rbegin</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line"><span class="function">iterator <span class="title">rbegin</span><span class="params">()</span></span>;                <span class="comment">//返回string的最后一个字符的位置</span></span><br><span class="line"><span class="function">const_iterator <span class="title">rend</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line"><span class="function">iterator <span class="title">rend</span><span class="params">()</span></span>;                    <span class="comment">//返回string第一个字符位置的前面</span></span><br><span class="line">rbegin和rend用于从后向前的迭代访问，通过设置迭代器<span class="built_in">string</span>::reverse_iterator,<span class="built_in">string</span>::const_reverse_iterator实现</span><br></pre></td></tr></table></figure>
+<h2 id="字符串流处理"><a href="#字符串流处理" class="headerlink" title="字符串流处理"></a>字符串流处理</h2><p>通过定义ostringstream和istringstream变量实现，&lt; sstream&gt;头文件中</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">input</span><span class="params">(<span class="string">"hello,this is a test"</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="built_in">istringstream</span> <span class="title">is</span><span class="params">(input)</span></span>;</span><br><span class="line"><span class="built_in">string</span> s1,s2,s3,s4;</span><br><span class="line">is&gt;&gt;s1&gt;&gt;s2&gt;&gt;s3&gt;&gt;s4;<span class="comment">//s1="hello,this",s2="is",s3="a",s4="test"</span></span><br><span class="line"><span class="built_in">ostringstream</span> os;</span><br><span class="line">os&lt;&lt;s1&lt;&lt;s2&lt;&lt;s3&lt;&lt;s4;</span><br><span class="line"><span class="built_in">cout</span>&lt;&lt;os.str();</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/" title="C++ 学习（9）——string">https://xiao-hu.com.cn/2019/11/18/C-%E5%AD%A6%E4%B9%A0%EF%BC%889%EF%BC%89%E2%80%94%E2%80%94string/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/17/50-%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6/" rel="next" title="50.第一次只出现一次的字符">
+                  <i class="fa fa-chevron-left"></i> 50.第一次只出现一次的字符
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/19/C-%E5%AD%A6%E4%B9%A0%EF%BC%8810%EF%BC%89C-11-%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="C ++ 学习（10）C++11 智能指针的使用">
+                  C ++ 学习（10）C++11 智能指针的使用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#声明一个C-字符串"><span class="nav-number">1.</span> <span class="nav-text">声明一个C++字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串操作函数"><span class="nav-number">2.</span> <span class="nav-text">字符串操作函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-字符串和C字符串的转换"><span class="nav-number">2.1.</span> <span class="nav-text">C++字符串和C字符串的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string的大小和容量"><span class="nav-number">2.2.</span> <span class="nav-text">string的大小和容量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string的字符串比较"><span class="nav-number">2.3.</span> <span class="nav-text">string的字符串比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string的插入与删除"><span class="nav-number">2.4.</span> <span class="nav-text">string的插入与删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string拼接字符串：append-amp-操作符"><span class="nav-number">2.5.</span> <span class="nav-text">string拼接字符串：append() &amp; + 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string的字符替换"><span class="nav-number">2.6.</span> <span class="nav-text">string的字符替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string查找：find"><span class="nav-number">2.7.</span> <span class="nav-text">string查找：find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string的排序：sort-s-begin-s-end"><span class="nav-number">2.8.</span> <span class="nav-text">string的排序：sort(s.begin(),s.end())</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string类的迭代器处理"><span class="nav-number">2.9.</span> <span class="nav-text">string类的迭代器处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串流处理"><span class="nav-number">2.10.</span> <span class="nav-text">字符串流处理</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

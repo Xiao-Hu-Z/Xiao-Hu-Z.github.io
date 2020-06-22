@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在本练习中，我们将使用支持向量机（SVM）来构建垃圾邮件分类器。 我们将从一些简单的2D数据集开始使用SVM来查看它们的工作原理。 然后，我们将对一组原始电子邮件进行一些预处理工作，并使用SVM在处理的电子邮件上构建分类器，以确定它们是否为垃圾邮件。6 Support Vector Machines6.1 Linear SVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习练习 6 - 支持向量机">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;03&#x2F;23&#x2F;%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="在本练习中，我们将使用支持向量机（SVM）来构建垃圾邮件分类器。 我们将从一些简单的2D数据集开始使用SVM来查看它们的工作原理。 然后，我们将对一组原始电子邮件进行一些预处理工作，并使用SVM在处理的电子邮件上构建分类器，以确定它们是否为垃圾邮件。6 Support Vector Machines6.1 Linear SVM">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323110554887.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323110822281.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323110835695.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323111138425.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323111148827.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T08:55:16.246Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190323110554887.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>机器学习练习 6 - 支持向量机 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习练习 6 - 支持向量机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-23 16:53:25" itemprop="dateCreated datePublished" datetime="2019-03-23T16:53:25+08:00">2019-03-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:55:16" itemprop="dateModified" datetime="2019-11-19T16:55:16+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在本练习中，我们将使用支持向量机（SVM）来构建垃圾邮件分类器。 我们将从一些简单的2D数据集开始使用SVM来查看它们的工作原理。 然后，我们将对一组原始电子邮件进行一些预处理工作，并使用SVM在处理的电子邮件上构建分类器，以确定它们是否为垃圾邮件。</p><h1 id="6-Support-Vector-Machines"><a href="#6-Support-Vector-Machines" class="headerlink" title="6 Support Vector Machines"></a>6 Support Vector Machines</h1><h2 id="6-1-Linear-SVM"><a href="#6-1-Linear-SVM" class="headerlink" title="6.1 Linear SVM"></a>6.1 Linear SVM</h2><a id="more"></a>
+<h3 id="6-1-1-load-data"><a href="#6-1-1-load-data" class="headerlink" title="6.1.1 load data"></a>6.1.1 load data</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sb</span><br><span class="line"><span class="keyword">from</span> scipy.io <span class="keyword">import</span> loadmat</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span><br><span class="line">raw_data = loadmat(<span class="string">'data/ex6data1.mat'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="6-1-2-visualize-data"><a href="#6-1-2-visualize-data" class="headerlink" title="6.1.2 visualize data"></a>6.1.2 visualize data</h3><p>我们将其用散点图表示，其中类标签由符号表示（+表示正类，o表示负类）。.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data = pd.DataFrame(raw_data[<span class="string">'X'</span>], columns=[<span class="string">'X1'</span>, <span class="string">'X2'</span>])</span><br><span class="line">data[<span class="string">'y'</span>] = raw_data[<span class="string">'y'</span>]</span><br><span class="line"></span><br><span class="line">positive = data[data[<span class="string">'y'</span>].isin([<span class="number">1</span>])]</span><br><span class="line">negative = data[data[<span class="string">'y'</span>].isin([<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">ax.scatter(positive[<span class="string">'X1'</span>], positive[<span class="string">'X2'</span>], s=<span class="number">50</span>, marker=<span class="string">'x'</span>, label=<span class="string">'Positive'</span>)</span><br><span class="line">ax.scatter(negative[<span class="string">'X1'</span>], negative[<span class="string">'X2'</span>], s=<span class="number">50</span>, marker=<span class="string">'o'</span>, label=<span class="string">'Negative'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>   <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190323110554887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>有一个异常的正例在其他样本之外。 这些类仍然是线性分离的，但它非常紧凑。 我们要训练线性支持向量机来学习类边界。 在这个练习中，我们没有从头开始执行SVM的任务，所以我要用scikit-learn。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#画决策边界    </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plotBoundary</span><span class="params">(clf,data)</span>:</span></span><br><span class="line">x_min,x_max=np.array(data[<span class="string">'X1'</span>]).min(),np.array(data[<span class="string">'X1'</span>]).max()</span><br><span class="line">y_min,y_max=np.array(data[<span class="string">'X2'</span>]).min(),np.array(data[<span class="string">'X2'</span>]).max()</span><br><span class="line">xx,yy=np.meshgrid(np.linspace(x_min,x_max,<span class="number">500</span>),np.linspace(y_min,y_max,<span class="number">500</span>))</span><br><span class="line">Z=clf.predict(np.c_[xx.ravel(),yy.ravel()])</span><br><span class="line">Z=Z.reshape(xx.shape)</span><br><span class="line">plt.contour(xx,yy,Z,colors = <span class="string">'red'</span>, linewidth = <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="6-1-3-C-1"><a href="#6-1-3-C-1" class="headerlink" title="6.1.3 C=1"></a>6.1.3 C=1</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">svc1 = svm.LinearSVC(C=<span class="number">1</span>, loss=<span class="string">'hinge'</span>, max_iter=<span class="number">1000</span>)</span><br><span class="line">clfs1=svc1.fit(data[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]], data[<span class="string">'y'</span>])</span><br><span class="line">svc1.score(data[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]], data[<span class="string">'y'</span>])  <span class="comment">#0.9803921568627451</span></span><br></pre></td></tr></table></figure>
+<p>这次我们得到了训练数据的完美分类，但是通过增加C的值，我们创建了一个不再适合数据的决策边界。 我们可以通过查看每个类别预测的置信水平来看出这一点，这是该点与超平面距离的函数。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data[<span class="string">'SVM 1 Confidence'</span>] = svc1.decision_function(data[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]])</span><br><span class="line"></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">ax.scatter(data[<span class="string">'X1'</span>], data[<span class="string">'X2'</span>], s=<span class="number">50</span>, c=data[<span class="string">'SVM 1 Confidence'</span>],cmap=<span class="string">'rainbow'</span>)</span><br><span class="line">plotBoundary(clfs1,data) </span><br><span class="line">ax.set_title(<span class="string">'SVM (C=1) Decision Confidence'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>  <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190323110822281.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h3 id="6-1-4-C-100"><a href="#6-1-4-C-100" class="headerlink" title="6.1.4 C=100"></a>6.1.4 C=100</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data[<span class="string">'SVM 2 Confidence'</span>] = svc2.decision_function(data[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]])</span><br><span class="line"></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">ax.scatter(data[<span class="string">'X1'</span>], data[<span class="string">'X2'</span>], s=<span class="number">50</span>, c=data[<span class="string">'SVM 2 Confidence'</span>], cmap=<span class="string">'rainbow'</span>)</span><br><span class="line">plotBoundary(clfs2,data)</span><br><span class="line">ax.set_title(<span class="string">'SVM (C=100) Decision Confidence'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>  <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190323110835695.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h2 id="6-2-SVM-with-Gaussian-Kernels"><a href="#6-2-SVM-with-Gaussian-Kernels" class="headerlink" title="6.2 SVM with Gaussian Kernels"></a>6.2 SVM with Gaussian Kernels</h2><p>使用SVM做非线性分类。我们将使用高斯核函数。</p>
+<p>为了用SVM找出一个非线性的决策边界，我们首先要实现高斯核函数。<br>我可以把高斯核函数想象成一个相似度函数，用来测量一对样本的距离，(x(i),y(j))<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gaussian_kernel</span><span class="params">(x1, x2, sigma)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.exp(-(np.sum((x1 - x2) ** <span class="number">2</span>) / (<span class="number">2</span> * (sigma ** <span class="number">2</span>))))</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x1 = np.array([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">1.0</span>])</span><br><span class="line">x2 = np.array([<span class="number">0.0</span>, <span class="number">4.0</span>, <span class="number">-1.0</span>])</span><br><span class="line">sigma = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">gaussian_kernel(x1, x2, sigma)</span><br><span class="line"><span class="comment">#0.32465246735834974</span></span><br></pre></td></tr></table></figure>
+<p>该结果与练习中的预期值相符。 接下来，我们将检查另一个数据集，这次用非线性决策边界。</p>
+<h3 id="6-2-1-load-data"><a href="#6-2-1-load-data" class="headerlink" title="6.2.1 load data"></a>6.2.1 load data</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">raw_data2 = loadmat(<span class="string">'data/ex6data2.mat'</span>)</span><br><span class="line">data2 = pd.DataFrame(raw_data2[<span class="string">'X'</span>], columns=[<span class="string">'X1'</span>, <span class="string">'X2'</span>])</span><br><span class="line">data2[<span class="string">'y'</span>] = raw_data2[<span class="string">'y'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="6-2-2-visualize-data"><a href="#6-2-2-visualize-data" class="headerlink" title="6.2.2 visualize data"></a>6.2.2 visualize data</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">positive = data2[data2[<span class="string">'y'</span>].isin([<span class="number">1</span>])]</span><br><span class="line">negative = data2[data2[<span class="string">'y'</span>].isin([<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">ax.scatter(positive[<span class="string">'X1'</span>], positive[<span class="string">'X2'</span>], s=<span class="number">30</span>, marker=<span class="string">'x'</span>, label=<span class="string">'Positive'</span>)</span><br><span class="line">ax.scatter(negative[<span class="string">'X1'</span>], negative[<span class="string">'X2'</span>], s=<span class="number">30</span>, marker=<span class="string">'o'</span>, label=<span class="string">'Negative'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190323111138425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>对于该数据集，我们将使用内置的RBF内核构建支持向量机分类器，并检查其对训练数据的准确性。 为了可视化决策边界，这一次我们将根据实例具有负类标签的预测概率来对点做阴影。 从结果可以看出，它们大部分是正确的。</p>
+<h3 id="6-2-3-try-built-in-Gaussian-Kernel-of-sklearn"><a href="#6-2-3-try-built-in-Gaussian-Kernel-of-sklearn" class="headerlink" title="6.2.3 try built-in Gaussian Kernel of sklearn"></a>6.2.3 try built-in Gaussian Kernel of sklearn</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">svc3 = svm.SVC(C=<span class="number">100</span>, gamma=<span class="number">10</span>, probability=<span class="literal">True</span>)</span><br><span class="line">svc3</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">SVC(C=100, cache_size=200, class_weight=None, coef0=0.0,</span></span><br><span class="line"><span class="string">  decision_function_shape='ovr', degree=3, gamma=10, kernel='rbf',</span></span><br><span class="line"><span class="string">  max_iter=-1, probability=True, random_state=None, shrinking=True,</span></span><br><span class="line"><span class="string">  tol=0.001, verbose=False)'''</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clfs3=svc3.fit(data2[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]], data2[<span class="string">'y'</span>])</span><br><span class="line">svc3.score(data2[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]], data2[<span class="string">'y'</span>])</span><br><span class="line"><span class="comment">#0.9698725376593279</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data2[<span class="string">'Probability'</span>] = svc3.predict_proba(data2[[<span class="string">'X1'</span>, <span class="string">'X2'</span>]])[:,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">fig, ax2 = plt.subplots(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">ax2.scatter(data2[<span class="string">'X1'</span>], data2[<span class="string">'X2'</span>], s=<span class="number">30</span>, c=data2[<span class="string">'Probability'</span>])</span><br><span class="line">plotBoundary(clfs3,data2)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190323111148827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h2 id="6-3-寻找最优参数"><a href="#6-3-寻找最优参数" class="headerlink" title="6.3 寻找最优参数"></a>6.3 寻找最优参数</h2><p>对于第三个数据集，我们给出了训练和验证集，并且基于验证集性能为SVM模型找到最优超参数。 虽然我们可以使用scikit-learn的内置网格搜索来做到这一点，但是本着遵循练习的目的，我们将从头开始实现一个简单的网格搜索</p>
+<h3 id="6-3-1-load-data"><a href="#6-3-1-load-data" class="headerlink" title="6.3.1 load data"></a>6.3.1 load data</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">raw_data = loadmat(<span class="string">'data/ex6data3.mat'</span>)</span><br><span class="line"></span><br><span class="line">X = raw_data[<span class="string">'X'</span>]</span><br><span class="line">Xval = raw_data[<span class="string">'Xval'</span>]</span><br><span class="line">y = raw_data[<span class="string">'y'</span>].ravel()</span><br><span class="line">yval = raw_data[<span class="string">'yval'</span>].ravel()</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-2-manual-grid-search-for-and-σ"><a href="#6-3-2-manual-grid-search-for-and-σ" class="headerlink" title="6.3.2 manual grid search for ? and σ"></a>6.3.2 manual grid search for ? and σ</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">C_values = [<span class="number">0.01</span>, <span class="number">0.03</span>, <span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">30</span>, <span class="number">100</span>]</span><br><span class="line">gamma_values = [<span class="number">0.01</span>, <span class="number">0.03</span>, <span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>, <span class="number">30</span>, <span class="number">100</span>]</span><br><span class="line"></span><br><span class="line">best_score = <span class="number">0</span></span><br><span class="line">best_params = &#123;<span class="string">'C'</span>: <span class="literal">None</span>, <span class="string">'gamma'</span>: <span class="literal">None</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> C <span class="keyword">in</span> C_values:</span><br><span class="line">    <span class="keyword">for</span> gamma <span class="keyword">in</span> gamma_values:</span><br><span class="line">        svc = svm.SVC(C=C, gamma=gamma)</span><br><span class="line">        svc.fit(X, y)</span><br><span class="line">        score = svc.score(Xval, yval)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> score &gt; best_score:</span><br><span class="line">            best_score = score</span><br><span class="line">            best_params[<span class="string">'C'</span>] = C</span><br><span class="line">            best_params[<span class="string">'gamma'</span>] = gamma</span><br><span class="line"></span><br><span class="line">best_score, best_params</span><br><span class="line"><span class="comment">#    (0.965, &#123;'C': 0.3, 'gamma': 100&#125;)</span></span><br></pre></td></tr></table></figure>
+<p>我们的目标是使用SVM来构建垃圾邮件过滤器。 在练习文本中，有一个任务涉及一些文本预处理，以获得适合SVM处理的格式的数据。 然而，这个任务很简单（将字词映射到为练习提供的字典中的ID），而其余的预处理步骤（如HTML删除，词干，标准化等）已经完成。 我将跳过机器学习任务，而不是重现这些预处理步骤，其中包括从预处理过的训练集构建分类器，以及将垃圾邮件和非垃圾邮件转换为单词出现次数的向量的测试数据集。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">spam_train = loadmat(<span class="string">'data/spamTrain.mat'</span>)</span><br><span class="line">spam_test = loadmat(<span class="string">'data/spamTest.mat'</span>)</span><br><span class="line"></span><br><span class="line">spam_train</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">'__header__'</span>: <span class="string">b'MATLAB 5.0 MAT-file, Platform: GLNXA64, Created on: Sun Nov 13 14:27:25 2011'</span>,</span><br><span class="line"> <span class="string">'__version__'</span>: <span class="string">'1.0'</span>,</span><br><span class="line"> <span class="string">'__globals__'</span>: [],</span><br><span class="line"> <span class="string">'X'</span>: array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        ...,</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]], dtype=uint8),</span><br><span class="line"> <span class="string">'y'</span>: array([[<span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>],</span><br><span class="line">        [<span class="number">0</span>],</span><br><span class="line">        ...,</span><br><span class="line">        [<span class="number">1</span>],</span><br><span class="line">        [<span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>]], dtype=uint8)&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X = spam_train[<span class="string">'X'</span>]</span><br><span class="line">Xtest = spam_test[<span class="string">'Xtest'</span>]</span><br><span class="line">y = spam_train[<span class="string">'y'</span>].ravel()</span><br><span class="line">ytest = spam_test[<span class="string">'ytest'</span>].ravel()</span><br><span class="line"></span><br><span class="line">X.shape, y.shape, Xtest.shape, ytest.shape</span><br><span class="line"><span class="comment">#   ((4000, 1899), (4000,), (1000, 1899), (1000,))</span></span><br></pre></td></tr></table></figure>
+<p>每个文档已经转换为一个向量，其中1,899个维对应于词汇表中的1,899个单词。 它们的值为二进制，表示文档中是否存在单词。 在这一点上，训练评估是用一个分类器拟合测试数据的问题。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">svc = svm.SVC()</span><br><span class="line">svc.fit(X, y)</span><br><span class="line">print(<span class="string">'Training accuracy = &#123;0&#125;%'</span>.format(np.round(svc.score(X, y) * <span class="number">100</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="comment"># Training accuracy = 94.4%</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'Test accuracy = &#123;0&#125;%'</span>.format(np.round(svc.score(Xtest, ytest) * <span class="number">100</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="comment"># Test accuracy = 95.3%</span></span><br></pre></td></tr></table></figure>
+<p>这个结果是使用使用默认参数的。 我们可能会使用一些参数调整来获得更高的精度</p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" title="机器学习练习 6 - 支持向量机">https://xiao-hu.com.cn/2019/03/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BB%83%E4%B9%A0-6-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/04/10/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" rel="prev" title="卡尔曼滤波（KF）">
+                  卡尔曼滤波（KF） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Support-Vector-Machines"><span class="nav-number">1.</span> <span class="nav-text">6 Support Vector Machines</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-Linear-SVM"><span class="nav-number">1.1.</span> <span class="nav-text">6.1 Linear SVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-load-data"><span class="nav-number">1.1.1.</span> <span class="nav-text">6.1.1 load data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-visualize-data"><span class="nav-number">1.1.2.</span> <span class="nav-text">6.1.2 visualize data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-3-C-1"><span class="nav-number">1.1.3.</span> <span class="nav-text">6.1.3 C=1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-4-C-100"><span class="nav-number">1.1.4.</span> <span class="nav-text">6.1.4 C=100</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-SVM-with-Gaussian-Kernels"><span class="nav-number">1.2.</span> <span class="nav-text">6.2 SVM with Gaussian Kernels</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-1-load-data"><span class="nav-number">1.2.1.</span> <span class="nav-text">6.2.1 load data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-2-visualize-data"><span class="nav-number">1.2.2.</span> <span class="nav-text">6.2.2 visualize data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-3-try-built-in-Gaussian-Kernel-of-sklearn"><span class="nav-number">1.2.3.</span> <span class="nav-text">6.2.3 try built-in Gaussian Kernel of sklearn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-寻找最优参数"><span class="nav-number">1.3.</span> <span class="nav-text">6.3 寻找最优参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-1-load-data"><span class="nav-number">1.3.1.</span> <span class="nav-text">6.3.1 load data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-2-manual-grid-search-for-and-σ"><span class="nav-number">1.3.2.</span> <span class="nav-text">6.3.2 manual grid search for ? and σ</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

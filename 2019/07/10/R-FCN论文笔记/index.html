@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Abstract分类需要特征具有平移不变性，检测则要求对目标的平移做出准确响应。提出了Position-sensitive score maps，以解决图像分类中的平移不变性与目标检测中的平移变化之间的困境。SPP，Faster R-CNN类的方法在ROI pooling前都是卷积，是具备平移不变性的，但一旦插入ROI pooling之后，后面的网络结构就不再具备平移不变性了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="R-FCN论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;10&#x2F;R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="Abstract分类需要特征具有平移不变性，检测则要求对目标的平移做出准确响应。提出了Position-sensitive score maps，以解决图像分类中的平移不变性与目标检测中的平移变化之间的困境。SPP，Faster R-CNN类的方法在ROI pooling前都是卷积，是具备平移不变性的，但一旦插入ROI pooling之后，后面的网络结构就不再具备平移不变性了。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710204931530.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019071014594651.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710154537337.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710160310184.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710220544767.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710221044808.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T09:15:45.679Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190710204931530.png">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/10/R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>R-FCN论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/10/R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          R-FCN论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-10 17:14:50" itemprop="dateCreated datePublished" datetime="2019-07-10T17:14:50+08:00">2019-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:15:45" itemprop="dateModified" datetime="2019-11-19T17:15:45+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" itemprop="url" rel="index">
+                    <span itemprop="name">语义分割</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>分类需要特征具有平移不变性，检测则要求对目标的平移做出准确响应。<br>提出了Position-sensitive score maps，以解决图像分类中的平移不变性与目标检测中的平移变化之间的困境。SPP，Faster R-CNN类的方法在ROI pooling前都是卷积，是具备平移不变性的，但一旦插入ROI pooling之后，后面的网络结构就不再具备平移不变性了。</p><a id="more"></a>
+<ul>
+<li>平移不变性：在用基础的分类结构比如ResNet、Inception给一只猫分类时，无论猫怎么扭曲、平移，最终识别出来的都是猫，输入怎么变形输出都不变这就是平移不变性，网络的层次越深这个特性会越明显。</li>
+<li>平移可变性则是针对目标检测的，一只猫从图片左侧移到了右侧，检测出的猫的坐标会发生变化就称为平移可变性。当卷积网络变深后最后一层卷积输出的feature map变小，物体在输入上的小偏移，经过N多层pooling后在最后的小feature map上会感知不到。</li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>目标检测的深度网络家族（SPP，Fast R-CNN，Faster R-CNN），通过感兴趣区域（RoI）池化层可以划分成两个子网络：（1）独立于RoI的共享“全卷积”subnetwork，（ii）不共享计算的RoI subnetwork。</p>
+<p>对于region-based的检测方法，以Faster R-CNN为例，实际上是分成了几个subnetwork，第一个用来在整张图上做比较耗时的conv，这些操作与region无关，是计算共享的。第二个subnetwork是用来产生候选的boundingbox（如RPN），第三个subnetwork用来分类或进一步对box进行regression（如Fast RCNN），这个subnetwork和region是有关系的，必须每个region单独跑网络，衔接在这个subnetwork和前两个subnetwork中间的就是ROI pooling。我们希望的是，耗时的卷积都尽量移到前面共享的subnetwork上。因此，和Faster RCNN中用的ResNet（前91层共享，插入ROI pooling，后10层不共享）策略不同，本文把所有的101层都放在了前面共享的subnetwork。最后用来prediction的卷积只有1层，大大减少了计算量。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190710204931530.png"><br>物体分类要求平移不变性越大越好 (图像中物体的移动不用区分)，而物体检测要求有平移变化。所以，ImageNet 分类领先的结果证明尽可能有平移不变性的全卷积结构更受亲睐。另一方面，物体检测任务需要一些平移变化的定位表示。假设图像分类网络的卷积层越深，则该网络对平移越不敏感。<br>ResNet在网络的卷积层间插入 RoI 池化层，分类时ROI pooling之后卷积不再有平移可变性。</p>
+<p><strong>整个R-FCN的结构</strong><br>一个base的conv网络如ResNet101, 一个RPN（Faster RCNN来的）,一个position sensitive的prediction层，最后的ROI pooling+投票的决策层<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019071014594651.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">为了将平移可变性并入FCN，使用一组专门的卷积层来构建一系列position-sensitive score maps作为FCN输出。<br>。这些分数图中的每一个都相对空间的位置信息进行编码（例如“在目标的左边”）。在这个FCN的顶端，我们添加了一个位置敏感的RoI池化层，它从这些score maps中获取信息，并且后面没有权重（卷积/fc）层。整个架构是端到端的学习。所有可学习的层都是卷积的，并在整个图像上共享。</p>
+<h1 id="Our-approach"><a href="#Our-approach" class="headerlink" title="Our approach"></a>Our approach</h1><h3 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1. Overview"></a>1. Overview</h3><p>基于区域的系统在不同 benchmarks 上依然精度领先。用更快 R-CNN 中的区域建议网络 (RPN) 提取候选区域，该 RPN 为全卷积网络。效仿更快 R-CNN，共享 RPN 和 R-FCN 的特征。</p>
+<ul>
+<li>跟随R-CNN，采用two-stage目标检测算法（R-CNN，SPPNet，Faster R-CNN，Fast R-CNN，Inside-Outside Net，OHEM），包括：区域提议和区域分类。</li>
+<li>不依赖区域提取（SSD 和 Yolo ）</li>
+</ul>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190710154537337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">      Region Proposal Network (RPN)提出了候选RoI，然后将其应用于评分图上。所有可学习的权重层都是卷积的，并在整个图像上计算；每个RoI的计算成本可以忽略不计。</p>
+<p>RPN 给出感兴趣区域，R-FCN 对RoI分类为目标类别和背景。在R-FCN中，所有可学习的权重层都是卷积的，并在整个图像上进行计算。最后一个卷积层为每个类别产生一堆大小为$k^2$的位置敏感分数图，从而得到一个具有C个目标类别的$k^2(C+1)$通道输出层（+1为背景）。一堆$k^2$个分数图对应于描述相对位置的k×k空间网格。例如，对于k×k=3×3，大小为9的分数图编码目标类别在$top-left,top-center,top-right,…,bottom-right$</p>
+<p>R-FCN 最后用位置敏感 RoI 池化层，给每个 RoI 1个分数。选择性池化图解：看上图的橙色响应图像 (top−left)，抠出橙色方块 RoI，池化橙色方块 RoI 得到橙色小方块 (分数)；其它颜色的响应图像同理。对所有颜色的小方块投票 (或池化) 得到1类的响应结果。</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190710160310184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>R-FCN 在与 RPN 共享的卷积层后多加1个卷积层。所以，R-FCN 与 RPN 一样，输入为整幅图像。但 R-FCN 最后1个卷积层的输出从整幅图像的卷积响应图像中分割出感兴趣区域的卷积响应图像。</p>
+<h3 id="2-Backbone-architecture"><a href="#2-Backbone-architecture" class="headerlink" title="2. Backbone architecture:"></a>2. Backbone architecture:</h3><p>典型的R-FCN是基于ResNet-101， 网络有100个卷积层，1个全局平均池化层和1个1000类的全连接层。删除了平均池化层和全连接层，只使用卷积层来计算特征图。使用ResNet-101，在ImageNet上预训练。ResNet-101中的最后一个卷积块是2048维，我们附加一个随机初始化的1024维的1×1卷积层来降维，然后，我们应用$k^2(C+1)$通道卷积层来生成分数图。</p>
+<h3 id="3-Position-sensitive-score-maps-amp-Position-sensitive-RoI-pooling："><a href="#3-Position-sensitive-score-maps-amp-Position-sensitive-RoI-pooling：" class="headerlink" title="3. Position-sensitive score maps &amp; Position-sensitive RoI pooling："></a>3. Position-sensitive score maps &amp; Position-sensitive RoI pooling：</h3><p>为了将位置信息显式地编码到每个RoI中，将每个RoI矩形分成k×k的组块。对于大小为w×h的RoI矩形，组块的大小为$\approx \frac{w}{k} \times \frac{h}{k}$，构建最后的卷积层为每个类别产生$k^2$分数图。在第(i,j)个组块（0≤i,j≤k−1）中，我们定义了一个位置敏感的RoI池化操作，它只在第(i,j)个score map中进行池化：</p>
+<script type="math/tex; mode=display">r_c(i,j ~|~ \Theta) = \sum_{(x,y)\in \text{bin}(i,j)} z_{i,j,c}(x+x_0, y+y_0 ~|~ \Theta)/n.</script><p>其中：<br>$r_c(i,j)$是第$(i,j)$个组块中第c个类别的池化响应<br> $z_{i,j,c}$是$k^2(C+1)$分数图中的一个分数图。<br>$(x_0,y_0)$表示一个RoI的左上角<br>n是组块中的像素数量<br>Θ表示网络的所有可学习参数<br><strong>分类：</strong><br>通过对分数进行平均来简单地投票，为每个RoI产生一个(C+1)维向量：$r_c(Θ)=∑_i,jr_c(i,j | Θ)$，计算类别的softmax响应，$s_c(\Theta)=e^{r_c(\Theta)} / \sum_{c’=0}^C e^{r_{c’}(\Theta)}$<br><strong>定位：</strong><br>$k^2(C+1)$维的卷积层后，增加1个$4k^2$维的卷积层来回归边界框。每个 RoI 产生的4k24k2维向量经平均投票后，用快速 R-CNN 的参数化得到1个44维向量$(t_x,t_y,t_w,t_h)$</p>
+<h3 id="4-训练"><a href="#4-训练" class="headerlink" title="4. 训练:"></a>4. 训练:</h3><p>每个 RoI 的损失函数为交叉熵损失与边界框回归损失的和。</p>
+<script type="math/tex; mode=display">L(s, t_{x,y,w,h})=L_{cls}(s_{c^*})+\lambda[c^*>0]L_{reg}(t,t^*)=-log\left(\frac{e^{r_{c^*}(\Theta)}}{\sum^{C}_{c'=0}e^{r_{c'}(\Theta)}}\right)+\lambda[c^*>0]L_{reg}(t,t^*)</script><p>$c^<em>$是RoI的真实标签,t\</em>表示真实的边界框<br>$c^<em>$=0说明 RoI 的真实标签为背景。Lreg与快速 R-CNN 中的边界框损失回归相同。RPN 产生的区域建议当 RoI 与 真实边框的 IoU 超过0.5时，标定为正样本。<br><strong>在线难例挖掘 (OHEM)</strong>。假设每个图像前向产生N个区域建议，计算所有建议的损失。按损失排序所有 RoIs，选择损失最高的B个 RoIs 3。<br><em>*参数：</em></em><br>0.0005的权重衰减和0.9的动量。默认情况下，我们使用单尺度训练：调整图像的大小，使得尺度（图像的较短边）为600像素。</p>
+<h3 id="5-推断"><a href="#5-推断" class="headerlink" title="5. 推断"></a>5. 推断</h3><p>在RPN和R-FCN之间计算共享的特征图，RPN部分提出RoI，R-FCN部分在其上评估类别分数并回归边界框。在推断过程中，我们评估了300个RoI进行公平比较，作为标准实践，使用0.3的IoU阈值，通过非极大值抑制（NMS）对结果进行后处理。</p>
+<h3 id="6-A-trous-and-stride（空洞和步长）"><a href="#6-A-trous-and-stride（空洞和步长）" class="headerlink" title="6. À trous and stride（空洞和步长）"></a>6. À trous and stride（空洞和步长）</h3><p>全卷积架构享有FCN广泛使用的语义分割的网络修改的好处。特别的是，我们将ResNet-101的有效步长从32像素降低到了16像素，增加了分数图的分辨率。conv4阶段（stride = 16）之前和之后的所有层都保持不变；第一个conv5块中的stride=2操作被修改为stride=1，并且conv5阶段的所有卷积滤波器都被“hole algorithm”修改来弥补减少的步幅。为了进行公平的比较，RPN是在conv4阶段（与R-FCN共享）之上计算的，就像Faster R-CNN的情况那样，所以RPN不会受空洞行为的影响。下表显示了R-FCN的消融结果（k×k=7×7，没有OHEM）。这个空洞窍门提高了2.6点的mAP。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190710220544767.png"></p>
+<h3 id="7-可视化"><a href="#7-可视化" class="headerlink" title="7. 可视化"></a>7. 可视化</h3><p>RoI 分类的可视化。RPN 刚好产生包含 person 类的 RoI。经过 R-FCN 的最后1个卷积层后产生9个相对空间位置的分数图，对 person 类的每个相对空间位置通道内的 RoI 桶平均池化得到3×33×3的池化分数，投票后送入分类器判断属于 person 类。当分类正确时，该类通道的位置敏感分数图 (中间) 的大多数橙色实线网格内的响应在整个 RoI 位置范围内最强。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190710221044808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h1 id="3-相关工作"><a href="#3-相关工作" class="headerlink" title="3. 相关工作"></a>3. 相关工作</h1><p>R-CNN 证实用深度网络产生区域建议是有效的。R-CNN 在剪切变形的区域上评价卷积网络，区域间不共享计算。SPP 网络，快速 R-CNN 和更快速 R-CNN 为”半卷积” (卷积子网络在整幅图像上共享计算，另1个子网络评价各个区域)。</p>
+<p>一些物体检测器被认为是”全卷积“模型。OverFeat 在共享卷积特征图上滑窗操作来检测物体。类似地，快速 R-CNN 等也用滑动窗口，它们的1个单尺度的滑动窗口可看作1个卷积层。更快 R-CNN 的 RPN 部分为1个预测关于多尺寸参考盒 (锚) 的边界框的全卷积检测器。更快 R-CNN 的 RPN 未知区域建议的类，但 SSD 该部分已知特定的类。</p>
+<p>另一类物体检测器采用全连接层，在整个图像上产生整体物体的检测结果</p>
+<p>待写，待修改！！！</p>
+<p><a href="https://arxiv.org/abs/1605.06409" target="_blank" rel="noopener">论文原文</a><br><a href="https://blog.csdn.net/c20081052/article/details/80522388" target="_blank" rel="noopener">【深度学习R-FCN】——深刻解读R-FCN网络结构</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/10/R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="R-FCN论文笔记">https://xiao-hu.com.cn/2019/07/10/R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/08/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95SSD-tensorflow/" rel="next" title="目标检测算法SSD+tensorflow">
+                  <i class="fa fa-chevron-left"></i> 目标检测算法SSD+tensorflow
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/13/SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="SegNet论文笔记">
+                  SegNet论文笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Our-approach"><span class="nav-number">3.</span> <span class="nav-text">Our approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Overview"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Backbone-architecture"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. Backbone architecture:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Position-sensitive-score-maps-amp-Position-sensitive-RoI-pooling："><span class="nav-number">3.0.3.</span> <span class="nav-text">3. Position-sensitive score maps &amp; Position-sensitive RoI pooling：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-训练"><span class="nav-number">3.0.4.</span> <span class="nav-text">4. 训练:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-推断"><span class="nav-number">3.0.5.</span> <span class="nav-text">5. 推断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-A-trous-and-stride（空洞和步长）"><span class="nav-number">3.0.6.</span> <span class="nav-text">6. À trous and stride（空洞和步长）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-可视化"><span class="nav-number">3.0.7.</span> <span class="nav-text">7. 可视化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-相关工作"><span class="nav-number">4.</span> <span class="nav-text">3. 相关工作</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

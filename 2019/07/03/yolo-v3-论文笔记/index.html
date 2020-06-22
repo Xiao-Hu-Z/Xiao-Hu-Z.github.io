@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Abstract作者对YOLO进行了进一步的更新，做了一些小设计更改让其表现更好。YOLOv3比YOLOv2相较大了一些，却更加准确，但是依然很快。在320×320 YOLOv3在28.2mAP上仅运行了22ms，和SSD的准确度相同但是快了3倍。在关注原有的0.5 IOU mAP 检测指标时，YOLOv3表现相当棒。在Titan X在52ms内实现了57.9 AP50，与RetinaNet在19">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yolo v3 论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;03&#x2F;yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="Abstract作者对YOLO进行了进一步的更新，做了一些小设计更改让其表现更好。YOLOv3比YOLOv2相较大了一些，却更加准确，但是依然很快。在320×320 YOLOv3在28.2mAP上仅运行了22ms，和SSD的准确度相同但是快了3倍。在关注原有的0.5 IOU mAP 检测指标时，YOLOv3表现相当棒。在Titan X在52ms内实现了57.9 AP50，与RetinaNet在19">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703184150894.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703185321807.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703185615332.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703190035327.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703190743849.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703190800188.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703190922841.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703192252867.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T09:02:31.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190703184150894.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>yolo v3 论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          yolo v3 论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-03 17:55:50" itemprop="dateCreated datePublished" datetime="2019-07-03T17:55:50+08:00">2019-07-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:02:31" itemprop="dateModified" datetime="2019-11-19T17:02:31+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703184150894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p><h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>作者对YOLO进行了进一步的更新，做了一些小设计更改让其表现更好。YOLOv3比YOLOv2相较大了一些，却更加准确，但是依然很快。在320×320 YOLOv3在28.2mAP上仅运行了22ms，和SSD的准确度相同但是快了3倍。在关注原有的0.5 IOU mAP 检测指标时，YOLOv3表现相当棒。在Titan X在52ms内实现了57.9 AP50，与RetinaNet在198ms内实现57.5AP50相当，但是快了3.8倍。</p><a id="more"></a>
+
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><h1 id="2-更新"><a href="#2-更新" class="headerlink" title="2.更新"></a>2.更新</h1><p>谈到YOLOv3的更新情况，其实大多数时候我们就是直接把别人的好点子拿来用了。我们还训练了一个全新的、比其他网络更好的分类网络。为了方便你理解，让我们从头开始慢慢介绍<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703185321807.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h2 id="2-1边界框预测"><a href="#2-1边界框预测" class="headerlink" title="2.1边界框预测"></a>2.1边界框预测</h2><p>在YOLO9000后，我们的系统开始用dimension clusters固定anchor box来选定边界框。神经网络会为每个边界框预测4个坐标：tx、ty、tw、th。如果目标cell距离图像左上角的边距是（cx, cy），且它对应边界框的宽和高为pw、ph，那么网络的预测值会是：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703185615332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在训练期间，我们会计算方差。如果预测坐标的ground truth是$\hat{t}_<em>$，那相应的梯度就是ground truth值和预测值的差：$\hat{t}_</em>-t_*$。利用上述公式，我们能轻松推出这个结论。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703190035327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>YOLOv3用逻辑回归预测每个边界框的objectness score。如果当前预测的边界框比之前的更好地与ground truth对象重合，那它的分数就是1。如果当前的预测不是最好的，但它和ground truth对象重合到了一定阈值以上，神经网络会忽视这个预测。我们使用的阈值是.5。与[15]不同，我们的系统只为每个ground truth对象分配一个边界框。如果先前的边界框并未分配给相应对象，那它只是检测错了对象，而不会对坐标或分类预测造成影响。</p>
+<h1 id="2-2-分类预测"><a href="#2-2-分类预测" class="headerlink" title="2.2 分类预测"></a>2.2 分类预测</h1><p>每个边界框都会使用多标记分类来预测框中可能包含的类。我们不用softmax，而是用单独的逻辑分类器，因为我们发现前者对于提升网络性能没什么用。在训练过程中，我们用二元交叉熵损失来预测类别。</p>
+<p>这个选择有助于我们把YOLO用于更复杂的领域，如开放的图像数据集。这个数据集中包含了大量重叠的标签（如女性和人）。如果我们用的是softmax，它会强加一个假设，使得每个框只包含一个类别。但通常情况下这样做是不妥的，相比之下，多标记的分类方法能更好地模拟数据</p>
+<h2 id="2-3-跨尺寸预测"><a href="#2-3-跨尺寸预测" class="headerlink" title="2.3 跨尺寸预测"></a>2.3 跨尺寸预测</h2><p>YOLOv3提供了3种尺寸不一的边界框。我们的系统用相似的概念提取这些尺寸的特征，以形成金字塔形网络[6]。我们<strong>在基本特征提取器中增加了几个卷积层，并用最后的卷积层预测一个三维张量编码：边界框、框中目标和分类预测</strong>。在COCO数据集实验中，我们的神经网络分别为每种尺寸各预测了3个边界框，所以得到的张量是N ×N ×[3∗(4+ 1+ 80)]，其中包含4个边界框offset、1个目标预测以及80种分类预测。</p>
+<p>接着，我们从前两个图层中得到特征图，并对它进行2次上采样。再从网络更早的图层中获得特征图，用element-wise把高低两种分辨率的特征图连接到一起。这样做能使我们找到早期特征映射中的上采样特征和细粒度特征，并获得更有意义的语义信息。之后，我们添加几个卷积层来处理这个特征映射组合，并最终预测出一个相似的、大小是原先两倍的张量。<br>我们用同样的网络设计来预测边界框的最终尺寸，这个过程其实也有助于分类预测，因为我们可以从早期图像中筛选出更精细的特征。</p>
+<p>和上一版一样，<strong>YOLOv3使用的聚类方法还是K-Means，它能用来确定边界框的先验</strong>。在实验中，我们选择了<strong>9个聚类和3个尺寸</strong>，然后<strong>在不同尺寸的边界框上均匀分割维度聚类</strong>。在COCO数据集上，这9个聚类分别是：(10×13)、(16×30)、(33×23)、(30×61)、(62×45)、(59×119)、(116 × 90)、(156 × 198)、(373 × 326)。</p>
+<h2 id="2-4-特征提取器"><a href="#2-4-特征提取器" class="headerlink" title="2.4 特征提取器"></a>2.4 特征提取器</h2><p>这次我们用了一个新的网络来提取特征，它融合了YOLOv2、Darknet-19以及其他新型残差网络，由连续的3×3和1×1卷积层组合而成，当然，其中也添加了一些shortcut connection，整体体量也更大。因为一共有53个卷积层，所以我们称它为……别急哦…… <strong>Darknet-53</strong>！<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703190743849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>这个新型网络在性能上远超Darknet-19，但在效率上同样优于ResNet-101和ResNet-152。下表是在ImageNet上的实验结果：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703190800188.png"><br>每个网络都使用相同的设置进行训练，输入256×256的图片，并进行单精度测试。运行环境为Titan X。我们得出的结论是Darknet-53在精度上可以与最先进的分类器相媲美，同时它的浮点运算更少，速度也更快。和ResNet-101相比，Darknet-53的速度是前者的1.5倍；而ResNet-152和它性能相似，但用时却是它的2倍以上。</p>
+<p>Darknet-53也可以实现每秒最高的测量浮点运算。这意味着网络结构可以更好地利用GPU，使其预测效率更高，速度更快。这主要是因为ResNets的层数太多，效率不高。</p>
+<h2 id="2-5-训练"><a href="#2-5-训练" class="headerlink" title="2.5 训练"></a>2.5 训练</h2><p>我们只是输入完整的图像，并没有做其他处理。实验过程中涉及的多尺寸训练、大量数据增强和batch normalization等操作均符合标准。模型训练和测试的框架是Darknet神经网络。</p>
+<h1 id="3-我们做了什么"><a href="#3-我们做了什么" class="headerlink" title="3.我们做了什么"></a>3.我们做了什么</h1><p>YOLOv3的表现非常好！请参见表3，就COCO奇怪的平均mAP成绩而言，它与SSD变体相当，但速度提高了3倍。尽管如此，它仍然比像RetinaNet这样的模型要差一点。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703190922841.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>如果仔细看这个表，我们可以发现在IOU=.5（即表中的AP50）时，YOLOv3非常强大。它几乎与RetinaNet相当，并且远高于SSD变体。这就证明了它其实是一款非常灵活的检测器，擅长为检测对象生成合适的边界框。然而，随着IOU阈值增加，YOLOv3的性能开始同步下降，这时它预测的边界框就不能做到完美对齐了。</p>
+<p>在过去，YOLO一直被用于小型对象检测。但现在我们可以预见其中的演变趋势，随着新的多尺寸预测功能上线，YOLOv3将具备更高的APS性能。但是它目前在中等尺寸或大尺寸物体上的表现还相对较差，仍需进一步的完善。</p>
+<p>当我们基于AP50指标绘制精度和速度时（见图3），我们发现YOLOv3与其他检测系统相比具有显着优势。也就是说，它的速度正在越来越快。</p>
+<h1 id="4-失败的尝试"><a href="#4-失败的尝试" class="headerlink" title="4.失败的尝试"></a>4.失败的尝试</h1><p>我们在研究YOLOv3时尝试了很多东西，以下是我们还记得的一些失败案例。</p>
+<p>Anchor box坐标的偏移预测。我们尝试了常规的Anchor box预测方法，比如利用线性激活将坐标x、y的偏移程度预测为边界框宽度或高度的倍数。但我们发现这种做法降低了模型的稳定性，且效果不佳。</p>
+<p>用线性方法预测x,y，而不是使用逻辑方法。我们尝试使用线性激活来直接预测x，y的offset，而不是逻辑激活。这降低了mAP成绩。</p>
+<p>focal loss。我们尝试使用focal loss，但它使我们的mAP降低了2点。 对于focal loss函数试图解决的问题，YOLOv3从理论上来说已经很强大了，因为它具有单独的对象预测和条件类别预测。因此，对于大多数例子来说，类别预测没有损失？或者其他的东西？我们并不完全确定。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190703192252867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">双IOU阈值和真值分配。在训练期间，Faster RCNN用了两个IOU阈值，如果预测的边框与.7的ground truth重合，那它是个正面的结果；如果在[.3—.7]之间，则忽略；如果和.3的ground truth重合，那它就是个负面的结果。我们尝试了这种思路，但效果并不好。</p>
+<p>我们对现在的更新状况很满意，它看起来已经是最佳状态。有些技术可能会产生更好的结果，但我们还需要对它们做一些调整来稳定训练。</p>
+<h1 id="5-更新的意义"><a href="#5-更新的意义" class="headerlink" title="5.更新的意义"></a>5.更新的意义</h1><p>YOLOv3是一个很好的检测器，它速度快，精度又高。虽然基于.3和.95的新指标，它在COCO上的成绩不如人意，但对于旧的检测指标.5 IOU，它还是非常不错的。</p>
+<p>所以为什么我们要改变指标呢？最初的COCO论文里只有这样一句含糊其词的话：一旦评估完成，就会生成评估指标结果。Russakovsky等人曾经有一份报告，说人类很难区分.3与.5的IOU：“训练人们用肉眼区别IOU值为0.3的边界框和0.5的边界框是一件非常困难的事”。[16]如果人类都难以区分这种差异，那这个指标有多重要？</p>
+<p>但也许更好的一个问题是：现在我们有了这些检测器，我们能用它们来干嘛？很多从事这方面研究的人都受雇于Google和Facebook，我想至少我们知道如果这项技术发展得完善，那他们绝对不会把它用来收集你的个人信息然后卖给……等等，你把事实说出来了！！哦哦。</p>
+<p>那么其他巨资资助计算机视觉研究的人还有军方，他们从来没有做过任何可怕的事情，比如用新技术杀死很多人……呸呸呸</p>
+<p>我有很多希望！我希望大多数人会把计算机视觉技术用于快乐的、幸福的事情上，比如计算国家公园里斑马的数量[11]，或者追踪小区附近到底有多少猫[17]。但是计算机视觉技术的应用已经步入歧途了，作为研究人员，我们有责任思考自己的工作可能带给社会的危害，并考虑怎么减轻这种危害。我们非常珍惜这个世界。</p>
+<p>就是翻译一遍，没看太懂</p>
+<p>YOLOv3论文：<a href="https://pjreddie.com/media/files/papers/YOLOv3.pdf" target="_blank" rel="noopener">https://pjreddie.com/media/files/papers/YOLOv3.pdf</a><br>参考：<a href="https://blog.csdn.net/leviopku/article/details/82660381" target="_blank" rel="noopener">https://blog.csdn.net/leviopku/article/details/82660381</a><br>YOLO官网： <a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">https://pjreddie.com/darknet/yolo/</a><br>tensorflow的实现代码：<a href="https://github.com/wizyoung/YOLOv3_TensorFlow" target="_blank" rel="noopener">https://github.com/wizyoung/YOLOv3_TensorFlow</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="yolo v3 论文笔记">https://xiao-hu.com.cn/2019/07/03/yolo-v3-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/03/yolo-v2-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="yolo v2 论文笔记">
+                  <i class="fa fa-chevron-left"></i> yolo v2 论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/04/SPPNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="SPPNet论文笔记">
+                  SPPNet论文笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Introduction"><span class="nav-number">2.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-更新"><span class="nav-number">3.</span> <span class="nav-text">2.更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1边界框预测"><span class="nav-number">3.1.</span> <span class="nav-text">2.1边界框预测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-2-分类预测"><span class="nav-number">4.</span> <span class="nav-text">2.2 分类预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-跨尺寸预测"><span class="nav-number">4.1.</span> <span class="nav-text">2.3 跨尺寸预测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-特征提取器"><span class="nav-number">4.2.</span> <span class="nav-text">2.4 特征提取器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-训练"><span class="nav-number">4.3.</span> <span class="nav-text">2.5 训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-我们做了什么"><span class="nav-number">5.</span> <span class="nav-text">3.我们做了什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-失败的尝试"><span class="nav-number">6.</span> <span class="nav-text">4.失败的尝试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-更新的意义"><span class="nav-number">7.</span> <span class="nav-text">5.更新的意义</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

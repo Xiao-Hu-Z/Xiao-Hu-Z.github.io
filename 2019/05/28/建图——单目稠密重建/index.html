@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="立体视觉在稠密重建,我们需要知道每一个像素点(或大部分像素点)的距离,那么大致上有以下几种解决方案: 使用单目相机,利用移动相机之后进行三角化,测量像素的距离。 使用双目相机,利用左右目的视差计算像素的距离(多目原理相同)。 使用 RGB-D 相机直接获得像素距离。 极线搜索与块匹配极线搜索 左边的相机观测到了某个像素 $p_1$ 。由于这是一个单目相机，无从知道它的深度,所以假设这个深度可能在某">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建图——单目稠密重建">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;05&#x2F;28&#x2F;%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="立体视觉在稠密重建,我们需要知道每一个像素点(或大部分像素点)的距离,那么大致上有以下几种解决方案: 使用单目相机,利用移动相机之后进行三角化,测量像素的距离。 使用双目相机,利用左右目的视差计算像素的距离(多目原理相同)。 使用 RGB-D 相机直接获得像素距离。 极线搜索与块匹配极线搜索 左边的相机观测到了某个像素 $p_1$ 。由于这是一个单目相机，无从知道它的深度,所以假设这个深度可能在某">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827134907280.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827143259384.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019082714335453.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827143444296.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827145429633.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827145500754.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827145629530.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827145919656.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827150302411.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827150355437.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827150420372.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019082715045226.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827150521194.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827165724538.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T08:21:26.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827134907280.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/05/28/%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>建图——单目稠密重建 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/05/28/%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          建图——单目稠密重建
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-28 16:20:24" itemprop="dateCreated datePublished" datetime="2019-05-28T16:20:24+08:00">2019-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:21:26" itemprop="dateModified" datetime="2019-11-19T16:21:26+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="立体视觉"><a href="#立体视觉" class="headerlink" title="立体视觉"></a>立体视觉</h3><p>在稠密重建,我们需要知道每一个像素点(或大部分像素点)的距离,那么大致上有以下几种解决方案:</p><ol>
+<li>使用单目相机,利用移动相机之后进行三角化,测量像素的距离。</li>
+<li>使用双目相机,利用左右目的视差计算像素的距离(多目原理相同)。</li>
+<li>使用 RGB-D 相机直接获得像素距离。</li>
+</ol><h3 id="极线搜索与块匹配"><a href="#极线搜索与块匹配" class="headerlink" title="极线搜索与块匹配"></a>极线搜索与块匹配</h3><p><strong>极线搜索</strong><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827134907280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p><ul>
+<li><p>左边的相机观测到了某个像素 $p_1$ 。由于这是一个单目相机，无从知道它的深度,所以假设这个深度可能在某个区域之内,不妨说是某最小值到无穷远之间:(d min , +∞)。因此,该像素对应的空间点就分布在某条线段上。在另一个视角(右侧相机)看来,这条线段的投影也形成图像平面上的一条线,称为极线。当我们知道两个相机间的运动时,这条极线也是能够确定的。</p>
+</li>
+<li><p>在特征点法中，通过特征匹配得到p2的位置，然而现在没有描述子，只能在极线上搜索和p1想的比较相似的点。（可能沿着极线一直走比较每个像素与p1的相似程度。）</p>
+</li>
+</ul><a id="more"></a>
+
+
+
+<p><strong>块匹配</strong></p>
+<ul>
+<li><p>在$p_1$周围取一个大小为w*w的小块，然后在极线上也取很多同样大小的小块进行比较，就可以在一定程度上提高区分性。这就是所谓的块匹配（只有假设在不同图像间整个小块的灰度值不变）。<br>取了$p_1$周围的小块，并且在极线上也取了很多个小块。不妨把p1周围的小块记成$A ∈ R^{w×w}$，把极线上的n个小块记成$B_i,i=1…n$。几种不同的方法计算小块与小块间的差异：</p>
+<ol>
+<li>SAD(Sum of Absolute Difference)。顾名思义,即取两个小块的差的绝对值之和:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827143259384.png#pic_center"></li>
+<li>SSD(Sum of Squared Distance）<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019082714335453.png#pic_center"></li>
+<li>NCC(Normalized Cross Correlation)(归一化互相关)，计算的是两个小块的相关性:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827143444296.png#pic_center"></li>
+</ol>
+<p>除了这些简单的版本外，我们可以先把每个小块的均值去掉。去掉均值后，我们准许像“小块B比A整体上亮一些，但仍然很相似”这样的情况。因此比之前的更加可靠一些。</p>
+</li>
+</ul>
+<h3 id="高斯分布的深度滤波器"><a href="#高斯分布的深度滤波器" class="headerlink" title="高斯分布的深度滤波器"></a>高斯分布的深度滤波器</h3><p> 对像素点深度的估计，本身亦可建模为一个状态估计问题，存在滤波器与非线性优化两种求解思路，采用计算量较少的滤波器方式。<br>下面介绍并演示高斯分布假设下的深度滤波器：</p>
+<p> 设某个像素点的深度 d 服从:<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827145429633.png#pic_center"><br> 而每当新的数据到来,我们都会观测到它的深度。同样的,假设这次观测亦是一个高斯分布:<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827145500754.png#pic_center"><br> 由于我们仅有观测方程而没有运动方程，所以这里深度仅用到了信息融合部分。设融合后的 d的分布为 $N(μ_{f use} , σ_{fuse}^2$ )，有：<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827145629530.png#pic_center"><br> 只考虑由几何关系带来的不确定性（不考虑光度不确定性等），计算深度不确定性$σ_{obs}^2$<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827145919656.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>考虑某次极线搜索，我们找到了p1对应的p2点，从而观测到了p1的深度值，认为p1对应的三维点为P。<br>记 $O_1P$ 为 p,$O_1O_2$ 为相机的平移 t ，$O_2P$ 记为 a。并且,把这个三角形的下面两个角记作 α, β。现在,考虑极线 $l_2$ 上存在着一个像素大小的误差,使得 β 角变成了 β ′ ,而 p 也变成了 p ′ ,并记上面那个角为 γ。我们要问的是,这一个像素的误差,会导致 p ′ 与 p 产生多大的差距呢?</p>
+<p> 由集合关系得：<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827150302411.png#pic_center"><br> 对 $p_2$ 扰动一个像素,将使得 β 产生一个变化量 δβ,由于相机焦距为 f ,于是:<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827150355437.png#pic_center"><br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827150420372.png#pic_center"><br> p ′ 的大小可以求得:<br> <img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019082715045226.png#pic_center"><br>由此,我们确定了由单个像素的不确定引起的深度不确定性。如果认为极线搜索的块<br>匹配仅有一个像素的误差,那么就可以设:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827150521194.png#pic_center"><br>如果极线搜索的不确定性大于一个像素,我们亦可按照此推导来放大这个不确定性。</p>
+<p>估计稠密深度的一个完整的过程:</p>
+<ol>
+<li><p>假设所有像素的深度满足某个初始的高斯分布。</p>
+</li>
+<li><p>当新数据产生时，通过极线搜索和块匹配确定投影点位置。</p>
+</li>
+<li><p>根据几何关系计算三角化后的深度及不确定性。</p>
+<ol>
+<li>将当前观测融合进上一次的估计中。若收敛则停止计算，否则返回第2步。</li>
+</ol>
+</li>
+</ol>
+<h3 id="实践："><a href="#实践：" class="headerlink" title="实践："></a>实践：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/timer.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// for sophus </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sophus/se3.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> Sophus::SE3;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for eigen </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Core&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Geometry&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> Eigen;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**********************************************</span></span><br><span class="line"><span class="comment">* 本程序演示了单目相机在已知轨迹下的稠密深度估计</span></span><br><span class="line"><span class="comment">* 使用极线搜索 + NCC 匹配的方式，与书本的 13.2 节对应</span></span><br><span class="line"><span class="comment">* 请注意本程序并不完美，你完全可以改进它——我其实在故意暴露一些问题。</span></span><br><span class="line"><span class="comment">***********************************************/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// parameters </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> boarder = <span class="number">20</span>; 	<span class="comment">// 边缘宽度</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> width = <span class="number">640</span>;  	<span class="comment">// 宽度 </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> height = <span class="number">480</span>;  	<span class="comment">// 高度</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> fx = <span class="number">481.2f</span>;	<span class="comment">// 相机内参</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> fy = <span class="number">-480.0f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> cx = <span class="number">319.5f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> cy = <span class="number">239.5f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ncc_window_size = <span class="number">2</span>;	<span class="comment">// NCC 取的窗口半宽度</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ncc_area = (<span class="number">2</span>*ncc_window_size+<span class="number">1</span>)*(<span class="number">2</span>*ncc_window_size+<span class="number">1</span>); <span class="comment">// NCC窗口面积</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> min_cov = <span class="number">0.1</span>;	<span class="comment">// 收敛判定：最小方差</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> max_cov = <span class="number">10</span>;	<span class="comment">// 发散判定：最大方差</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// 重要的函数 </span></span><br><span class="line"><span class="comment">// 从 REMODE 数据集读取数据  </span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">readDatasetFiles</span><span class="params">( </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="built_in">string</span>&amp; path, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; color_image_files, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt;SE3&gt;&amp; poses </span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据新的图像更新深度估计</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">update</span><span class="params">( </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> SE3&amp; T_C_R, </span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth, </span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth_cov </span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 极线搜索 </span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">epipolarSearch</span><span class="params">( </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> SE3&amp; T_C_R, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="keyword">double</span>&amp; depth_mu, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="keyword">double</span>&amp; depth_cov,</span></span></span><br><span class="line"><span class="function"><span class="params">    Vector2d&amp; pt_curr</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新深度滤波器 </span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">updateDepthFilter</span><span class="params">( </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> SE3&amp; T_C_R, </span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth, </span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth_cov</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算 NCC 评分 </span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">NCC</span><span class="params">( <span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> Vector2d&amp; pt_ref, <span class="keyword">const</span> Vector2d&amp; pt_curr )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 双线性灰度插值 </span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">getBilinearInterpolatedValue</span><span class="params">( <span class="keyword">const</span> Mat&amp; img, <span class="keyword">const</span> Vector2d&amp; pt )</span> </span>&#123;</span><br><span class="line">    uchar* d = &amp; img.data[ <span class="keyword">int</span>(pt(<span class="number">1</span>,<span class="number">0</span>))*img.step+<span class="keyword">int</span>(pt(<span class="number">0</span>,<span class="number">0</span>)) ];</span><br><span class="line">    <span class="keyword">double</span> xx = pt(<span class="number">0</span>,<span class="number">0</span>) - <span class="built_in">floor</span>(pt(<span class="number">0</span>,<span class="number">0</span>)); </span><br><span class="line">    <span class="keyword">double</span> yy = pt(<span class="number">1</span>,<span class="number">0</span>) - <span class="built_in">floor</span>(pt(<span class="number">1</span>,<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">return</span>  (( <span class="number">1</span>-xx ) * ( <span class="number">1</span>-yy ) * <span class="keyword">double</span>(d[<span class="number">0</span>]) +</span><br><span class="line">            xx* ( <span class="number">1</span>-yy ) * <span class="keyword">double</span>(d[<span class="number">1</span>]) +</span><br><span class="line">            ( <span class="number">1</span>-xx ) *yy* <span class="keyword">double</span>(d[img.step]) +</span><br><span class="line">            xx*yy*<span class="keyword">double</span>(d[img.step+<span class="number">1</span>]))/<span class="number">255.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// 一些小工具 </span></span><br><span class="line"><span class="comment">// 显示估计的深度图 </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">plotDepth</span><span class="params">( <span class="keyword">const</span> Mat&amp; depth )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 像素到相机坐标系 </span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> Vector3d <span class="title">px2cam</span> <span class="params">( <span class="keyword">const</span> Vector2d px )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Vector3d ( </span><br><span class="line">        (px(<span class="number">0</span>,<span class="number">0</span>) - cx)/fx,</span><br><span class="line">        (px(<span class="number">1</span>,<span class="number">0</span>) - cy)/fy, </span><br><span class="line">        <span class="number">1</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 相机坐标系到像素 </span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> Vector2d <span class="title">cam2px</span> <span class="params">( <span class="keyword">const</span> Vector3d p_cam )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Vector2d (</span><br><span class="line">        p_cam(<span class="number">0</span>,<span class="number">0</span>)*fx/p_cam(<span class="number">2</span>,<span class="number">0</span>) + cx, </span><br><span class="line">        p_cam(<span class="number">1</span>,<span class="number">0</span>)*fy/p_cam(<span class="number">2</span>,<span class="number">0</span>) + cy </span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检测一个点是否在图像边框内</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">inside</span><span class="params">( <span class="keyword">const</span> Vector2d&amp; pt )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> pt(<span class="number">0</span>,<span class="number">0</span>) &gt;= boarder &amp;&amp; pt(<span class="number">1</span>,<span class="number">0</span>)&gt;=boarder </span><br><span class="line">        &amp;&amp; pt(<span class="number">0</span>,<span class="number">0</span>)+boarder&lt;width &amp;&amp; pt(<span class="number">1</span>,<span class="number">0</span>)+boarder&lt;=height;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显示极线匹配 </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">showEpipolarMatch</span><span class="params">( <span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> Vector2d&amp; px_ref, <span class="keyword">const</span> Vector2d&amp; px_curr )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显示极线 </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">showEpipolarLine</span><span class="params">( <span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> Vector2d&amp; px_ref, <span class="keyword">const</span> Vector2d&amp; px_min_curr, <span class="keyword">const</span> Vector2d&amp; px_max_curr )</span></span>;</span><br><span class="line"><span class="comment">// ------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( argc != <span class="number">2</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage: dense_mapping path_to_test_dataset"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 从数据集读取数据</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; color_image_files; </span><br><span class="line">    <span class="built_in">vector</span>&lt;SE3&gt; poses_TWC;</span><br><span class="line">    <span class="keyword">bool</span> ret = readDatasetFiles( argv[<span class="number">1</span>], color_image_files, poses_TWC );</span><br><span class="line">    <span class="keyword">if</span> ( ret==<span class="literal">false</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Reading image files failed!"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"read total "</span>&lt;&lt;color_image_files.size()&lt;&lt;<span class="string">" files."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 第一张图</span></span><br><span class="line">    Mat ref = imread( color_image_files[<span class="number">0</span>], <span class="number">0</span> );                <span class="comment">// gray-scale image </span></span><br><span class="line">    SE3 pose_ref_TWC = poses_TWC[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">double</span> init_depth   = <span class="number">3.0</span>;    <span class="comment">// 深度初始值</span></span><br><span class="line">    <span class="keyword">double</span> init_cov2    = <span class="number">3.0</span>;    <span class="comment">// 方差初始值 </span></span><br><span class="line">    <span class="function">Mat <span class="title">depth</span><span class="params">( height, width, CV_64F, init_depth )</span></span>;             <span class="comment">// 深度图</span></span><br><span class="line">    <span class="function">Mat <span class="title">depth_cov</span><span class="params">( height, width, CV_64F, init_cov2 )</span></span>;          <span class="comment">// 深度图方差 </span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> index=<span class="number">1</span>; index&lt;color_image_files.size(); index++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"*** loop "</span>&lt;&lt;index&lt;&lt;<span class="string">" ***"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        Mat curr = imread( color_image_files[index], <span class="number">0</span> );       </span><br><span class="line">        <span class="keyword">if</span> (curr.data == <span class="literal">nullptr</span>) <span class="keyword">continue</span>;</span><br><span class="line">        SE3 pose_curr_TWC = poses_TWC[index];</span><br><span class="line">        SE3 pose_T_C_R = pose_curr_TWC.inverse() * pose_ref_TWC; <span class="comment">// 坐标转换关系： T_C_W * T_W_R = T_C_R </span></span><br><span class="line">        update( ref, curr, pose_T_C_R, depth, depth_cov );</span><br><span class="line">        plotDepth( depth );</span><br><span class="line">        imshow(<span class="string">"image"</span>, curr);</span><br><span class="line">        waitKey(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"estimation returns, saving depth map ..."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    imwrite( <span class="string">"depth.png"</span>, depth );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"done."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">readDatasetFiles</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="built_in">string</span>&amp; path, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt; <span class="built_in">string</span> &gt;&amp; color_image_files, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;SE3&gt;&amp; poses</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span><span class="params">( path+<span class="string">"/first_200_frames_traj_over_table_input_sequence.txt"</span>)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> ( !fin ) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ( !fin.eof() )</span><br><span class="line">    &#123;</span><br><span class="line">		<span class="comment">// 数据格式：图像文件名 tx, ty, tz, qx, qy, qz, qw ，注意是 TWC 而非 TCW</span></span><br><span class="line">        <span class="built_in">string</span> image; </span><br><span class="line">        fin&gt;&gt;image; </span><br><span class="line">        <span class="keyword">double</span> data[<span class="number">7</span>];</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">double</span>&amp; d:data ) fin&gt;&gt;d;</span><br><span class="line">        </span><br><span class="line">        color_image_files.push_back( path+<span class="built_in">string</span>(<span class="string">"/images/"</span>)+image );</span><br><span class="line">        poses.push_back(</span><br><span class="line">            SE3( Quaterniond(data[<span class="number">6</span>], data[<span class="number">3</span>], data[<span class="number">4</span>], data[<span class="number">5</span>]), </span><br><span class="line">                 Vector3d(data[<span class="number">0</span>], data[<span class="number">1</span>], data[<span class="number">2</span>]))</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">if</span> ( !fin.good() ) <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对整个深度图进行更新</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">update</span><span class="params">(<span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> SE3&amp; T_C_R, Mat&amp; depth, Mat&amp; depth_cov )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> x=boarder; x&lt;width-boarder; x++ )</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> y=boarder; y&lt;height-boarder; y++ )</span><br><span class="line">        &#123;</span><br><span class="line">			<span class="comment">// 遍历每个像素</span></span><br><span class="line">            <span class="keyword">if</span> ( depth_cov.ptr&lt;<span class="keyword">double</span>&gt;(y)[x] &lt; min_cov || depth_cov.ptr&lt;<span class="keyword">double</span>&gt;(y)[x] &gt; max_cov ) <span class="comment">// 深度已收敛或发散</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="comment">// 在极线上搜索 (x,y) 的匹配 </span></span><br><span class="line">            Vector2d pt_curr; </span><br><span class="line">            <span class="keyword">bool</span> ret = epipolarSearch ( </span><br><span class="line">                ref, </span><br><span class="line">                curr, </span><br><span class="line">                T_C_R, </span><br><span class="line">                Vector2d(x,y), </span><br><span class="line">                depth.ptr&lt;<span class="keyword">double</span>&gt;(y)[x], </span><br><span class="line">                <span class="built_in">sqrt</span>(depth_cov.ptr&lt;<span class="keyword">double</span>&gt;(y)[x]),</span><br><span class="line">                pt_curr</span><br><span class="line">            );</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> ( ret == <span class="literal">false</span> ) <span class="comment">// 匹配失败</span></span><br><span class="line">                <span class="keyword">continue</span>; </span><br><span class="line">            </span><br><span class="line">			<span class="comment">// 取消该注释以显示匹配</span></span><br><span class="line">            showEpipolarMatch( ref, curr, Vector2d(x,y), pt_curr );</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 匹配成功，更新深度图 </span></span><br><span class="line">            updateDepthFilter( Vector2d(x,y), pt_curr, T_C_R, depth, depth_cov );</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 极线搜索</span></span><br><span class="line"><span class="comment">// 方法见书 13.2 13.3 两节</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">epipolarSearch</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> SE3&amp; T_C_R, <span class="keyword">const</span> Vector2d&amp; pt_ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="keyword">double</span>&amp; depth_mu, <span class="keyword">const</span> <span class="keyword">double</span>&amp; depth_cov, </span></span></span><br><span class="line"><span class="function"><span class="params">    Vector2d&amp; pt_curr )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Vector3d f_ref = px2cam( pt_ref );</span><br><span class="line">    f_ref.normalize();</span><br><span class="line">    Vector3d P_ref = f_ref*depth_mu;	<span class="comment">// 参考帧的 P 向量</span></span><br><span class="line">    </span><br><span class="line">    Vector2d px_mean_curr = cam2px( T_C_R*P_ref ); <span class="comment">// 按深度均值投影的像素</span></span><br><span class="line">    <span class="keyword">double</span> d_min = depth_mu<span class="number">-3</span>*depth_cov, d_max = depth_mu+<span class="number">3</span>*depth_cov;</span><br><span class="line">    <span class="keyword">if</span> ( d_min&lt;<span class="number">0.1</span> ) d_min = <span class="number">0.1</span>;</span><br><span class="line">    Vector2d px_min_curr = cam2px( T_C_R*(f_ref*d_min) );	<span class="comment">// 按最小深度投影的像素</span></span><br><span class="line">    Vector2d px_max_curr = cam2px( T_C_R*(f_ref*d_max) );	<span class="comment">// 按最大深度投影的像素</span></span><br><span class="line">    </span><br><span class="line">    Vector2d epipolar_line = px_max_curr - px_min_curr;	<span class="comment">// 极线（线段形式）</span></span><br><span class="line">    Vector2d epipolar_direction = epipolar_line;		<span class="comment">// 极线方向 </span></span><br><span class="line">    epipolar_direction.normalize();</span><br><span class="line">    <span class="keyword">double</span> half_length = <span class="number">0.5</span>*epipolar_line.norm();	<span class="comment">// 极线线段的半长度</span></span><br><span class="line">    <span class="keyword">if</span> ( half_length&gt;<span class="number">100</span> ) half_length = <span class="number">100</span>;   <span class="comment">// 我们不希望搜索太多东西 </span></span><br><span class="line">    </span><br><span class="line">	<span class="comment">// 取消此句注释以显示极线（线段）</span></span><br><span class="line">    showEpipolarLine( ref, curr, pt_ref, px_min_curr, px_max_curr );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在极线上搜索，以深度均值点为中心，左右各取半长度</span></span><br><span class="line">    <span class="keyword">double</span> best_ncc = <span class="number">-1.0</span>;</span><br><span class="line">    Vector2d best_px_curr; </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">double</span> l=-half_length; l&lt;=half_length; l+=<span class="number">0.7</span> )  <span class="comment">// l+=sqrt(2) </span></span><br><span class="line">    &#123;</span><br><span class="line">        Vector2d px_curr = px_mean_curr + l*epipolar_direction;  <span class="comment">// 待匹配点</span></span><br><span class="line">        <span class="keyword">if</span> ( !inside(px_curr) )</span><br><span class="line">            <span class="keyword">continue</span>; </span><br><span class="line">        <span class="comment">// 计算待匹配点与参考帧的 NCC</span></span><br><span class="line">        <span class="keyword">double</span> ncc = NCC( ref, curr, pt_ref, px_curr );</span><br><span class="line">        <span class="keyword">if</span> ( ncc&gt;best_ncc )</span><br><span class="line">        &#123;</span><br><span class="line">            best_ncc = ncc; </span><br><span class="line">            best_px_curr = px_curr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( best_ncc &lt; <span class="number">0.85f</span> )      <span class="comment">// 只相信 NCC 很高的匹配</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>; </span><br><span class="line">    pt_curr = best_px_curr;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">NCC</span> <span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_ref, <span class="keyword">const</span> Vector2d&amp; pt_curr</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 零均值-归一化互相关</span></span><br><span class="line">    <span class="comment">// 先算均值</span></span><br><span class="line">    <span class="keyword">double</span> mean_ref = <span class="number">0</span>, mean_curr = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; values_ref, values_curr; <span class="comment">// 参考帧和当前帧的均值</span></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> x=-ncc_window_size; x&lt;=ncc_window_size; x++ )</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> y=-ncc_window_size; y&lt;=ncc_window_size; y++ )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">double</span> value_ref = <span class="keyword">double</span>(ref.ptr&lt;uchar&gt;( <span class="keyword">int</span>(y+pt_ref(<span class="number">1</span>,<span class="number">0</span>)) )[ <span class="keyword">int</span>(x+pt_ref(<span class="number">0</span>,<span class="number">0</span>)) ])/<span class="number">255.0</span>;</span><br><span class="line">            mean_ref += value_ref;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">double</span> value_curr = getBilinearInterpolatedValue( curr, pt_curr+Vector2d(x,y) );</span><br><span class="line">            mean_curr += value_curr;</span><br><span class="line">            </span><br><span class="line">            values_ref.push_back(value_ref);</span><br><span class="line">            values_curr.push_back(value_curr);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    mean_ref /= ncc_area;</span><br><span class="line">    mean_curr /= ncc_area;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">// 计算 Zero mean NCC</span></span><br><span class="line">    <span class="keyword">double</span> numerator = <span class="number">0</span>, demoniator1 = <span class="number">0</span>, demoniator2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;values_ref.size(); i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">double</span> n = (values_ref[i]-mean_ref) * (values_curr[i]-mean_curr);</span><br><span class="line">        numerator += n;</span><br><span class="line">        demoniator1 += (values_ref[i]-mean_ref)*(values_ref[i]-mean_ref);</span><br><span class="line">        demoniator2 += (values_curr[i]-mean_curr)*(values_curr[i]-mean_curr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> numerator / <span class="built_in">sqrt</span>( demoniator1*demoniator2+<span class="number">1e-10</span> );   <span class="comment">// 防止分母出现零</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">updateDepthFilter</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_ref, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Vector2d&amp; pt_curr, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> SE3&amp; T_C_R,</span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth, </span></span></span><br><span class="line"><span class="function"><span class="params">    Mat&amp; depth_cov</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 我是一只喵</span></span><br><span class="line">    <span class="comment">// 不知道这段还有没有人看</span></span><br><span class="line">    <span class="comment">// 用三角化计算深度</span></span><br><span class="line">    SE3 T_R_C = T_C_R.inverse();</span><br><span class="line">    Vector3d f_ref = px2cam( pt_ref );</span><br><span class="line">    f_ref.normalize();</span><br><span class="line">    Vector3d f_curr = px2cam( pt_curr );</span><br><span class="line">    f_curr.normalize();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 方程</span></span><br><span class="line">    <span class="comment">// d_ref * f_ref = d_cur * ( R_RC * f_cur ) + t_RC</span></span><br><span class="line">    <span class="comment">// =&gt; [ f_ref^T f_ref, -f_ref^T f_cur ] [d_ref] = [f_ref^T t]</span></span><br><span class="line">    <span class="comment">//    [ f_cur^T f_ref, -f_cur^T f_cur ] [d_cur] = [f_cur^T t]</span></span><br><span class="line">    <span class="comment">// 二阶方程用克莱默法则求解并解之</span></span><br><span class="line">    Vector3d t = T_R_C.translation();</span><br><span class="line">    Vector3d f2 = T_R_C.rotation_matrix() * f_curr; </span><br><span class="line">    Vector2d b = Vector2d ( t.dot ( f_ref ), t.dot ( f2 ) );</span><br><span class="line">    <span class="keyword">double</span> A[<span class="number">4</span>];</span><br><span class="line">    A[<span class="number">0</span>] = f_ref.dot ( f_ref );</span><br><span class="line">    A[<span class="number">2</span>] = f_ref.dot ( f2 );</span><br><span class="line">    A[<span class="number">1</span>] = -A[<span class="number">2</span>];</span><br><span class="line">    A[<span class="number">3</span>] = - f2.dot ( f2 );</span><br><span class="line">    <span class="keyword">double</span> d = A[<span class="number">0</span>]*A[<span class="number">3</span>]-A[<span class="number">1</span>]*A[<span class="number">2</span>];</span><br><span class="line">    Vector2d lambdavec = </span><br><span class="line">        Vector2d (  A[<span class="number">3</span>] * b ( <span class="number">0</span>,<span class="number">0</span> ) - A[<span class="number">1</span>] * b ( <span class="number">1</span>,<span class="number">0</span> ),</span><br><span class="line">                    -A[<span class="number">2</span>] * b ( <span class="number">0</span>,<span class="number">0</span> ) + A[<span class="number">0</span>] * b ( <span class="number">1</span>,<span class="number">0</span> )) /d;</span><br><span class="line">    Vector3d xm = lambdavec ( <span class="number">0</span>,<span class="number">0</span> ) * f_ref;</span><br><span class="line">    Vector3d xn = t + lambdavec ( <span class="number">1</span>,<span class="number">0</span> ) * f2;</span><br><span class="line">    Vector3d d_esti = ( xm+xn ) / <span class="number">2.0</span>;  <span class="comment">// 三角化算得的深度向量</span></span><br><span class="line">    <span class="keyword">double</span> depth_estimation = d_esti.norm();   <span class="comment">// 深度值</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 计算不确定性（以一个像素为误差）</span></span><br><span class="line">    Vector3d p = f_ref*depth_estimation;</span><br><span class="line">    Vector3d a = p - t; </span><br><span class="line">    <span class="keyword">double</span> t_norm = t.norm();</span><br><span class="line">    <span class="keyword">double</span> a_norm = a.norm();</span><br><span class="line">    <span class="keyword">double</span> alpha = <span class="built_in">acos</span>( f_ref.dot(t)/t_norm );</span><br><span class="line">    <span class="keyword">double</span> beta = <span class="built_in">acos</span>( -a.dot(t)/(a_norm*t_norm));</span><br><span class="line">    <span class="keyword">double</span> beta_prime = beta + <span class="built_in">atan</span>(<span class="number">1</span>/fx);</span><br><span class="line">    <span class="keyword">double</span> gamma = M_PI - alpha - beta_prime;</span><br><span class="line">    <span class="keyword">double</span> p_prime = t_norm * <span class="built_in">sin</span>(beta_prime) / <span class="built_in">sin</span>(gamma);</span><br><span class="line">    <span class="keyword">double</span> d_cov = p_prime - depth_estimation; </span><br><span class="line">    <span class="keyword">double</span> d_cov2 = d_cov*d_cov;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 高斯融合</span></span><br><span class="line">    <span class="keyword">double</span> mu = depth.ptr&lt;<span class="keyword">double</span>&gt;( <span class="keyword">int</span>(pt_ref(<span class="number">1</span>,<span class="number">0</span>)) )[ <span class="keyword">int</span>(pt_ref(<span class="number">0</span>,<span class="number">0</span>)) ];</span><br><span class="line">    <span class="keyword">double</span> sigma2 = depth_cov.ptr&lt;<span class="keyword">double</span>&gt;( <span class="keyword">int</span>(pt_ref(<span class="number">1</span>,<span class="number">0</span>)) )[ <span class="keyword">int</span>(pt_ref(<span class="number">0</span>,<span class="number">0</span>)) ];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">double</span> mu_fuse = (d_cov2*mu+sigma2*depth_estimation) / ( sigma2+d_cov2);</span><br><span class="line">    <span class="keyword">double</span> sigma_fuse2 = ( sigma2 * d_cov2 ) / ( sigma2 + d_cov2 );</span><br><span class="line">    </span><br><span class="line">    depth.ptr&lt;<span class="keyword">double</span>&gt;( <span class="keyword">int</span>(pt_ref(<span class="number">1</span>,<span class="number">0</span>)) )[ <span class="keyword">int</span>(pt_ref(<span class="number">0</span>,<span class="number">0</span>)) ] = mu_fuse; </span><br><span class="line">    depth_cov.ptr&lt;<span class="keyword">double</span>&gt;( <span class="keyword">int</span>(pt_ref(<span class="number">1</span>,<span class="number">0</span>)) )[ <span class="keyword">int</span>(pt_ref(<span class="number">0</span>,<span class="number">0</span>)) ] = sigma_fuse2;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后面这些太简单我就不注释了（其实是因为懒）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">plotDepth</span><span class="params">(<span class="keyword">const</span> Mat&amp; depth)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    imshow( <span class="string">"depth"</span>, depth*<span class="number">0.4</span> );</span><br><span class="line">    waitKey(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">showEpipolarMatch</span><span class="params">(<span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> Vector2d&amp; px_ref, <span class="keyword">const</span> Vector2d&amp; px_curr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Mat ref_show, curr_show;</span><br><span class="line">    cv::cvtColor( ref, ref_show, CV_GRAY2BGR );</span><br><span class="line">    cv::cvtColor( curr, curr_show, CV_GRAY2BGR );</span><br><span class="line">    </span><br><span class="line">    cv::circle( ref_show, cv::Point2f(px_ref(<span class="number">0</span>,<span class="number">0</span>), px_ref(<span class="number">1</span>,<span class="number">0</span>)), <span class="number">5</span>, cv::Scalar(<span class="number">0</span>,<span class="number">0</span>,<span class="number">250</span>), <span class="number">2</span>);</span><br><span class="line">    cv::circle( curr_show, cv::Point2f(px_curr(<span class="number">0</span>,<span class="number">0</span>), px_curr(<span class="number">1</span>,<span class="number">0</span>)), <span class="number">5</span>, cv::Scalar(<span class="number">0</span>,<span class="number">0</span>,<span class="number">250</span>), <span class="number">2</span>);</span><br><span class="line">    </span><br><span class="line">    imshow(<span class="string">"ref"</span>, ref_show );</span><br><span class="line">    imshow(<span class="string">"curr"</span>, curr_show );</span><br><span class="line">    waitKey(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">showEpipolarLine</span><span class="params">(<span class="keyword">const</span> Mat&amp; ref, <span class="keyword">const</span> Mat&amp; curr, <span class="keyword">const</span> Vector2d&amp; px_ref, <span class="keyword">const</span> Vector2d&amp; px_min_curr, <span class="keyword">const</span> Vector2d&amp; px_max_curr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    Mat ref_show, curr_show;</span><br><span class="line">    cv::cvtColor( ref, ref_show, CV_GRAY2BGR );</span><br><span class="line">    cv::cvtColor( curr, curr_show, CV_GRAY2BGR );</span><br><span class="line">    </span><br><span class="line">    cv::circle( ref_show, cv::Point2f(px_ref(<span class="number">0</span>,<span class="number">0</span>), px_ref(<span class="number">1</span>,<span class="number">0</span>)), <span class="number">5</span>, cv::Scalar(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">2</span>);</span><br><span class="line">    cv::circle( curr_show, cv::Point2f(px_min_curr(<span class="number">0</span>,<span class="number">0</span>), px_min_curr(<span class="number">1</span>,<span class="number">0</span>)), <span class="number">5</span>, cv::Scalar(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">2</span>);</span><br><span class="line">    cv::circle( curr_show, cv::Point2f(px_max_curr(<span class="number">0</span>,<span class="number">0</span>), px_max_curr(<span class="number">1</span>,<span class="number">0</span>)), <span class="number">5</span>, cv::Scalar(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">2</span>);</span><br><span class="line">    cv::line( curr_show, Point2f(px_min_curr(<span class="number">0</span>,<span class="number">0</span>), px_min_curr(<span class="number">1</span>,<span class="number">0</span>)), Point2f(px_max_curr(<span class="number">0</span>,<span class="number">0</span>), px_max_curr(<span class="number">1</span>,<span class="number">0</span>)), Scalar(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    imshow(<span class="string">"ref"</span>, ref_show );</span><br><span class="line">    imshow(<span class="string">"curr"</span>, curr_show );</span><br><span class="line">    waitKey(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注解:</strong></p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827165724538.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/05/28/%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA/" title="建图——单目稠密重建">https://xiao-hu.com.cn/2019/05/28/%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/05/28/%E4%BD%8D%E5%A7%BF%E5%9B%BE-Pose-Graph-%E4%BC%98%E5%8C%96/" rel="next" title="位姿图(Pose Graph)优化">
+                  <i class="fa fa-chevron-left"></i> 位姿图(Pose Graph)优化
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/" rel="prev" title="视觉slam十四讲 10.后端１">
+                  视觉slam十四讲 10.后端１ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#立体视觉"><span class="nav-number">1.</span> <span class="nav-text">立体视觉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#极线搜索与块匹配"><span class="nav-number">2.</span> <span class="nav-text">极线搜索与块匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯分布的深度滤波器"><span class="nav-number">3.</span> <span class="nav-text">高斯分布的深度滤波器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实践："><span class="nav-number">4.</span> <span class="nav-text">实践：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

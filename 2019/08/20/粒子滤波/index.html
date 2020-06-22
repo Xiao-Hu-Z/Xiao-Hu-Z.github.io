@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="粒子滤波理论粒子滤波通过非参数化的蒙特卡洛 (Monte Carlo) 模拟方法来实现递推贝叶斯滤波，适用 于任何能用状态空间模型描述的非线性系统，精度可以逼近最优估计。粒子滤波器具有简单、易于实现等特点，它为分析非线性动态系统提供了一种有效的解决方法，从而引起 目标跟踪、信号处理以及自动控制等领域的广泛关注。首先概述用于求解目标状态后验概率的贝叶斯滤波理论 随后介绍具有普遍适用性的粒子滤波器，最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="粒子滤波(PF)">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;08&#x2F;20&#x2F;%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="粒子滤波理论粒子滤波通过非参数化的蒙特卡洛 (Monte Carlo) 模拟方法来实现递推贝叶斯滤波，适用 于任何能用状态空间模型描述的非线性系统，精度可以逼近最优估计。粒子滤波器具有简单、易于实现等特点，它为分析非线性动态系统提供了一种有效的解决方法，从而引起 目标跟踪、信号处理以及自动控制等领域的广泛关注。首先概述用于求解目标状态后验概率的贝叶斯滤波理论 随后介绍具有普遍适用性的粒子滤波器，最">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019082114452597.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821151700602.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821152025820.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821152255977.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826114055219.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821160035880.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821160001494.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821160415685.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821160745836.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821161103465.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821161204410.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190821161407463.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826110136724.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826110126696.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826110458830.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826110606359.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826110647797.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826112642193.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826113328640.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826113632863.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826113659119.png#pic_center">
+<meta property="og:updated_time" content="2019-11-19T08:29:05.616Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019082114452597.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/08/20/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>粒子滤波(PF) | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/20/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          粒子滤波(PF)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-20 16:27:49" itemprop="dateCreated datePublished" datetime="2019-08-20T16:27:49+08:00">2019-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:29:05" itemprop="dateModified" datetime="2019-11-19T16:29:05+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">滤波算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="粒子滤波理论"><a href="#粒子滤波理论" class="headerlink" title="粒子滤波理论"></a>粒子滤波理论</h1><p>粒子滤波通过非参数化的蒙特卡洛 (Monte Carlo) 模拟方法来实现递推贝叶斯滤波，适用 于任何能用状态空间模型描述的非线性系统，精度可以逼近最优估计。粒子滤波器具有简单、易于实现等特点，它为分析非线性动态系统提供了一种有效的解决方法，从而引起 目标跟踪、信号处理以及自动控制等领域的广泛关注。首先概述用于求解目标状态后验概率的贝叶斯滤波理论 随后介绍具有普遍适用性的粒子滤波器，最后针对当前粒子滤波器存在的粒子 多样性丧失问题，提出了一种量子进化粒子滤波算法。</p><a id="more"></a>
+<h2 id="贝叶斯滤波"><a href="#贝叶斯滤波" class="headerlink" title="贝叶斯滤波"></a>贝叶斯滤波</h2><p>动态系统的目标跟踪问题可以通过图所示的状态空间模型来描述。本节在贝叶斯滤 波框架下讨论目标跟踪问题。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019082114452597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>其中 f(), h() 分别为状态转移方程与观测方程，在目标跟踪问题中，动态系统的状态空间模型可描述为</p>
+<script type="math/tex; mode=display">x_k=f(x_{k-1})+u_{k-1}</script><script type="math/tex; mode=display">y_k=h(x_k)+v_k</script><p>为了描述方便，用$X_k=x_{0:k}$={$x_0,x_1,…,x_k$}与$Y_k=y_{0:k}$={$y_0,y_1,…,y_k$}分别表示 0 到 k 时刻所有的状态与观测值。 </p>
+<p>在处理目标跟踪问题时， 通常假设目标的状态转移过程服从一阶马尔可夫模型：</p>
+<ul>
+<li>假设当前时刻的==状态$x_k$ 只与上一时刻的状$x_{k-1}$有关==</li>
+<li>假设观测值相互独立，即==观测值$y_k$只与 k 时刻的状态$x_k$有关==</li>
+</ul>
+<p>贝叶斯滤波为非线性系统的状态估计问题提供了一种基于概率分布形式的解决方案。 贝叶斯滤波将状态估计视为一个概率推理过程， 即将目标状态的估计问题转换为利用贝叶斯公式求解后验概率密度$p(x_k|Y_k)$ 或滤波概率密度$p(x_k|Y_k)$，进而获得目标状态的最优估计。<br><strong>贝叶斯滤波包含预测和更新两个阶段</strong>：</p>
+<ul>
+<li>预测过程：利用系统模型预测状态的先验概率密度 </li>
+<li>更新过程：利用最新的测量值对先验概率密度进行修正，得到后验概率密度</li>
+</ul>
+<p>假设已知$k_1$ 时刻的概率密度函数为$p(x_{k-1}|Y_{k-1})$，贝叶斯滤波的具体过程如下：</p>
+<ol>
+<li><strong>预测过程</strong>，由$p(x_{k-1}|Y_{k-1})$得到$p(x_{k}|Y_{k-1})$<script type="math/tex; mode=display">p(x_k,x_{k-1}|Y_{k-1})=p(x_k|x_{k-1},Y_{k-1})   p(x_{k-1}|Y_{k-1})</script></li>
+</ol>
+<p>当给定$x_{k-1}$时，状态$x_k$与$Y_{k-1}$相互独立，所以：</p>
+<script type="math/tex; mode=display">p(x_k,x_{k-1}|Y_{k-1})=p(x_k|x_{k-1})p(x_{k-1}|Y_{k-1})</script><p>对上式$x_{k-1}$积分：</p>
+<script type="math/tex; mode=display">p(x_k,|Y_{k-1})=\int p(x_k|x_{k-1})p(x_{k-1}|Y_{k-1})dx_{k-1}</script><ol>
+<li><strong>跟新过程</strong>，由$p(x_k,|Y_{k-1})$得到$p(x_k,|Y_{k})$：<br>获取 k 时刻的测量$y_k$后，利用贝叶斯公式对先验概率密度进行更新，得到后验概率<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821151700602.png#pic_center"><br>假设$y_k$只有$x_k$决定，即：<script type="math/tex; mode=display">p(y_k|x_k,Y_{k-1})=p(y_k|x_k)</script>因此：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821152025820.png#pic_center"><br>其中，$p(y_k|Y_{k-1})$为归一化常数<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821152255977.png#pic_center"><br>贝叶斯滤波以递推的形式给出后验 (或滤波 )概率密度函数的最优解。 目标状态的最优估计值可由后验 ( 或滤波 ) 概率密度函数进行计算。 通常根据极大后验 (MAP) 准则或最小均方误 差(MMSE) 准则，将具有极大后验概率密度的状态或条件均值作为系统状态的估计值，即<script type="math/tex; mode=display">\hat{x}_k^{MAP}=argminp(x_k|Y_k)</script><script type="math/tex; mode=display">\hat{x}_k^{MMSE}=\int E([x_k|Y_k])=\int f(x_k)p(x_k|Y_k)dx_k</script>贝叶斯滤波需要进行积分运算，除了一些特殊的系统模型（如线性高斯系统，有限状态的离散系统）之外，对于一般的非线性、非高斯系统，贝叶斯滤波很难得到后验概率的封闭解析式。因此，现有的非线性滤波器多采用近似的计算方法解决积分问题，以此来获取估计的次优解。在系统的非线性模型可由在当前状态展开的线性模型有限近似的前提下，基于一阶或二阶Taylor级数展开的扩展Kalman滤波得到广泛应用。在一般情况下，逼近概率密度函数比逼近非线性函数容易实现。据此，Julier与Uhlmann提出一种Unscented Kalman滤波器，通过选定的sigma点来精确估计随机变量经非线性变换后的均值和方差，从而更好的近似状态的概率密度函数，其理论估计精度优于扩展Kalman滤波。获取次优解的另外一中方案便是基于蒙特卡洛模拟的粒子滤波器。<br><strong>## 粒子滤波<br>标准的粒子滤波算法流程为</strong>：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826114055219.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></li>
+</ol>
+<h3 id="贝叶斯重要性采样"><a href="#贝叶斯重要性采样" class="headerlink" title="贝叶斯重要性采样"></a>贝叶斯重要性采样</h3><p>粒子滤波算法的核心思想便是利用一系列随机样本的加权和表示后验概率密度，通过求和来近似积分操作。假设可以从后验概率密度$p(x_k,Y_k)$中抽取N个独立同分布的随机样本$x_k^{(i)},i=1,…,N$，则有</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821160035880.png#pic_center"><br>这里$x_k$为连续变量，$\delta (x-x_k)$为单位冲激函数(狄拉克函数)，即$\delta (x-x_k)=0$，$x  \neq x_k$,且$\int \delta (x)dx=1$.</p>
+<p>当$x_k$为离散变量时，后验概率分布$P(x_k|Y_k)$可近似逼近为:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821160001494.png"><br>设 $x_k^{(i)}$为从后验概率密度函数$p(x_k|Y_k)$中获取的采样粒子，则任意函数$f(x_k)$ 的期望<br>估计可以用求和方式逼近，即<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821160415685.png#pic_center"><br>蒙特卡洛方法一般可以归纳为以下三个步骤：</p>
+<ul>
+<li>构造概率模型。对于本身具有随机性质的问题，主要工作是正确地描述和模拟这个概 率过程。对于确定性问题，比如计算定积分、求解线性方程组、偏微分方程等问题，采 用蒙特卡洛方法求解需要事先构造一个人为的概率过程，将它的某些参量视为问题的 解。</li>
+<li>从指定概率分布中采样。产生服从己知概率分布的随机变量是实现蒙特卡洛方法模拟 试验的关键步骤。 </li>
+<li>建立各种估计量的估计。一般说来，构造出概率模型并能从中抽样后，便可进行现模 拟试验。随后，就要确定一个随机变量，将其作为待求解问题的解进行估计。 </li>
+</ul>
+<p>在实际计算中， <strong>通常无法直接从后验概率分布中采样， 如何得到服从后验概率分布的随机样本是蒙特卡洛方法中基本的问题之一</strong>。 ==重要性采样法引入一个已知的、 容易采样的重要性概率密度函数$q(x_k|Y_k)$，从中生成采样粒子，利用这些随机样本的加权和来逼近后验滤<br>波概率密度$p(x_k|Y_k)$== ，如图 2.3所示。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821160745836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>令{$x_k^{(i)}, w_k^{(i)},i=1,…,N$表示一支撑点，其中$x_k^{(i)}$是 k 时刻第 i 个粒子的状态，其相应的权值为$ w_k^{(i)}$ ，则后验滤波概率密度可以表示为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821161103465.png#pic_center"><br>其中：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821161204410.png#pic_center"><br>当采样粒子的数目很大时，便可近似逼近真实的后验概率密度函数。任意函数$f(x_k)$的期望估计为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190821161407463.png#pic_center"></p>
+<h3 id="序贯重要性采样算法"><a href="#序贯重要性采样算法" class="headerlink" title="序贯重要性采样算法"></a>序贯重要性采样算法</h3><p>在基于重要性采样的蒙特卡洛模拟方法中，估计后验滤波概率需要利用所有的观测数据，每次新的观测数据来到都需要重新计算整个状态序列的重要性权值。序贯重要性采样作为粒子滤波的基础，它将统计学中的序贯分析方法应用到的蒙特卡洛方法中，从而实现后验滤波概率密度的递推估计。假设重要性概率密度函数$q(x_{0:k}|y_{1:k})$可以分解为</p>
+<script type="math/tex; mode=display">q(x_{0:k}|y_{1:k})=q(x_{0:k-1}|y_{1:k-1}) q(x_k|x_{0:k-1}，y_{1:k-1})</script><p>设系统状态是一个马尔可夫过程，且给定系统状态下各次观测独立，则有<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826110136724.png#pic_center"></p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826110126696.png#pic_center"></p>
+<p>后验概率密度函数的递归形式可以表示为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826110458830.png#pic_center"><br>粒子权值$w_k^{(i)}$的递归形式可以表示为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826110606359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"><br>通常，需要对粒子权值进行归一化处理，即<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826110647797.png#pic_center"><br>序贯重要性采样算法从重要性概率密度函数中生成采样粒子，并随着测量值的依次到来递推求得相应的权值，最终以粒子加权和的形式来描述后验滤波概率密度，进而得到状态估计。序贯重要性采样算法的流程可以用如下伪代码描述：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826112642193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h3 id="重要密度函数的选择"><a href="#重要密度函数的选择" class="headerlink" title="重要密度函数的选择"></a>重要密度函数的选择</h3><p>重要性概率密度函数的选择对粒子滤波的性能有很大影响，在设计与实现粒子滤波器的过程中十分重要。在工程应用中，通常选取状态变量的转移概率密度函数作为重要性概率密度函数。此时，粒子的权值为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826113328640.png#pic_center"><br>转移概率的形式简单且易于实现，在观测精度不高的场合，将其作为重要性概率密度函数可以取得较好的滤波效果。<br>然而，==采用转移概率密度函数作为重要性概率密度函数没有考虑最新观测数据所提供的信息，从中抽取的样本与真实后验分布产生的样本存在一定的偏差==，特别是当观测模型具有较高的精度或预测先验与似然函数之间重叠部分较少时，这种偏差尤为明显。<br>择重要性概率密度函数的一个标准是使得粒子权值的方差最小。Doucet等给出的最优重要性概率密度函数为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826113632863.png#pic_center"><br>此时，粒子的权值为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826113659119.png#pic_center"></p>
+<blockquote>
+<p>参考<br><a href="https://wenku.baidu.com/view/362c5868a300a6c30c229fbd.html" target="_blank" rel="noopener">粒子滤波理论一看就懂</a></p>
+</blockquote>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/08/20/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2/" title="粒子滤波(PF)">https://xiao-hu.com.cn/2019/08/20/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/08/18/%E6%97%A0%E8%BF%B9%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" rel="next" title="无迹卡尔曼滤波（UKF)">
+                  <i class="fa fa-chevron-left"></i> 无迹卡尔曼滤波（UKF)
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/08/22/ROS%E4%B8%8B%E5%8D%95%E7%9B%AE%E5%92%8C%E5%8F%8C%E7%9B%AE%E7%9B%B8%E6%9C%BA%E7%9A%84%E6%A0%87%E5%AE%9A/" rel="prev" title="ROS下单目和双目相机的标定">
+                  ROS下单目和双目相机的标定 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#粒子滤波理论"><span class="nav-number">1.</span> <span class="nav-text">粒子滤波理论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#贝叶斯滤波"><span class="nav-number">1.1.</span> <span class="nav-text">贝叶斯滤波</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯重要性采样"><span class="nav-number">1.1.1.</span> <span class="nav-text">贝叶斯重要性采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序贯重要性采样算法"><span class="nav-number">1.1.2.</span> <span class="nav-text">序贯重要性采样算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要密度函数的选择"><span class="nav-number">1.1.3.</span> <span class="nav-text">重要密度函数的选择</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

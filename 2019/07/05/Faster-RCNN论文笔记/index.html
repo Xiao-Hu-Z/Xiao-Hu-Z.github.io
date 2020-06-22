@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Abstract最先进的目标检测网络依靠 region proposal algorithms来假设目标的位置。SPPnet和Fast R-CNN等研究已经减少了这些检测网络的运行时间，使得 region proposal 计算成为一个瓶颈Region Proposal Network (RPN) ，RPN网络与检测网络共享完整的图像卷积特征，大大减少了生成候选框所需的时间。RPN是一个全卷积网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Faster RCNN论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;05&#x2F;Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="Abstract最先进的目标检测网络依靠 region proposal algorithms来假设目标的位置。SPPnet和Fast R-CNN等研究已经减少了这些检测网络的运行时间，使得 region proposal 计算成为一个瓶颈Region Proposal Network (RPN) ，RPN网络与检测网络共享完整的图像卷积特征，大大减少了生成候选框所需的时间。RPN是一个全卷积网络">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019070520494280.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190705213529708.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190705214048719.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190707102207744.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190707091634227.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190707100848566.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019070615200549.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190706160205873.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190706165056620.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019070710063327.png">
+<meta property="og:updated_time" content="2019-11-19T09:11:30.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019070520494280.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Faster RCNN论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Faster RCNN论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-05 17:10:40" itemprop="dateCreated datePublished" datetime="2019-07-05T17:10:40+08:00">2019-07-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:11:30" itemprop="dateModified" datetime="2019-11-19T17:11:30+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>最先进的目标检测网络依靠 region proposal algorithms来假设目标的位置。SPPnet和Fast R-CNN等研究已经减少了这些检测网络的运行时间，使得 region proposal 计算成为一个瓶颈<br>Region Proposal Network (RPN) ，RPN网络与检测网络共享完整的图像卷积特征，大大减少了生成候选框所需的时间。RPN是一个全卷积网络，可以同时在每个位置预测目标边界和目标分数。RPN经过端到端的训练，可以生成高质量的区域建议，使用Fast R-CNN来用于检测。</p><a id="more"></a>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>引入了新的区域建议网络（RPN），它们共享最先进目标检测网络的卷积层。通过在测试时共享卷积，计算区域建议的边际成本很小（例如，每张图像10ms）<br>RPN旨在有效预测具有广泛（各种）尺度和长宽比的区域提议。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019070520494280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>与使用图像金字塔（图1，a）或滤波器金字塔（图1，b）的流行方法相比，我们引入新的“锚”盒anchor boxes作为多种尺度和长宽比的参考。我们的方案可以被认为是回归参考d 金字塔（图1，c），它避免了枚举多种比例或长宽比的图像或滤波器。这个模型在使用单尺度图像进行训练和测试时运行良好，从而有利于运行速度。</p>
+<p>解决多尺度和尺寸的不同方案。<br>（a）构建图像和特征映射金字塔，分类器以各种尺度运行。<br>（b）在特征映射上运行具有多个比例/大小的滤波器的金字塔。<br>（c）我们在回归函数中使用参考边界框金字塔。<br>为了将RPN与Fast R-CNN 目标检测网络相结合，我们提出了一种训练方案，在微调区域建议(region proposal)任务和微调目标检测之间进行交替，同时保持区域提议的固定。该方案快速收敛，并产生两个任务之间共享的具有卷积特征的统一网络。</p>
+<h1 id="2-RELATED-WORK"><a href="#2-RELATED-WORK" class="headerlink" title="2. RELATED WORK"></a>2. RELATED WORK</h1><p><strong>Object Proposals</strong><br>广泛使用的目标提议方法包括基于超像素分组（例如，选择性搜索，CPMC，MCG）和那些基于滑动窗口的方法（例如窗口中的目标，EdgeBoxes）。目标提议方法被采用为独立于检测器（例如，选择性搜索目标检测器，R-CNN和Fast R-CNN）的外部模块。<br><strong>用于目标检测的深度网络</strong><br>R-CNN方法[5]端到端地对CNN进行训练，将建议区域分类为目标类别或背景。R-CNN主要作为分类器，并不能预测目标边界（除了通过边界框回归进行细化）。其准确度取决于区域提议模块的性能<br>使用深度网络来预测目标边界框的方法:</p>
+<ul>
+<li>OverFeat方法中，训练一个全连接层来预测假定单个目标定位任务的边界框坐标。然后将全连接层变成卷积层，用于检测多个类别的目标</li>
+<li>MultiBox方法，从网络中生成区域提议，网络最后的全连接层同时预测多个类别不相关的边界框，并推广到OverFeat的“单边界框”方式。</li>
+</ul>
+<p>OverFeat计算图像金字塔的卷积特征用于分类，定位和检测。共享卷积特征映射的自适应大小池化Adaptively-sized pooling (SPP) （SPP）被开发用于有效的基于区域的目标检测，和语义分割。Fast R-CNN能够对共享卷积特征进行端到端的检测器训练。</p>
+<h1 id="3-FASTER-R-CNN"><a href="#3-FASTER-R-CNN" class="headerlink" title="3. FASTER R-CNN"></a>3. FASTER R-CNN</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190705213529708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190705214048719.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>Faster R-CNN由两个模块组成：</p>
+<ul>
+<li>proposes regions的深度全卷积网络</li>
+<li>使用提议区域的Fast R-CNN检测器<h2 id="3-1-Region-Proposal-Networks"><a href="#3-1-Region-Proposal-Networks" class="headerlink" title="3.1 Region Proposal Networks"></a>3.1 Region Proposal Networks</h2>RPN的作用是输入一张图像，输出一批矩形候选框，类似于以往目标检测中的selective search，网络结构是基于卷积神经网络，但输出包含二分类softmax和bbox回归的多任务模型。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190707102207744.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><h3 id="3-1-1-Anchors"><a href="#3-1-1-Anchors" class="headerlink" title="3.1.1 Anchors"></a>3.1.1 Anchors</h3><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190707091634227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在每个滑动窗口位置，我们同时预测多个区域建议，其中每个位置可能提议的最大数目表示为k。因此，reg层具有个4k输出，编码k个边界框的坐标，cls层输出2k个分数，估计每个建议是目标或不是目标的概率。锚点位于所讨论的滑动窗口的中心，并与一个尺度和长宽比相关。默认情况下，我们使用3个尺度和3个长宽比，在每个滑动位置产生k=9个锚点。对于大小为W×H（通常约为2400）的卷积特征映射，总共有WHk个锚点。</li>
+</ul>
+<p>训练、测试区域提案和目标检测网络都是在单一尺度的图像上,缩放图像为600*600,多尺度特征提取可能提高准确率但是不利于速度与准确率之间的权衡。<br>对于anchor，我们用3个简单的尺度:$128^2$ ,$256^2$ ,$512^2$ pixels，和3个简单的长宽比，1:1，1:2，2:1，共９种矩形。</p>
+<p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190707100848566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h3 id="Translation-Invariant-Anchors"><a href="#Translation-Invariant-Anchors" class="headerlink" title="Translation-Invariant Anchors"></a>Translation-Invariant Anchors</h3><p>方法的一个重要特性是它是平移不变的，无论是在锚点还是计算相对于锚点的区域提议的函数。如果在图像中平移目标，提议应该平移，并且同样的函数应该能够在任一位置预测建议(proposal)。<br>平移不变特性也减小了模型的大小。MultiBox有(4 + 1) × 800-维的全连接输出层，而我们的方法在个锚点的情况下有(4 + 2) × 9-维的卷积输出层。因此，我们的输出层具有(512 × (4 + 2) × 9个参数（对于VGG-16），比MultiBox输出层的个参数（(1536 × (4 + 1) × 800 for GoogleNet）少了两个数量级</p>
+<h3 id="Multi-Scale-Anchors-as-Regression-References"><a href="#Multi-Scale-Anchors-as-Regression-References" class="headerlink" title="Multi-Scale Anchors as Regression References"></a>Multi-Scale Anchors as Regression References</h3><p>多尺度预测有两种流行的方法：</p>
+<ul>
+<li>基于图像/特征金字塔，例如DPM和基于CNN的方法，在多个尺度上进行缩放，并且针对每个尺度计算特征映射（HOG或深卷积特征），非常耗时。<ul>
+<li>在特征映射上使用多尺度（和/或长宽比）的滑动窗口。例如，在DPM中，使用不同的滤波器大小（例如5×7和7×5）分别对不同长宽比的模型进行训练。可以把它看作是一个“滤波器金字塔”。</li>
+</ul>
+</li>
+</ul>
+<p>作为比较，我们的基于锚点方法被建立在锚点金字塔上，这是更具成本效益的。方法参照多尺度和长宽比的锚盒来分类和回归边界框。它只依赖单一尺度的图像和特征映射，并使用单一尺寸的滤波器（特征映射上的滑动窗口）</p>
+<p>这种基于锚点的多尺度设计，可以简单地使用在单尺度图像上计算的卷积特征，Fast R-CNN检测器也是这样做的。多尺度锚点设计是共享特征的关键组件，不需要额外的成本来处理尺度。</p>
+<h3 id="3-1-2-Loss-Function"><a href="#3-1-2-Loss-Function" class="headerlink" title="3.1.2 Loss Function"></a>3.1.2 Loss Function</h3><p> 正负样本的判定：</p>
+<ul>
+<li>某anchor与任一目标区域的IOU最大，则判为目标<ul>
+<li>某anchor与任一目标区域的IOU&gt;0.7则判定有目标，即正样本</li>
+<li>某anchor与任一目标区域的IOU&lt;0.3则判为背景，即负样本</li>
+</ul>
+</li>
+</ul>
+<p><strong>损失函数：</strong><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019070615200549.png"><br>i is the index of an anchor in a mini-batch<br>$p_i$ is the predicted probability of anchor i being an<br>object.<br>The ground-truth label$p^<em>_i$  is 1 if the anchor is positive, and is 0 if the anchor is negative.<br>$t_i$ is a vector representing the 4 parameterized coordinates<br>of the predicted bounding box<br>$t_i^</em>$ is that of the ground-truth box associated with a positive anchor.<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190706160205873.png"><br>Variables $x$, $x_a$ , and $x^*$are for the predicted box, anchor box, and ground-truth box respectively (likewise for y, w, h)</p>
+<h3 id="3-1-3-训练RPN"><a href="#3-1-3-训练RPN" class="headerlink" title="3.1.3 训练RPN"></a>3.1.3 训练RPN</h3><ol>
+<li>RPN可以使用反向传播和SGD实现端到端的训练，依照Fast R-CNN中的“image-centric”采样策略训练这个网络。每个mini-batch由包含了许多正负样本的单个图像组成。们可以优化所有anchor的损失函数，但是这会偏向于负样本，因为正负样本主要根据IOU值大小的来标定的，这样一来负样本就比较多。</li>
+<li><strong>训练数据：</strong> 从一图片中随机提取256个anchor去计算一个mini-batch的损失函数。正样本：负样本=1:1，如果一个图像中的正样本数小于128，则多用一些负样本以满足有256个Proposal可以用于训练。</li>
+<li><strong>权重参数</strong>：前面几层参数是经ImageNet数据集预训练后的vgg16来进行初始化，新增的两层为权重均设置为满足0均值，标准差为0.01的高斯分布来进行初始化。</li>
+<li><strong>学习率</strong>：基于PASCAL VOC数据集，前60k的mini-batch，Lr =0.001，之后的20k个mini-batch，Lr = 0.0001</li>
+<li><strong>优化算法</strong>：Momentum，其中设置momentum = 0.9，权重衰减系数设置为0.0005。</li>
+</ol>
+<h2 id="3-2-RPN和Fast-R-CNN共享图像卷积特征"><a href="#3-2-RPN和Fast-R-CNN共享图像卷积特征" class="headerlink" title="3.2 RPN和Fast R-CNN共享图像卷积特征"></a>3.2 RPN和Fast R-CNN共享图像卷积特征</h2><p>区域生成网络（RPN）和fast RCNN都需要一个原始特征提取网络<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190706165056620.png"><br>介绍三种能使网络共享图像特征的方法：</p>
+<ul>
+<li>交叉训练(Alternating training)。首先训练RPN，然后拿着RPN生成的proposals去训练Fast R-CNN，然后通过训练Fast R-CNN得到调整的网络再去初始化RPN</li>
+<li>近似联合训练:直接在上图结构上训练。在backward计算梯度时，把提取的ROI区域当做固定值看待；在backward更新参数时，来自RPN和来自Fast RCNN的增量合并输入原始特征提取层。</li>
+<li>非近似联合训练。如上所述，由RPN预测的检测框也是输入的函数。 Fast R-CNN中的RoI池化层接受卷积特征以及预测的检测框作为输入，因此理论上有效的反向传播求解器也应该包含梯度w.r.t.框坐标。这些梯度在上述近似联合训练中被忽略。在非近似联合培训解决方案中，我们需要一个可区分w.r.t.框坐标的RoI池化层。</li>
+</ul>
+<p><strong>四步交替训练</strong>：</p>
+<ul>
+<li>单独训练RPN网络，网络参数由预训练模型载入</li>
+<li><p>单独训练Fast-RCNN网络，将第一步RPN的输出候选区域作为检测网络的输入。具体而言，RPN输出一个候选框，通过候选框截取原图像，并将截取后的图像通过几次conv-pool，然后再通过roi-pooling和fc再输出两条支路，一条是目标分类softmax，另一条是bbox回归。截止到现在，两个网络并没有共享参数，只是分开训练了</p>
+</li>
+<li><p>用检测网络初始化RPN训练，但我们固定共享的卷积层，并且只微调RPN独有的层，现在两个网络共享卷积层了。</p>
+</li>
+<li>保持共享的卷积层固定，微调Fast R-CNN的fc层。这样，两个网络共享相同的卷积层，构成一个统一的网络。</li>
+</ul>
+<p>测试阶段流程图如下：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019070710063327.png"></p>
+<p>论文原文：<a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">https://arxiv.org/abs/1506.01497</a><br>参考：<br><a href="https://blog.csdn.net/jcli1_14/article/details/82193784" target="_blank" rel="noopener">Faster -RCNN算法笔记</a><br><a href="https://blog.csdn.net/u014365862/article/details/77887230" target="_blank" rel="noopener">Faster RCNN：RPN，anchor，sliding windows</a><br><a href="https://www.cnblogs.com/guoyaohua/p/9488119.html" target="_blank" rel="noopener">Faster R-CNN：详解目标检测的实现过程</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="Faster RCNN论文笔记">https://xiao-hu.com.cn/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/05/Fast-R-CNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="Fast R-CNN论文笔记">
+                  <i class="fa fa-chevron-left"></i> Fast R-CNN论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/06/AlexNet/" rel="prev" title="AlexNet">
+                  AlexNet <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Introduction"><span class="nav-number">2.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RELATED-WORK"><span class="nav-number">3.</span> <span class="nav-text">2. RELATED WORK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-FASTER-R-CNN"><span class="nav-number">4.</span> <span class="nav-text">3. FASTER R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Region-Proposal-Networks"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Region Proposal Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-Anchors"><span class="nav-number">4.1.1.</span> <span class="nav-text">3.1.1 Anchors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Translation-Invariant-Anchors"><span class="nav-number">4.1.2.</span> <span class="nav-text">Translation-Invariant Anchors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Scale-Anchors-as-Regression-References"><span class="nav-number">4.1.3.</span> <span class="nav-text">Multi-Scale Anchors as Regression References</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-Loss-Function"><span class="nav-number">4.1.4.</span> <span class="nav-text">3.1.2 Loss Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-3-训练RPN"><span class="nav-number">4.1.5.</span> <span class="nav-text">3.1.3 训练RPN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-RPN和Fast-R-CNN共享图像卷积特征"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 RPN和Fast R-CNN共享图像卷积特征</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="安装KalibrKalibr工程有两种，一种是已经编译好的包，叫CDE package,另一种是未经编译的源文件。选择源码安装安装依赖项1sudo apt-get install python-setuptools python-rosinstall ipython libeigen3-devlibboost-all-dev doxygen libopencv-dev ros-indigo-vis">
+<meta name="keywords" content="标定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小觅双目+IMU联合标定">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;08&#x2F;23&#x2F;%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="安装KalibrKalibr工程有两种，一种是已经编译好的包，叫CDE package,另一种是未经编译的源文件。选择源码安装安装依赖项1sudo apt-get install python-setuptools python-rosinstall ipython libeigen3-devlibboost-all-dev doxygen libopencv-dev ros-indigo-vis">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-19T08:37:27.137Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>小觅双目+IMU联合标定 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          小觅双目+IMU联合标定
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-23 16:33:38" itemprop="dateCreated datePublished" datetime="2019-08-23T16:33:38+08:00">2019-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:37:27" itemprop="dateModified" datetime="2019-11-19T16:37:27+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="安装Kalibr"><a href="#安装Kalibr" class="headerlink" title="安装Kalibr"></a>安装Kalibr</h1><p>Kalibr工程有两种，一种是已经编译好的包，叫CDE package,另一种是未经编译的源文件。<br>选择源码安装</p><h3 id="安装依赖项"><a href="#安装依赖项" class="headerlink" title="安装依赖项"></a>安装依赖项</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-setuptools <span class="keyword">python</span>-rosinstall ipython libeigen3-devlibboost-<span class="keyword">all</span>-dev doxygen libopencv-dev ros-indigo-vision-opencvros-indigo-image-transport-plugins ros-indigo-cmake-modulespython-software-properties software-properties-common libpoco-devpython-matplotlib <span class="keyword">python</span>-scipy <span class="keyword">python</span>-git <span class="keyword">python</span>-pip ipython libtbb-devlibblas-dev liblapack-dev <span class="keyword">python</span>-catkin-tools libv4l-dev</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip installpython-igraph <span class="comment">--upgrade</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建工作空间"><a href="#创建工作空间" class="headerlink" title="创建工作空间"></a>创建工作空间</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p ~/kalibr_workspace/src</span><br><span class="line">cd ~/kalibr_workspace</span><br><span class="line">source /opt/ros/kinetic/setup.bash</span><br><span class="line">catkin init</span><br><span class="line">catkin<span class="built_in"> config </span>--extend /opt/ros/kinetic</span><br><span class="line">catkin<span class="built_in"> config </span>--cmake-args <span class="attribute">-DCMAKE_BUILD_TYPE</span>=Release</span><br></pre></td></tr></table></figure>
+<h3 id="下载并编译"><a href="#下载并编译" class="headerlink" title="下载并编译"></a>下载并编译</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> ~<span class="string">/kalibr_workspace/src</span></span><br><span class="line">git clone https:<span class="string">//github.com/ethz-asl/Kalibr.git</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">cd</span> ~<span class="string">/kalibr_workspace</span></span><br><span class="line">catkin build -DCMAKE_BUILD_TYPE=Release -j4</span><br></pre></td></tr></table></figure>
+<h3 id="设置环境"><a href="#设置环境" class="headerlink" title="设置环境"></a>设置环境</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> ~<span class="regexp">/kalibr_workspace/</span>devel<span class="regexp">/setup.bash</span></span><br></pre></td></tr></table></figure>
+<h1 id="mynteye标定"><a href="#mynteye标定" class="headerlink" title="mynteye标定"></a>mynteye标定</h1><h3 id="get-img-params获得："><a href="#get-img-params获得：" class="headerlink" title="get_img_params获得："></a>get_img_params获得：</h3><p> <strong>获取相机标定参数</strong><br> <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/samples/</span>_output<span class="regexp">/bin/</span>tutorials<span class="regexp">/get_img_params</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">I/get_img_params.cc:<span class="number">44</span> Intrinsics left: &#123;pinhole, width: <span class="number">752</span>, height: <span class="number">480</span>, fx: <span class="number">362.20059643202876032</span>, fy: <span class="number">363.50065250745848289</span>, cx: <span class="number">406.58699068023440759</span>, cy: <span class="number">234.35161110061483214</span>, model: <span class="number">0</span>, coeffs: [<span class="number">-0.25034765682756088</span>, <span class="number">0.05057939920289762</span>, <span class="number">-0.00070536676161976</span>, <span class="number">-0.00852554513070338</span>, <span class="number">0.00000000000000000</span>]&#125;</span><br><span class="line">I/get_img_params.cc:<span class="number">45</span> Intrinsics right: &#123;pinhole, width: <span class="number">752</span>, height: <span class="number">480</span>, fx: <span class="number">365.14014888558477878</span>, fy: <span class="number">365.13385298966960590</span>, cx: <span class="number">389.32395100630907336</span>, cy: <span class="number">234.95160212312546832</span>, model: <span class="number">0</span>, coeffs: [<span class="number">-0.30377346762098512</span>, <span class="number">0.07992969367399984</span>, <span class="number">0.00005154751753072</span>, <span class="number">-0.00067345903740579</span>, <span class="number">0.00000000000000000</span>]&#125;</span><br><span class="line">I/get_img_params.cc:<span class="number">46</span> Extrinsics right to left: &#123;rotation: [<span class="number">0.99867908939669447</span>, <span class="number">-0.00634455661374854</span>, <span class="number">0.05098845950961969</span>, <span class="number">0.00598903163893333</span>, <span class="number">0.99995670037792639</span>, <span class="number">0.00712242018683670</span>, <span class="number">-0.05103144032669509</span>, <span class="number">-0.00680764060926713</span>, <span class="number">0.99867384471984544</span>], translation: [<span class="number">-120.02489764113249748</span>, <span class="number">-1.17826374090507469</span>, <span class="number">-5.20582051599965379</span>]&#125;</span><br><span class="line">ROSMsgInfoPair:</span><br><span class="line">left:</span><br><span class="line">width: <span class="number">752</span>, height: <span class="number">480</span></span><br><span class="line">distortion_model: PINHOLE</span><br><span class="line">D: <span class="number">-0.250348</span>,<span class="number">0.0505794</span>,<span class="number">-0.000705367</span>,<span class="number">-0.00852555</span>,<span class="number">0</span>,</span><br><span class="line">K: <span class="number">362.201</span>,<span class="number">0</span>,<span class="number">363.501</span>,<span class="number">0</span>,<span class="number">406.587</span>,<span class="number">234.352</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,</span><br><span class="line">R: <span class="number">0.995541</span>,<span class="number">0.00317344</span>,<span class="number">0.0942805</span>,<span class="number">-0.00348417</span>,<span class="number">0.999989</span>,<span class="number">0.00313134</span>,<span class="number">-0.0942695</span>,<span class="number">-0.00344587</span>,<span class="number">0.995541</span>,</span><br><span class="line">P: <span class="number">326.239</span>,<span class="number">0</span>,<span class="number">340.971</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">326.239</span>,<span class="number">235.709</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,</span><br><span class="line"></span><br><span class="line">right:</span><br><span class="line">width: <span class="number">752</span>, height: <span class="number">480</span></span><br><span class="line">distortion_model: PINHOLE</span><br><span class="line">D: <span class="number">-0.303773</span>,<span class="number">0.0799297</span>,<span class="number">5.15475e-05</span>,<span class="number">-0.000673459</span>,<span class="number">0</span>,</span><br><span class="line">K: <span class="number">365.14</span>,<span class="number">0</span>,<span class="number">365.134</span>,<span class="number">0</span>,<span class="number">389.324</span>,<span class="number">234.952</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,</span><br><span class="line">R: <span class="number">0.999013</span>,<span class="number">0.00980714</span>,<span class="number">0.04333</span>,<span class="number">-0.00966439</span>,<span class="number">0.999947</span>,<span class="number">-0.00350257</span>,<span class="number">-0.0433621</span>,<span class="number">0.00308036</span>,<span class="number">0.999055</span>,</span><br><span class="line">P: <span class="number">326.239</span>,<span class="number">0</span>,<span class="number">340.971</span>,<span class="number">-39195.5</span>,<span class="number">0</span>,<span class="number">326.239</span>,<span class="number">235.709</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,</span><br></pre></td></tr></table></figure>
+<p>相机投影参数：fx、fy、cx、cy</p>
+<p>相机畸变参数：coeffs[5]=[k1,k2,p1,p2,k3]</p>
+<p>  <strong>获取IMU标定参数</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/samples/</span>_output<span class="regexp">/bin/</span>tutorials<span class="regexp">/get_imu_params</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/get_imu_params.cc:<span class="number">23</span> Motion <span class="built_in">int</span>rinsics: &#123;accel: &#123;scale: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], assembly: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], drift: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], noise: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], bias: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], x: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], y: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], z: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>]&#125;, gyro: &#123;scale: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], assembly: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], drift: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], noise: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], bias: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], x: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], y: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], z: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>]&#125;&#125;</span><br><span class="line">I/get_imu_params.cc:<span class="number">24</span> Motion extrinsics left to imu: &#123;rotation: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>], translation: [<span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>, <span class="number">0.00000000000000000</span>]&#125;</span><br></pre></td></tr></table></figure>
+<p>Camera与IMU参数：</p>
+<blockquote>
+<p>Each camera has the following parameters:</p>
+<p>  camera_model<br>      camera projection type (pinhole / omni)<br>      intrinsics<br>      vector containing the intrinsic parameters for the given projection type. elements are as follows:<br>      pinhole: [fu fv pu pv]<br>      omni: [xi fu fv pu pv]<br>      ds: [xi alpha fu fv pu pv]<br>      eucm: [alpha beta fu fv pu pv]<br>      see Supported models for more information<br>      distortion_model<br>      lens distortion type (radtan / equidistant)<br>      distortion_coeffs<br>      parameter vector for the distortion model<br>      see Supported models for more information<br>      T_cn_cnm1<br>      camera extrinsic transformation, always with respect to the last camera in the chain<br>      (e.g. cam1: T_cn_cnm1 = T_c1_c0, takes cam0 to cam1 coordinates)<br>      T_cam_imu<br>      IMU extrinsics: transformation from IMU to camera coordinates (T_c_i)<br>      timeshift_cam_imu<br>      timeshift between camera and IMU timestamps in seconds (t_imu = t_cam + shift)<br>      rostopic<br>      topic of the camera’s image stream<br>      resolution<br>      camera resolution [width,height]</p>
+<h1 id="Kalibr-标定"><a href="#Kalibr-标定" class="headerlink" title="Kalibr 标定"></a>Kalibr 标定</h1><h3 id="1-标定-Camera"><a href="#1-标定-Camera" class="headerlink" title="1. 标定 Camera"></a>1. 标定 Camera</h3><p>参考：<a href="https://github.com/ethz-asl/kalibr/wiki/multiple-camera-calibration" target="_blank" rel="noopener">Multiple camera calibration</a><br><strong>mynt相机发布topic</strong></p>
+</blockquote>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source wrappers/ros/devel/<span class="built_in">setup</span>.bash</span><br><span class="line">roslaunch mynt_eye_ros_wrapper <span class="built_in">display</span>.launch</span><br></pre></td></tr></table></figure>
+<p><strong>数据采集</strong><br>通过 ROS 发布 image 消息的节点, 我们只需要使用 rosbag record 工具将拍摄到的标定板图像制作成 bag 文件。</p>
+<p>建议在捕获校准数据时将摄像机流的频率降低到4 Hz左右。这减少了数据集中的冗余信息，从而降低了校准的运行时间。</p>
+<p>ROS 提供了改变 topic 发布频率的节点<a href="http://wiki.ros.org/topic_tools/throttle" target="_blank" rel="noopener">throttle</a>, 指令如下 :</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rosrun topic_tools throttle <span class="keyword">messages</span> /mynteye/<span class="keyword">left</span>/image_raw <span class="number">4.0</span> </span><br><span class="line"></span><br><span class="line">rosrun topic_tools throttle <span class="keyword">messages</span> /mynteye/<span class="keyword">right</span>/image_raw <span class="number">4.0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosbag <span class="keyword">record</span> -O stereo_calibra.bag</span><br></pre></td></tr></table></figure>
+<p><strong>标定</strong></p>
+<p> 集好数据集以后, 就可以用已经安装好的 Kalibr 标定双目相机了, 指令如下:</p>
+<p>标定方式：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kalibr_calibrate_cameras <span class="params">--bag</span> [filename.bag] <span class="params">--topics</span> [TOPIC_0 <span class="string">...</span> TOPIC_N] <span class="params">--models</span> [MODEL_0 <span class="string">...</span> MODEL_N] <span class="params">--target</span> [target.yaml]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>bag filename.bag：包含数据的ROS包</p>
+</li>
+<li><p>topics TOPIC_0 … TOPIC_N：相机节点</p>
+</li>
+<li><p>models MODEL_0 … MODEL_N：list of camera/distortion models to be fitted<br>(see <a href="https://github.com/ethz-asl/kalibr/wiki/supported-models" target="_blank" rel="noopener">Supported models</a>)</p>
+</li>
+<li>target target.yaml：the calibration target configuration</li>
+</ul>
+<p>采集好数据集以后, 就可以用已经安装好的 Kalibr 标定双目相机了, 指令如下:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ros_ws<span class="regexp">/kalibr/</span>devel/setup.bash</span><br><span class="line">kalibr_calibrate_cameras --bag <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/</span>stereo_calibra.bag  --topics <span class="regexp">/mynteye/</span>left<span class="regexp">/image_raw /</span>mynteye<span class="regexp">/right/</span>image_raw --models pinhole-radtan pinhole-radtan --target <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/</span>april_6x6_80x80cm_A0.yaml</span><br></pre></td></tr></table></figure>
+<p><strong>输出cam_chain.yaml</strong></p>
+<h3 id="2-标定-Camera-IMU"><a href="#2-标定-Camera-IMU" class="headerlink" title="2. 标定 Camera-IMU"></a>2. 标定 Camera-IMU</h3><p>参考：<a href="https://github.com/ethz-asl/kalibr/wiki/camera-imu-calibration#calibration-target" target="_blank" rel="noopener">Camera-IMU calibration</a><br>Example chain.yaml<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">cam0:</span><br><span class="line">  camera_model: pinhole</span><br><span class="line">  <span class="built_in">int</span>rinsics: [<span class="number">461.629</span>, <span class="number">460.152</span>, <span class="number">362.680</span>, <span class="number">246.049</span>]</span><br><span class="line">  distortion_model: radtan</span><br><span class="line">  distortion_coeffs: [<span class="number">-0.27695497</span>, <span class="number">0.06712482</span>, <span class="number">0.00087538</span>, <span class="number">0.00011556</span>]</span><br><span class="line">  T_cam_imu:</span><br><span class="line">  - [<span class="number">0.01779318</span>, <span class="number">0.99967549</span>,<span class="number">-0.01822936</span>, <span class="number">0.07008565</span>]</span><br><span class="line">  - [<span class="number">-0.9998017</span>, <span class="number">0.01795239</span>, <span class="number">0.00860714</span>,<span class="number">-0.01771023</span>]</span><br><span class="line">  - [<span class="number">0.00893160</span>, <span class="number">0.01807260</span>, <span class="number">0.99979678</span>, <span class="number">0.00399246</span>]</span><br><span class="line">  - [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>]</span><br><span class="line">  timeshift_cam_imu: <span class="number">-8.121e-05</span></span><br><span class="line">  rostopic: /cam0/image_raw</span><br><span class="line">  resolution: [<span class="number">752</span>, <span class="number">480</span>]</span><br><span class="line">cam1:</span><br><span class="line">  camera_model: omni</span><br><span class="line">  <span class="built_in">int</span>rinsics: [<span class="number">0.80065662</span>, <span class="number">833.006</span>, <span class="number">830.345</span>, <span class="number">373.850</span>, <span class="number">253.749</span>]</span><br><span class="line">  distortion_model: radtan</span><br><span class="line">  distortion_coeffs: [<span class="number">-0.33518750</span>, <span class="number">0.13211436</span>, <span class="number">0.00055967</span>, <span class="number">0.00057686</span>]</span><br><span class="line">  T_cn_cnm1:</span><br><span class="line">  - [ <span class="number">0.99998854</span>, <span class="number">0.00216014</span>, <span class="number">0.00427195</span>,<span class="number">-0.11003785</span>]</span><br><span class="line">  - [<span class="number">-0.00221074</span>, <span class="number">0.99992702</span>, <span class="number">0.01187697</span>, <span class="number">0.00045792</span>]</span><br><span class="line">  - [<span class="number">-0.00424598</span>,<span class="number">-0.01188627</span>, <span class="number">0.99992034</span>,<span class="number">-0.00064487</span>]</span><br><span class="line">  - [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>]</span><br><span class="line">  T_cam_imu:</span><br><span class="line">  - [ <span class="number">0.01567142</span>, <span class="number">0.99978002</span>,<span class="number">-0.01393948</span>,<span class="number">-0.03997419</span>]</span><br><span class="line">  - [<span class="number">-0.99966203</span>, <span class="number">0.01595569</span>, <span class="number">0.02052137</span>,<span class="number">-0.01735854</span>]</span><br><span class="line">  - [ <span class="number">0.02073927</span>, <span class="number">0.01361317</span>, <span class="number">0.99969223</span>, <span class="number">0.00326019</span>]</span><br><span class="line">  - [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>]</span><br><span class="line">  timeshift_cam_imu: <span class="number">-8.681e-05</span></span><br><span class="line">  rostopic: /cam1/image_raw</span><br><span class="line">  resolution: [<span class="number">752</span>, <span class="number">480</span>]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>camera_model//相机模型<br>camera projection type (pinhole / omni)<br>intrinsics//相机内参<br>vector containing the intrinsic parameters for the given projection type. elements are as follows:<br>pinhole: [fu fv pu pv]<br>omni: [xi fu fv pu pv]<br>distortion_model//畸变模型<br>lens distortion type (radtan / equidistant)<br>distortion_coeffs//畸变参数<br>parameter vector for the distortion model<br>T_cn_cnm1//左右摄像头的相对位姿<br>camera extrinsic transformation, always with respect to the last camera in the chain<br>(e.g. cam1: T_cn_cnm1 = T_c1_c0, takes cam0 to cam1 coordinates)<br>timeshift_cam_imu//在捕捉数据时，imu数据和图像时间偏移<br>timeshift between camera and IMU timestamps in seconds (t_imu = t_cam + shift)<br>rostopic<br>topic of the camera’s image stream<br>resolution<br>camera resolution [width,height]</p>
+</blockquote>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">#Acc</span>elerometers</span><br><span class="line">accelerometer_noise_density: <span class="number">1.86</span>e-<span class="number">03</span>   <span class="selector-id">#Noise</span> density (continuous-time)</span><br><span class="line">accelerometer_random_walk:   <span class="number">4.33</span>e-<span class="number">04</span>   <span class="selector-id">#Bias</span> random walk</span><br><span class="line"></span><br><span class="line">#Gyroscopes</span><br><span class="line">gyroscope_noise_density:     <span class="number">1.87</span>e-<span class="number">04</span>   <span class="selector-id">#Noise</span> density (continuous-time)</span><br><span class="line">gyroscope_random_walk:       <span class="number">2.66</span>e-<span class="number">05</span>   <span class="selector-id">#Bias</span> random walk</span><br><span class="line"></span><br><span class="line">rostopic:                    /imu0      <span class="selector-id">#the</span> IMU ROS topic</span><br><span class="line">update_rate:                 <span class="number">200.0</span>      <span class="selector-id">#Hz</span> (<span class="keyword">for</span> discretization of the values above)</span><br></pre></td></tr></table></figure>
+<p><strong>数据采集</strong><br>在标定完双目内外参数以后, 可以接着标定和 IMU 之间的外参数了. 这次采用同样的标定板, 采集数据的最佳频率为图像20Hz, IMU 200 Hz 。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosbag record -O stereo_imu_calibra.bag  <span class="regexp">/mynteye/</span>left<span class="regexp">/image_raw /my</span>nteye<span class="regexp">/right/im</span>age_raw <span class="regexp">/mynteye/imu</span><span class="regexp">/data_raw</span></span><br></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ul>
+<li>采集数据的起始和结束阶段注意别晃动太大，如从桌子上拿起或者放下。如果有这样的动作，在标定阶段应该跳过bag数据集的首尾的数据.<ul>
+<li>采集数据的时候应该给imu各个轴足够的激励，如先依次绕各个轴运动，运动完后来个在空中画8字之类的操作，当然也要注意别运动太剧烈，图像都模糊了。</li>
+</ul>
+</li>
+</ul>
+<p><strong>标定</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kalibr_calibrate_imu_camera --target <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/</span>april_6x6_80x80cm_A0.yaml --cam <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/</span>camchain-stereo_calibra.yaml --imu <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/imu</span>_mynteye.yaml --bag <span class="regexp">/home/</span>xiaohu<span class="regexp">/bagfiles/</span>stereo_imu_calibra.bag --bag-<span class="keyword">from</span>-to <span class="number">2</span> <span class="number">37</span></span><br></pre></td></tr></table></figure>
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/" title="小觅双目+IMU联合标定">https://xiao-hu.com.cn/2019/08/23/%E5%B0%8F%E8%A7%85%E5%8F%8C%E7%9B%AE-IMU%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%A0%87%E5%AE%9A/" rel="tag"><i class="fa fa-tag"></i> 标定</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/08/22/ROS%E4%B8%8B%E5%8D%95%E7%9B%AE%E5%92%8C%E5%8F%8C%E7%9B%AE%E7%9B%B8%E6%9C%BA%E7%9A%84%E6%A0%87%E5%AE%9A/" rel="next" title="ROS下单目和双目相机的标定">
+                  <i class="fa fa-chevron-left"></i> ROS下单目和双目相机的标定
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/08/28/ubuntu16-%E9%95%AD%E7%A5%9E%E6%99%BA%E8%83%BDC16%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE/" rel="prev" title="ubuntu 镭神智能C16驱动配置">
+                  ubuntu 镭神智能C16驱动配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Kalibr"><span class="nav-number">1.</span> <span class="nav-text">安装Kalibr</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装依赖项"><span class="nav-number">1.0.1.</span> <span class="nav-text">安装依赖项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建工作空间"><span class="nav-number">1.0.2.</span> <span class="nav-text">创建工作空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载并编译"><span class="nav-number">1.0.3.</span> <span class="nav-text">下载并编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置环境"><span class="nav-number">1.0.4.</span> <span class="nav-text">设置环境</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mynteye标定"><span class="nav-number">2.</span> <span class="nav-text">mynteye标定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-img-params获得："><span class="nav-number">2.0.1.</span> <span class="nav-text">get_img_params获得：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kalibr-标定"><span class="nav-number">3.</span> <span class="nav-text">Kalibr 标定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-标定-Camera"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. 标定 Camera</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-标定-Camera-IMU"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. 标定 Camera-IMU</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

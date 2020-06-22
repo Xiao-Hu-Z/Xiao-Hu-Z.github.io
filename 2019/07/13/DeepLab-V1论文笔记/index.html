@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062v4AbstractDeepLab是结合了深度卷积神经网络(DCNNs)和概率图模型(DenseCRFs)的方法。实验发现DCNNs最后一层的响应不能充分地用于定位精确的目标分割，根本原因是DCNNs的高级特征的平移不变性（即高层次特征映射）。DeepLab解决这一问题的方法是通过将DCNNs层的响应和完全连接的条件随机场(CRF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepLab V1论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;13&#x2F;DeepLab-V1%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062v4AbstractDeepLab是结合了深度卷积神经网络(DCNNs)和概率图模型(DenseCRFs)的方法。实验发现DCNNs最后一层的响应不能充分地用于定位精确的目标分割，根本原因是DCNNs的高级特征的平移不变性（即高层次特征映射）。DeepLab解决这一问题的方法是通过将DCNNs层的响应和完全连接的条件随机场(CRF">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190713220706128.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714153501835.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714110823350.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714155409534.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714112738205.png==#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714113959723.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714160144493.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714160214556.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714160323170.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714160418154.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190714160432162.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T09:20:18.549Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190713220706128.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/13/DeepLab-V1%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>DeepLab V1论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/13/DeepLab-V1%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DeepLab V1论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-13 17:19:39" itemprop="dateCreated datePublished" datetime="2019-07-13T17:19:39+08:00">2019-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:20:18" itemprop="dateModified" datetime="2019-11-19T17:20:18+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" itemprop="url" rel="index">
+                    <span itemprop="name">语义分割</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>原文：<a href="https://arxiv.org/abs/1412.7062v4" target="_blank" rel="noopener">https://arxiv.org/abs/1412.7062v4</a></p><h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>DeepLab是结合了深度卷积神经网络(DCNNs)和概率图模型(DenseCRFs)的方法。实验发现DCNNs最后一层的响应不能充分地用于定位精确的目标分割，根本原因是DCNNs的高级特征的平移不变性（即高层次特征映射）。DeepLab解决这一问题的方法是通过将DCNNs层的响应和完全连接的条件随机场(CRF)结合。同时模型创新性的将Hole（即空洞卷积）算法应用到DCNNs模型上。</p><a id="more"></a>
+
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ol>
+<li>相比于传统的视觉算法(SIFT或HOG)，DCNN以其end-to-end方式获得了很好的效果，成功部分可以归功于DCNN对图像转换的平移不变性，这一属性能加强它们学习数据的分层抽象能力。 不变性非常适用于高级视觉任务, 但不利于低级任务, 如姿态估计、语义分割，在这些任务中我们倾向于精确的定位而不是抽象的空间关系。</li>
+<li>DCNN在图像标注任务应用上的两大技术障碍: <blockquote>
+<p>信号的下采样：DCNN每层max-pooling及downsampling(striding)的结合造成信号分辨率减小，DeepLab是采用的atrous(带孔)算法扩展感受野，获取更多的上下文信息。<br>空间不灵敏性(不变性) ：分类器获取以对象中心的决策是需要空间变换的不变性，这天然的限制了DCNN的定位精度，DeepLab采用完全连接的条件随机场(DenseCRF)能够捕获细微的边缘细节，同时也适应远程依赖，模型很大程度上提高了基于像素级别分类器的性能。</p>
+</blockquote>
+</li>
+<li>DeepLab的三个主要优点 ：<blockquote>
+<ul>
+<li>速度：带atrous算法的DCNN可以保持8FPS的速度，全连接CRF平均推断需要0.5s。<ul>
+<li>准确：在PASCAL语义分割挑战中获得了第二的成绩</li>
+</ul>
+</li>
+<li>简单：DeepLab是由两个非常成熟的模块(DCNN和CRFs)级联而成<h1 id="2-Related-Work"><a href="#2-Related-Work" class="headerlink" title="2. Related Work"></a>2. Related Work</h1></li>
+</ul>
+</blockquote>
+</li>
+<li><p>DeepLab系统应用在语义分割任务上，目的是做逐像素分类的，这与使用两阶段的DCNN方法形成鲜明对比(指R-CNN等系列的目标检测工作)，R-CNN系列的做法是原先图片上获取候选区域，再送到DCNN中获取分割建议，重新排列取结果。虽然这种方法明确地尝试处理前段分割算法的本质，但在仍没有明确的利用DCNN的预测图。</p>
+</li>
+<li><p>我们的系统与其他先进模型的主要区别在于DenseCRFs和DCNN的结合。是将每个像素视为CRF节点，利用远程依赖关系，并使用CRF推理直接优化DCNN的损失函数。Koltun(2011)的工作表明完全连接的CRF在语义分割下非常有效。</p>
+</li>
+<li><p>也有其他组采取非常相似的方向，将DCNN和密集的CRF结合起来，我们已经更新提出了DeepLab系统(指的是DeepLabV2)。</p>
+</li>
+</ol>
+<h1 id="3-密集分类下的卷积神经网络"><a href="#3-密集分类下的卷积神经网络" class="headerlink" title="3.  密集分类下的卷积神经网络"></a>3.  密集分类下的卷积神经网络</h1><h2 id="3-1-采用孔洞算法的高效密集滑动窗口特征提取"><a href="#3-1-采用孔洞算法的高效密集滑动窗口特征提取" class="headerlink" title="3.1 采用孔洞算法的高效密集滑动窗口特征提取"></a>3.1 采用孔洞算法的高效密集滑动窗口特征提取</h2><p>空洞算法：atrous算法可以稀疏的采样底层特征映射，该方法可以使用任何采样率计算密集的特征映射。在VGG-16中使用不同采样率的空洞卷积，可以让模型密集计算时明确控制网络的感受野，从而保证DCNN的预测图可靠的预测图像中物体的位置。</p>
+<p>将VGG-16的全连接层改成卷积层，图像以原始分辨率输入，会产生非常稀疏的检测分数（步幅32,步幅=输入尺寸/输出特征尺寸步幅），为了在我们的8像素的目标步幅上更密集地计算分数，在VGG网络中最后两个最大池化层之后跳过subsampling(池化层)，而是采用2或者4采样率的空洞卷积对特征图做采样扩大感受野从而缩小步幅。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190713220706128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714153501835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>蓝色部分是输入：7×7的图像；</li>
+<li>青色部分是输出：3×3的图像；</li>
+<li>空洞卷积核：3×3 采样率(扩展率)为2 无padding。</li>
+</ul>
+<p>图1的这种方法被称为“孔洞算法”（atrous algorithm）（空洞卷积），并且已经被用于高效计算多孔算法(也叫做非抽取小波变换)。 通过添加到im2col函数（将多通道特征图转换为矢量块），将稀疏样本的底层特征图添加到Caffe框架中来实现这个操作。 并且允许以任何目标子采样率有效地计算密集的CNN特征图，而不引入任何近似值。</p>
+<p>微调Imagenet预先训练的VGG-16网络的模型权重，使其可以用于图像分类。 然后将最后一层的1000-way分类器改成21-way分类器，损失函数是CNN输出（原图8倍下采样）空间每个点的cross-entropy之和，所有位置和标签在整体损失函数中的权重相等，目标是ground truth（8倍下采样），SGD优化目标函数。</p>
+<h2 id="3-2-用卷积网络减小感受野并加速密集计算"><a href="#3-2-用卷积网络减小感受野并加速密集计算" class="headerlink" title="3.2 用卷积网络减小感受野并加速密集计算"></a>3.2 用卷积网络减小感受野并加速密集计算</h2><p>网络进行密集分数计算的另一个关键因素是明确控制网络的感受野大小。 基于DCNN的图像识别方法依赖于在Imagenet大规模分类任务上预先训练的网络。 这些网络通常具有很大的感受野大小，无法保证良好的定位精度。此外，在将网络转换为完全卷积的网络之后，第一个全连接层具有4,096个大的7×7空间大小的滤波器，密集分数图计算成为瓶颈。。我们在第一层FC前下采样，同时减少FC的通道数（从4096到1024）。</p>
+<p>我们已经通过将第一FC层空间抽样到4×4空间大小来解决这两个严重的实际问题。 这将网络的感受野减少到128×128（零填充）或308×308（卷积模式），并将第一个FC层的计算时间缩短了3倍。 使用我们的基于Caffe的实现和Titan GPU，由此产生的VGG派生网络非常有效：给定一个306×306输入图像，它在网络末端产生39×39密集原始特征图，速率约为8 fps在测试期间。 训练时的速度为3帧/秒。 我们还成功地将全连接层上的神经元数量从4096个减少到1024个，在不牺牲性能的情况下进一步大大减少了计算时间和内存占用，详见第5节。使用较小的网络，如Krizhevsky等 （2013）可以允许视频速率测试时密集特征计算，即使在轻型GPU上。</p>
+<h1 id="4-详细的边界恢复：完全连接的条件随机场和多尺度预测"><a href="#4-详细的边界恢复：完全连接的条件随机场和多尺度预测" class="headerlink" title="4. 详细的边界恢复：完全连接的条件随机场和多尺度预测"></a>4. 详细的边界恢复：完全连接的条件随机场和多尺度预测</h1><h2 id="4-1-深卷积网络和定位挑战"><a href="#4-1-深卷积网络和定位挑战" class="headerlink" title="4.1 深卷积网络和定位挑战"></a>4.1 深卷积网络和定位挑战</h2><p>如图2所示，DCNN分数图可以可靠地预测图像中对象的存在和粗略位置，但不太适合用于勾画其精确轮廓。 卷积网络在分类精度和定位精度之间有自然的trade-off：深度模型表明了最大池化层在分类任务中很有效，但增加的不变性和大的感受野使得在其高输出层分数推断位置的问题更困难。<br>解决方法：</p>
+<ul>
+<li>利用卷积网络中多层的信息来更好地估计对象边界。 </li>
+<li>采用超像素表示，实质上是将定位任务委托给低级分割方法。</li>
+</ul>
+<p>Deeplab方案：耦合DCNN的识别能力和完全连接的CRF的细粒度定位精度来寻求新的替代方向，并表明它在解决定位挑战方面非常成功，产生了准确的语义分割结果。</p>
+<h2 id="4-2-全连接CRF用于精确定位"><a href="#4-2-全连接CRF用于精确定位" class="headerlink" title="4.2 全连接CRF用于精确定位"></a>4.2 全连接CRF用于精确定位</h2><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714110823350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>传统上，CRF已被用于平滑噪声分割图。通常，这些模型包含耦合相邻节点的能量项，有利于相同标签分配空间近端像素。定性的说，这些短程的CRF主要功能是清除在手工特征基础上建立的弱分类器的虚假预测。</p>
+<p>与这些较弱的分类器相比，现代DCNN体系结构如我们在这项工作中使用的结构产生了定性不同的得分图和语义标签预测。如图2所示，Score map通常相当平滑并产生均匀分类结果。在这个制度下，使用短距离CRFs可能不好，因为我们的目标应该是恢复详细的局部结构，而不是进一步平滑。使用对比敏感的能量函数（Rother等人，2004）结合局部范围的CRF可以潜在地改善局部化，但仍然忽略了薄弱结构(thin-structures)，通常需要解决昂贵的离散优化问题。</p>
+<p>为了克服短距离CRF的这些限制，可用全连接的CRF来提升分割精度。该模型采用能量函数<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714155409534.png"></p>
+<p>其中 $x$ 是像素的标签分配。<img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714112738205.png==#pic_center"><br>$P(x_i)$是像素i的标签分配概率</p>
+<script type="math/tex; mode=display">θ_{ij} (x_i , x_j ) = μ(x_i , x_j ) m=\sum ^K_{m=1}w_m · k_m (f_i , f_j )</script><p>其中：<br>$μ(x_i , x_j ) =1$ if $x_i \neq x_j$,否则为0<br>$k^m$是高斯核取决于为像素$i$和$j$提取的特征（表示为$f$），并由参数 $w^m$加权<br>采用双边位置和颜色组合，具体来说，内核是：<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714113959723.png"><br>其中第一个内核依赖于像素位置（表示为$p$ ）和像素颜色强度（表示为$I$），而第二个内核只取决于像素位置。超参数 $\sigma _{\alpha }$， $\sigma _{\beta }$和$\sigma _{\gamma  }$控制高斯核的“尺度”。</p>
+<h2 id="4-3-多尺度预测"><a href="#4-3-多尺度预测" class="headerlink" title="4.3 多尺度预测"></a>4.3 多尺度预测</h2><p>使用多尺度预测提高边界定位效果：在输入图像和前四个最大池化层的输出上加了两层的MLP(第一层是128个3×3卷积，第二层是128个1×1卷积)，最终输出的特征映射送到模型的最后一层辅助预测，合起来模型最后的softmax层输入特征多了5×128=640个通道，实验表示多尺度有助于提升预测结果，但是效果不如CRF明显。</p>
+<h1 id="实验评估"><a href="#实验评估" class="headerlink" title="实验评估"></a>实验评估</h1><ol>
+<li>实验设置<blockquote>
+<ul>
+<li>数据集：PASCAL VOC 2012 segmentation benchmark<ul>
+<li>DCNN模型：权重采用预训练的VGG16</li>
+<li>DCNN损失函数：交叉熵cross-entropy</li>
+<li>训练器：SGD，batch=20</li>
+</ul>
+</li>
+<li>学习率：初始为0.001，最后的分类层是0.01。每2000次迭代乘0.1</li>
+<li>权重：0.9的动量， 0.0005的衰减</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>DeepLab由DCNN和CRF组成，训练策略是分段训练，即DCNN的输出是CRF的一元势函数，在训练CRF时是固定的。在对DCNN做了fine-tune后，对CRF做交叉验证。</p>
+<ol>
+<li>验证集上评估<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714160144493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></li>
+</ol>
+<p>可以看到带CRF和多尺度的(MSc)的DeepLab模型效果明显上升了。</p>
+<ol>
+<li><p>多尺度特征应用<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714160214556.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>第一行是普通输出，第二行是带多尺度的输出，可以看出多尺度输出细节部分要好点</p>
+</li>
+<li><p>离散卷积的效果<br>atrous算法可以允许调整感受野（FOV），大的离散卷积效果更好（同时见Table 1）<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714160323170.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+</li>
+<li><p>评估边界附近的精确度<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714160418154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+</li>
+<li><p>与其他模型对比DeepLab捕获到最好的边界<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190714160432162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h1 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h1><p>DeepLab创造性的结合了DCNN和CRF产生一种新的语义分割模型，模型有准确的预测结果同时计算效率高。在PASCAL VOC 2012上展现了先进的水平。DeepLab是卷积神经网络和概率图模型的交集，后续可考虑将CNN和CRF结合到一起做end-to-end训练。</p>
+</li>
+</ol>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/13/DeepLab-V1%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="DeepLab V1论文笔记">https://xiao-hu.com.cn/2019/07/13/DeepLab-V1%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/13/Fully-Convolutional-Networks-for-Semantic-Segmentation%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="Fully Convolutional Networks for Semantic Segmentation论文笔记">
+                  <i class="fa fa-chevron-left"></i> Fully Convolutional Networks for Semantic Segmentation论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/14/DeepLab-V2%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="DeepLab V2论文笔记">
+                  DeepLab V2论文笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Related-Work"><span class="nav-number">3.</span> <span class="nav-text">2. Related Work</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-密集分类下的卷积神经网络"><span class="nav-number">4.</span> <span class="nav-text">3.  密集分类下的卷积神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-采用孔洞算法的高效密集滑动窗口特征提取"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 采用孔洞算法的高效密集滑动窗口特征提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-用卷积网络减小感受野并加速密集计算"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 用卷积网络减小感受野并加速密集计算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-详细的边界恢复：完全连接的条件随机场和多尺度预测"><span class="nav-number">5.</span> <span class="nav-text">4. 详细的边界恢复：完全连接的条件随机场和多尺度预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-深卷积网络和定位挑战"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 深卷积网络和定位挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-全连接CRF用于精确定位"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 全连接CRF用于精确定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-多尺度预测"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 多尺度预测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验评估"><span class="nav-number">6.</span> <span class="nav-text">实验评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讨论"><span class="nav-number">7.</span> <span class="nav-text">讨论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

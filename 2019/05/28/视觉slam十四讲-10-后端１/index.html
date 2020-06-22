@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1 概述1.1 状态估计的概率解释在后端优化中，我们通常考虑更长的一段时间内的状态估计问题，而且不仅使用过去的信息更新自己的状态，也会用未来的信息更新自己，这种处理方式称为批量的（Batch）。如果当前状态只由过去决定，甚至只由前一个时刻决定，称为渐进的(Incremental)。x_{k}=f(x_{k−1},μ_{k})+ω_{k}\\       z_{k,j}=h(y_{j},x_{k})">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视觉slam十四讲 10.后端１">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;05&#x2F;28&#x2F;%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="1 概述1.1 状态估计的概率解释在后端优化中，我们通常考虑更长的一段时间内的状态估计问题，而且不仅使用过去的信息更新自己的状态，也会用未来的信息更新自己，这种处理方式称为批量的（Batch）。如果当前状态只由过去决定，甚至只由前一个时刻决定，称为渐进的(Incremental)。x_{k}=f(x_{k−1},μ_{k})+ω_{k}\\       z_{k,j}=h(y_{j},x_{k})">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190715181910361.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T08:39:03.677Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190715181910361.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>视觉slam十四讲 10.后端１ | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          视觉slam十四讲 10.后端１
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-28 18:16:29" itemprop="dateCreated datePublished" datetime="2019-05-28T18:16:29+08:00">2019-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:39:03" itemprop="dateModified" datetime="2019-11-19T16:39:03+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h1><h2 id="1-1-状态估计的概率解释"><a href="#1-1-状态估计的概率解释" class="headerlink" title="1.1 状态估计的概率解释"></a>1.1 状态估计的概率解释</h2><p>在后端优化中，我们通常考虑更长的一段时间内的状态估计问题，而且不仅使用过去的信息更新自己的状态，也会用未来的信息更新自己，这种处理方式称为批量的（Batch）。如果当前状态只由过去决定，甚至只由前一个时刻决定，称为渐进的(Incremental)。</p><script type="math/tex; mode=display">x_{k}=f(x_{k−1},μ_{k})+ω_{k}\\      
+z_{k,j}=h(y_{j},x_{k})+v_{k,j}</script><a id="more"></a>
+<p>注意几点：</p>
+<ul>
+<li>只有当xk观测到了yi，才会产生观测数据。事实上在一个位置通常只能看到一小部分路标。</li>
+<li>在没有运动方程的情况下，整个优化问题就只由许多个观测方程组成，类似于SfM（Structure from Motion）问题，相当于通过一组图像来恢复运动和结构。</li>
+</ul>
+<h2 id="1-2-线性系统和KF"><a href="#1-2-线性系统和KF" class="headerlink" title="1.2 线性系统和KF"></a>1.2 线性系统和KF</h2><p>当我们假设马尔可夫性。</p>
+<script type="math/tex; mode=display">P(x_{k}|x_{k-1},x_{0},u_{1:k},z_{1:k-1}) =  =P(x_{k}|x_{k-1},u_{k})</script><p>预测和更新两个步骤：</p>
+<ol>
+<li>预测：<script type="math/tex; mode=display">\bar{x}_k=A_k\hat{x}_{k-1}+u_k,\quad\bar{P}_k=A_k\bar{P}_{k-1}A^T_k+R</script><ol>
+<li>跟新：先计算K,它又称为卡尔曼增益。<script type="math/tex; mode=display">K=\bar{P}_kC^T_k(C_k\bar{P}_kC^T_k+Q_k)^{-1}</script>然后计算后验概率分布：<script type="math/tex; mode=display">\hat{x}_{k}=\bar{x}_k+K(z_k+K(z_k-C_k\bar{x}_k) \\
+\hat{P}_{k}=(I-KC_k)\bar{P}_k\quad\quad\quad\quad\qquad</script></li>
+</ol>
+</li>
+</ol>
+<h2 id="1-3-非线性优化和EKF"><a href="#1-3-非线性优化和EKF" class="headerlink" title="1.3 非线性优化和EKF"></a>1.3 非线性优化和EKF</h2><ol>
+<li><p>把卡尔曼滤波扩展到非线性系统中，称为卡尔曼滤波器（EKF），通常的做法，在某个点附近考虑运动方程及观测方程的一阶泰勒展开，只保留一阶项，即线性部分，然后按照线性系统进行推到。<br>令k-1时刻的均值和协方差矩阵为$\hat{x}_{k-1},\hat{P}_{k-1}$.在k时刻，把运动方程和观测方程在$\hat{x}_{k-1},\hat{P}_{k-1}$处线性化（相当于一阶泰勒展开），有：</p>
+<script type="math/tex; mode=display">x_{k}\approx f(\hat{x}_{k-1},u_k)+\frac{\partial f}{\partial x_{k-1}}|_{\hat{x}_{k-1}}(x_{k-1}-\hat{x}_{k-1})+w_k</script><p>记偏导数：</p>
+<script type="math/tex; mode=display">F=\frac{\partial f}{\partial {x}_{k-1}}|_{\hat{x}_{k-1}}</script><p>对于观测方程：</p>
+<script type="math/tex; mode=display">z_k\approx h(\bar{x}_k)+\frac{\partial h}{\partial x_k}|_{\bar{x}_k}(x_k-\bar{x}_k)+n_k</script><p>记偏导数：</p>
+<script type="math/tex; mode=display">H=\frac{\partial h}{\partial {x}_{k}}|_{\bar{x}_{k}}</script><p>在预测步骤中，根据运动方程有：</p>
+<script type="math/tex; mode=display">P(x_k|x_0,u_{1:k},z_{0:k-1})=N(f(\hat{x}_{k-1},u_k),F\hat{P}_{k-1}F^T+R_k)</script><p>记：</p>
+<script type="math/tex; mode=display">\bar{x}_k=f(\hat{x}_{k-1},u_k),\qquad\bar{P}_k=F\hat{P}_{k-1}F^T+R_k.</script><p>观测方程有：</p>
+<script type="math/tex; mode=display">P(z_k|x_k)=N(h(\bar{x}_k)+H(x_k-\bar{x}_k),Q_k)</script><p>卡尔曼增益$K_k$:</p>
+<script type="math/tex; mode=display">K_k=\bar{P}_kH^T(h\bar{P}_k H^T+Q_k)^{-1}</script><p>后验概率的形式：</p>
+<script type="math/tex; mode=display">\hat{x}_k=\bar{x}_k+K_k(z_k-h(\bar{x}_k)),\hat{P}_k=(I-K_kH)\bar{P}_k</script><p>在线性系统和高斯噪声下，卡尔曼滤波给出了最优无偏估计。<br>在SLAM这种非线性的情况下，给出了单次线性近似的最大后验估计（MPA)。</p>
+</li>
+<li><p>EKF的局限性 ：</p>
+<ol>
+<li>滤波器方法一定程度上假设了马尔可夫性，也就是k时刻的状态只与k-1时刻相关，而与k-1之前的状态和观测都无关。如果当前帧确实与很久之前的数据有关（例如回环），那么滤波器就会很难处理。<ol>
+<li>EKF滤波器仅在$X_{k-1}$处做了一次线性化，然后根据这次线性化结果，把后概率给算出来。这默认该点处的线性化近似在后概率处仍然是有效的。而实际上，当我们离工作点较远时，一阶泰勒展开与整个函数区别其实很大。</li>
+<li>EKF需要对存储状态量的均值和方差，并对它们进行维护和更新。如果把路标也放进状态，由于视觉slam中路标数量很大，这个存储量相当可观，且与状态量呈平方增长，因此EKF SLAM普遍认为不适合大型场景。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="2-BA与图优化"><a href="#2-BA与图优化" class="headerlink" title="2 BA与图优化"></a>2 BA与图优化</h1><p>Bundle Adjustment，是指从视觉重建中提取出最优的3D模型和相机参数（内参数和外参数）。从每一个特征点反射出来的几束光线，在我们把相机姿态和特征点空间位置做出最优的调整之后，最后收束到相机光心的这个过程。在图优化框架的视觉slam算法<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190715181910361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h2 id="2-1-投影模型和BA代价函数"><a href="#2-1-投影模型和BA代价函数" class="headerlink" title="2.1 投影模型和BA代价函数"></a>2.1 投影模型和BA代价函数</h2><h2 id="2-2-BA的求解"><a href="#2-2-BA的求解" class="headerlink" title="2.2 BA的求解"></a>2.2 BA的求解</h2><h2 id="2-3-稀疏性和边缘化"><a href="#2-3-稀疏性和边缘化" class="headerlink" title="2.3 稀疏性和边缘化"></a>2.3 稀疏性和边缘化</h2><h2 id="2-4-鲁棒核函数"><a href="#2-4-鲁棒核函数" class="headerlink" title="2.4 鲁棒核函数"></a>2.4 鲁棒核函数</h2><h2 id="2-5-小结"><a href="#2-5-小结" class="headerlink" title="2.5 小结"></a>2.5 小结</h2><h1 id="3-实践：g2o"><a href="#3-实践：g2o" class="headerlink" title="3 实践：g2o"></a>3 实践：g2o</h1><h2 id="3-1-BA数据集"><a href="#3-1-BA数据集" class="headerlink" title="3.1 BA数据集"></a>3.1 BA数据集</h2><h2 id="3-2-g2o求解BA"><a href="#3-2-g2o求解BA" class="headerlink" title="3.2 g2o求解BA"></a>3.2 g2o求解BA</h2><p>定义节点，用节点表示相机和路标</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Core&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"g2o/core/base_vertex.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"g2o/core/base_binary_edge.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ceres/autodiff.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"tools/rotation.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"common/projection.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexCameraBAL</span> :</span> <span class="keyword">public</span> g2o::BaseVertex&lt;<span class="number">9</span>,Eigen::VectorXd&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;</span><br><span class="line">    VertexCameraBAL() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">read</span> <span class="params">( <span class="built_in">std</span>::istream&amp; <span class="comment">/*is*/</span> )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">write</span> <span class="params">( <span class="built_in">std</span>::ostream&amp; <span class="comment">/*os*/</span> )</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">setToOriginImpl</span><span class="params">()</span> </span>&#123;&#125;<span class="comment">// 重置</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">oplusImpl</span> <span class="params">( <span class="keyword">const</span> <span class="keyword">double</span>* update )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Eigen::VectorXd::<span class="function">ConstMapType <span class="title">v</span> <span class="params">( update, VertexCameraBAL::Dimension )</span></span>;</span><br><span class="line">        _estimate += v;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexPointBAL</span> :</span> <span class="keyword">public</span> g2o::BaseVertex&lt;<span class="number">3</span>, Eigen::Vector3d&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;</span><br><span class="line">    VertexPointBAL() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">read</span> <span class="params">( <span class="built_in">std</span>::istream&amp; <span class="comment">/*is*/</span> )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">write</span> <span class="params">( <span class="built_in">std</span>::ostream&amp; <span class="comment">/*os*/</span> )</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">setToOriginImpl</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">oplusImpl</span> <span class="params">( <span class="keyword">const</span> <span class="keyword">double</span>* update )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Eigen::Vector3d::<span class="function">ConstMapType <span class="title">v</span> <span class="params">( update )</span></span>;</span><br><span class="line">        _estimate += v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>定义边，表示相机路标之间的观测</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EdgeObservationBAL</span> :</span> <span class="keyword">public</span> g2o::BaseBinaryEdge&lt;<span class="number">2</span>, Eigen::Vector2d,VertexCameraBAL, VertexPointBAL&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;</span><br><span class="line">    EdgeObservationBAL() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">read</span> <span class="params">( <span class="built_in">std</span>::istream&amp; <span class="comment">/*is*/</span> )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">write</span> <span class="params">( <span class="built_in">std</span>::ostream&amp; <span class="comment">/*os*/</span> )</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">computeError</span><span class="params">()</span> override   <span class="comment">// The virtual function comes from the Edge base class. Must define if you use edge.</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> VertexCameraBAL* cam = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> VertexCameraBAL*&gt; ( vertex ( <span class="number">0</span> ) );</span><br><span class="line">        <span class="keyword">const</span> VertexPointBAL* point = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> VertexPointBAL*&gt; ( vertex ( <span class="number">1</span> ) );</span><br><span class="line"></span><br><span class="line">        ( *<span class="keyword">this</span> ) ( cam-&gt;estimate().data(), point-&gt;estimate().data(), _error.data() );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span> <span class="params">( <span class="keyword">const</span> T* camera, <span class="keyword">const</span> T* point, T* residuals )</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        T predictions[<span class="number">2</span>];</span><br><span class="line">        CamProjectionWithDistortion ( camera, point, predictions );</span><br><span class="line">        residuals[<span class="number">0</span>] = predictions[<span class="number">0</span>] - T ( measurement() ( <span class="number">0</span> ) );</span><br><span class="line">        residuals[<span class="number">1</span>] = predictions[<span class="number">1</span>] - T ( measurement() ( <span class="number">1</span> ) );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">linearizeOplus</span><span class="params">()</span> override</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// use numeric Jacobians</span></span><br><span class="line">        <span class="comment">// BaseBinaryEdge&lt;2, Vector2d, VertexCameraBAL, VertexPointBAL&gt;::linearizeOplus();</span></span><br><span class="line">        <span class="comment">// return;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// using autodiff from ceres. Otherwise, the system will use g2o numerical diff for Jacobians</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> VertexCameraBAL* cam = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> VertexCameraBAL*&gt; ( vertex ( <span class="number">0</span> ) );</span><br><span class="line">        <span class="keyword">const</span> VertexPointBAL* point = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> VertexPointBAL*&gt; ( vertex ( <span class="number">1</span> ) );</span><br><span class="line">        <span class="keyword">typedef</span> ceres::internal::AutoDiff&lt;EdgeObservationBAL, <span class="keyword">double</span>, VertexCameraBAL::Dimension, VertexPointBAL::Dimension&gt; BalAutoDiff;</span><br><span class="line"></span><br><span class="line">        Eigen::Matrix&lt;<span class="keyword">double</span>, Dimension, VertexCameraBAL::Dimension, Eigen::RowMajor&gt; dError_dCamera;</span><br><span class="line">        Eigen::Matrix&lt;<span class="keyword">double</span>, Dimension, VertexPointBAL::Dimension, Eigen::RowMajor&gt; dError_dPoint;</span><br><span class="line">        <span class="keyword">double</span> *parameters[] = &#123; <span class="keyword">const_cast</span>&lt;<span class="keyword">double</span>*&gt; ( cam-&gt;estimate().data() ), <span class="keyword">const_cast</span>&lt;<span class="keyword">double</span>*&gt; ( point-&gt;estimate().data() ) &#125;;</span><br><span class="line">        <span class="keyword">double</span> *jacobians[] = &#123; dError_dCamera.data(), dError_dPoint.data() &#125;;</span><br><span class="line">        <span class="keyword">double</span> value[Dimension];</span><br><span class="line">        <span class="keyword">bool</span> diffState = BalAutoDiff::Differentiate ( *<span class="keyword">this</span>, parameters, Dimension, value, jacobians );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// copy over the Jacobians (convert row-major -&gt; column-major)</span></span><br><span class="line">        <span class="keyword">if</span> ( diffState )</span><br><span class="line">        &#123;</span><br><span class="line">            _jacobianOplusXi = dError_dCamera;</span><br><span class="line">            _jacobianOplusXj = dError_dPoint;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            assert ( <span class="number">0</span> &amp;&amp; <span class="string">"Error while differentiating"</span> );</span><br><span class="line">            _jacobianOplusXi.setZero();</span><br><span class="line">            _jacobianOplusXj.setZero();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>根据BALProblem类当中的实际数据来生成一些节点和边，交给g2o进行优化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// set up the vertexs and edges for the bundle adjustment. </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BuildProblem</span><span class="params">(<span class="keyword">const</span> BALProblem* bal_problem, g2o::SparseOptimizer* optimizer, <span class="keyword">const</span> BundleParams&amp; params)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_points = bal_problem-&gt;num_points();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_cameras = bal_problem-&gt;num_cameras();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> camera_block_size = bal_problem-&gt;camera_block_size();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> point_block_size = bal_problem-&gt;point_block_size();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set camera vertex with initial value in the dataset.</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span>* raw_cameras = bal_problem-&gt;cameras();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_cameras; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">ConstVectorRef <span class="title">temVecCamera</span><span class="params">(raw_cameras + camera_block_size * i,camera_block_size)</span></span>;</span><br><span class="line">        VertexCameraBAL* pCamera = <span class="keyword">new</span> VertexCameraBAL();</span><br><span class="line">        pCamera-&gt;setEstimate(temVecCamera);   <span class="comment">// initial value for the camera i..</span></span><br><span class="line">        pCamera-&gt;setId(i);                    <span class="comment">// set id for each camera vertex </span></span><br><span class="line">  </span><br><span class="line">        <span class="comment">// remeber to add vertex into optimizer..</span></span><br><span class="line">        optimizer-&gt;addVertex(pCamera);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set point vertex with initial value in the dataset. </span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span>* raw_points = bal_problem-&gt;points();</span><br><span class="line">    <span class="comment">// const int point_block_size = bal_problem-&gt;point_block_size();</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; num_points; ++j)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">ConstVectorRef <span class="title">temVecPoint</span><span class="params">(raw_points + point_block_size * j, point_block_size)</span></span>;</span><br><span class="line">        VertexPointBAL* pPoint = <span class="keyword">new</span> VertexPointBAL();</span><br><span class="line">        pPoint-&gt;setEstimate(temVecPoint);   <span class="comment">// initial value for the point i..</span></span><br><span class="line">        pPoint-&gt;setId(j + num_cameras);     <span class="comment">// each vertex should have an unique id, no matter it is a camera vertex, or a point vertex </span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// remeber to add vertex into optimizer..</span></span><br><span class="line">        pPoint-&gt;setMarginalized(<span class="literal">true</span>);</span><br><span class="line">        optimizer-&gt;addVertex(pPoint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set edges for graph..</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span>  num_observations = bal_problem-&gt;num_observations();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span>* observations = bal_problem-&gt;observations();   <span class="comment">// pointer for the first observation..</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_observations; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        EdgeObservationBAL* bal_edge = <span class="keyword">new</span> EdgeObservationBAL();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">int</span> camera_id = bal_problem-&gt;camera_index()[i]; <span class="comment">// get id for the camera; </span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">int</span> point_id = bal_problem-&gt;point_index()[i] + num_cameras; <span class="comment">// get id for the point </span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(params.robustify)</span><br><span class="line">        &#123;</span><br><span class="line">            g2o::RobustKernelHuber* rk = <span class="keyword">new</span> g2o::RobustKernelHuber;</span><br><span class="line">            rk-&gt;setDelta(<span class="number">1.0</span>);</span><br><span class="line">            bal_edge-&gt;setRobustKernel(rk);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set the vertex by the ids for an edge observation</span></span><br><span class="line">        bal_edge-&gt;setVertex(<span class="number">0</span>,<span class="keyword">dynamic_cast</span>&lt;VertexCameraBAL*&gt;(optimizer-&gt;vertex(camera_id)));</span><br><span class="line">        bal_edge-&gt;setVertex(<span class="number">1</span>,<span class="keyword">dynamic_cast</span>&lt;VertexPointBAL*&gt;(optimizer-&gt;vertex(point_id)));</span><br><span class="line">        bal_edge-&gt;setInformation(Eigen::Matrix2d::Identity());</span><br><span class="line">        bal_edge-&gt;setMeasurement(Eigen::Vector2d(observations[<span class="number">2</span>*i+<span class="number">0</span>],observations[<span class="number">2</span>*i + <span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">       optimizer-&gt;addEdge(bal_edge) ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-求解"><a href="#3-3-求解" class="headerlink" title="3.3 求解"></a>3.3 求解</h2><p>求解设置：</p>
+<ul>
+<li>使用何种方法来定义非线性优化的下降策略</li>
+<li>使用哪类线性求解器</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> g2o::BlockSolver&lt;g2o::BlockSolverTraits&lt;<span class="number">9</span>,<span class="number">3</span>&gt; &gt; BalBlockSolver;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetSolverOptionsFromFlags</span><span class="params">(BALProblem* bal_problem, <span class="keyword">const</span> BundleParams&amp; params, g2o::SparseOptimizer* optimizer)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    BalBlockSolver* solver_ptr;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    g2o::LinearSolver&lt;BalBlockSolver::PoseMatrixType&gt;* linearSolver = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(params.linear_solver == <span class="string">"dense_schur"</span> )&#123;</span><br><span class="line">        linearSolver = <span class="keyword">new</span> g2o::LinearSolverDense&lt;BalBlockSolver::PoseMatrixType&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(params.linear_solver == <span class="string">"sparse_schur"</span>)&#123;</span><br><span class="line">        linearSolver = <span class="keyword">new</span> g2o::LinearSolverCholmod&lt;BalBlockSolver::PoseMatrixType&gt;();</span><br><span class="line">        <span class="keyword">dynamic_cast</span>&lt;g2o::LinearSolverCholmod&lt;BalBlockSolver::PoseMatrixType&gt;* &gt;(linearSolver)-&gt;setBlockOrdering(<span class="literal">true</span>);  <span class="comment">// AMD ordering , only needed for sparse cholesky solver</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    solver_ptr = <span class="keyword">new</span> BalBlockSolver(linearSolver);</span><br><span class="line">    <span class="comment">//SetLinearSolver(solver_ptr, params);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//SetMinimizerOptions(solver_ptr, params, optimizer);</span></span><br><span class="line">    g2o::OptimizationAlgorithmWithHessian* solver;</span><br><span class="line">    <span class="keyword">if</span>(params.trust_region_strategy == <span class="string">"levenberg_marquardt"</span>)&#123;</span><br><span class="line">        solver = <span class="keyword">new</span> g2o::OptimizationAlgorithmLevenberg(solver_ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(params.trust_region_strategy == <span class="string">"dogleg"</span>)&#123;</span><br><span class="line">        solver = <span class="keyword">new</span> g2o::OptimizationAlgorithmDogleg(solver_ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Please check your trust_region_strategy parameter again.."</span>&lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    optimizer-&gt;setAlgorithm(solver);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="4-实践-Ceres"><a href="#4-实践-Ceres" class="headerlink" title="4 实践:Ceres"></a>4 实践:Ceres</h1><h2 id="4-1-Ceres求解BA"><a href="#4-1-Ceres求解BA" class="headerlink" title="4.1 Ceres求解BA"></a>4.1 Ceres求解BA</h2><p>首先定义代价函数类型，并定义Create成员来使用Ceres当中的AutoDiff特性。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SnavelyReprojectionError</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    SnavelyReprojectionError(<span class="keyword">double</span> observation_x, <span class="keyword">double</span> observation_y):observed_x(observation_x),observed_y(observation_y)&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> T* <span class="keyword">const</span> camera,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">const</span> T* <span class="keyword">const</span> point,</span></span></span><br><span class="line"><span class="function"><span class="params">                T* residuals)</span><span class="keyword">const</span></span>&#123;                  </span><br><span class="line">        <span class="comment">// camera[0,1,2] are the angle-axis rotation</span></span><br><span class="line">        T predictions[<span class="number">2</span>];</span><br><span class="line">        CamProjectionWithDistortion(camera, point, predictions);</span><br><span class="line">        residuals[<span class="number">0</span>] = predictions[<span class="number">0</span>] - T(observed_x);</span><br><span class="line">        residuals[<span class="number">1</span>] = predictions[<span class="number">1</span>] - T(observed_y);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> ceres::<span class="function">CostFunction* <span class="title">Create</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> observed_x, <span class="keyword">const</span> <span class="keyword">double</span> observed_y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">new</span> ceres::AutoDiffCostFunction&lt;SnavelyReprojectionError,<span class="number">2</span>,<span class="number">9</span>,<span class="number">3</span>&gt;(</span><br><span class="line">            <span class="keyword">new</span> SnavelyReprojectionError(observed_x,observed_y)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> observed_x;</span><br><span class="line">    <span class="keyword">double</span> observed_y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// SnavelyReprojection.h</span></span></span><br></pre></td></tr></table></figure>
+<p>定义好之后,我们就可以使用 SnavelyReprojectionError::Create 函数来轻松地构建这<br>个目标函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BuildProblem</span><span class="params">(BALProblem* bal_problem, Problem* problem, <span class="keyword">const</span> BundleParams&amp; params)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> point_block_size = bal_problem-&gt;point_block_size();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> camera_block_size = bal_problem-&gt;camera_block_size();</span><br><span class="line">    <span class="keyword">double</span>* points = bal_problem-&gt;mutable_points();</span><br><span class="line">    <span class="keyword">double</span>* cameras = bal_problem-&gt;mutable_cameras();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Observations is 2 * num_observations long array observations</span></span><br><span class="line">    <span class="comment">// [u_1, u_2, ... u_n], where each u_i is two dimensional, the x </span></span><br><span class="line">    <span class="comment">// and y position of the observation. </span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span>* observations = bal_problem-&gt;observations();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bal_problem-&gt;num_observations(); ++i)&#123;</span><br><span class="line">        CostFunction* cost_function;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Each Residual block takes a point and a camera as input </span></span><br><span class="line">        <span class="comment">// and outputs a 2 dimensional Residual</span></span><br><span class="line">      </span><br><span class="line">        cost_function = SnavelyReprojectionError::Create(observations[<span class="number">2</span>*i + <span class="number">0</span>], observations[<span class="number">2</span>*i + <span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If enabled use Huber's loss function. </span></span><br><span class="line">        LossFunction* loss_function = params.robustify ? <span class="keyword">new</span> HuberLoss(<span class="number">1.0</span>) : <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Each observatoin corresponds to a pair of a camera and a point </span></span><br><span class="line">        <span class="comment">// which are identified by camera_index()[i] and point_index()[i]</span></span><br><span class="line">        <span class="comment">// respectively.</span></span><br><span class="line">        <span class="keyword">double</span>* camera = cameras + camera_block_size * bal_problem-&gt;camera_index()[i];</span><br><span class="line">        <span class="keyword">double</span>* point = points + point_block_size * bal_problem-&gt;point_index()[i];</span><br><span class="line"></span><br><span class="line">     </span><br><span class="line">        problem-&gt;AddResidualBlock(cost_function, loss_function, camera, point);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了使用 Schur 消元,Ceres 采取的策略和 g2o 有很大的不同。Ceres采用额外的类型 ParameterBlockOrdering 来管理 schur 消元顺序,并且使用 AddElement-ToGroup 来对变量进行编号从而定义消元顺序。例如下面设置点云变量为 0,相机变量为1 就可以让点云变量先进行消元(优先消元编号最小的变量):<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetOrdering</span><span class="params">(BALProblem* bal_problem, ceres::Solver::Options* options, <span class="keyword">const</span> BundleParams&amp; params)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_points = bal_problem-&gt;num_points();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> point_block_size = bal_problem-&gt;point_block_size();</span><br><span class="line">    <span class="keyword">double</span>* points = bal_problem-&gt;mutable_points();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_cameras = bal_problem-&gt;num_cameras();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> camera_block_size = bal_problem-&gt;camera_block_size();</span><br><span class="line">    <span class="keyword">double</span>* cameras = bal_problem-&gt;mutable_cameras();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (params.ordering == <span class="string">"automatic"</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    ceres::ParameterBlockOrdering* ordering = <span class="keyword">new</span> ceres::ParameterBlockOrdering;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The points come before the cameras</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_points; ++i)</span><br><span class="line">       ordering-&gt;AddElementToGroup(points + point_block_size * i, <span class="number">0</span>);</span><br><span class="line">       </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_cameras; ++i)</span><br><span class="line">        ordering-&gt;AddElementToGroup(cameras + camera_block_size * i, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    options-&gt;linear_solver_ordering.reset(ordering);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetOrdering</span><span class="params">(BALProblem* bal_problem, ceres::Solver::Options* options, <span class="keyword">const</span> BundleParams&amp; params)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_points = bal_problem-&gt;num_points();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> point_block_size = bal_problem-&gt;point_block_size();</span><br><span class="line">    <span class="keyword">double</span>* points = bal_problem-&gt;mutable_points();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> num_cameras = bal_problem-&gt;num_cameras();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> camera_block_size = bal_problem-&gt;camera_block_size();</span><br><span class="line">    <span class="keyword">double</span>* cameras = bal_problem-&gt;mutable_cameras();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (params.ordering == <span class="string">"automatic"</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    ceres::ParameterBlockOrdering* ordering = <span class="keyword">new</span> ceres::ParameterBlockOrdering;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The points come before the cameras</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_points; ++i)</span><br><span class="line">       ordering-&gt;AddElementToGroup(points + point_block_size * i, <span class="number">0</span>);</span><br><span class="line">       </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num_cameras; ++i)</span><br><span class="line">        ordering-&gt;AddElementToGroup(cameras + camera_block_size * i, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    options-&gt;linear_solver_ordering.reset(ordering);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-2-求解"><a href="#4-2-求解" class="headerlink" title="4.2 求解"></a>4.2 求解</h2><p>g2o<br>的设置全靠变量类型来选择不同的下降策略,以及选择稠密或者稀疏的线性方程组解法,<br>然而 ceres 全靠给 Solver::Options 的类型成员变量进行赋值来调整。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetLinearSolver</span><span class="params">(ceres::Solver::Options* options, <span class="keyword">const</span> BundleParams&amp; params)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">// linear solver 的选取</span></span><br><span class="line">    CHECK(ceres::StringToLinearSolverType(params.linear_solver, &amp;options-&gt;linear_solver_type));</span><br><span class="line">    CHECK(ceres::StringToSparseLinearAlgebraLibraryType(params.sparse_linear_algebra_library, &amp;options-&gt;sparse_linear_algebra_library_type));</span><br><span class="line">    CHECK(ceres::StringToDenseLinearAlgebraLibraryType(params.dense_linear_algebra_library, &amp;options-&gt;dense_linear_algebra_library_type));</span><br><span class="line">    options-&gt;num_linear_solver_threads = params.num_threads;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetMinimizerOptions</span><span class="params">(Solver::Options* options, <span class="keyword">const</span> BundleParams&amp; params)</span></span>&#123;</span><br><span class="line">    options-&gt;max_num_iterations = params.num_iterations;</span><br><span class="line">    options-&gt;minimizer_progress_to_stdout = <span class="literal">true</span>;</span><br><span class="line">    options-&gt;num_threads = params.num_threads;</span><br><span class="line">    <span class="comment">// options-&gt;eta = params.eta;</span></span><br><span class="line">    <span class="comment">// options-&gt;max_solver_time_in_seconds = params.max_solver_time;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 下降策略的选取</span></span><br><span class="line">    CHECK(StringToTrustRegionStrategyType(params.trust_region_strategy,</span><br><span class="line">                                        &amp;options-&gt;trust_region_strategy_type));</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetSolverOptionsFromFlags</span><span class="params">(BALProblem* bal_problem,</span></span></span><br><span class="line"><span class="function"><span class="params">                               <span class="keyword">const</span> BundleParams&amp; params, Solver::Options* options)</span></span>&#123;</span><br><span class="line">    SetMinimizerOptions(options,params);</span><br><span class="line">    SetLinearSolver(options,params);</span><br><span class="line">    <span class="comment">//变量排序的设置</span></span><br><span class="line">    SetOrdering(bal_problem, options,params);</span><br></pre></td></tr></table></figure>
+<p>ceres 的求解也很简单，只需要简单地设置一下关于梯度和相邻两次迭代之间目标函数之差的相关阈值就可以。Solve 函数负责 Ceres 的求解功能,只需要传给它对应的选项,目标函数即可。Summary 类型用来负责函数求解每一次迭代的统计结果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">options.gradient_tolerance = <span class="number">1e-16</span>;</span><br><span class="line">options.function_tolerance = <span class="number">1e-16</span>;</span><br><span class="line">Solver::Summary summary;</span><br><span class="line">Solve(options, &amp;problem, &amp;summary);</span><br></pre></td></tr></table></figure>
+<h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5 小结"></a>5 小结</h1><p>待写！！！</p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/" title="视觉slam十四讲 10.后端１">https://xiao-hu.com.cn/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/05/28/%E5%BB%BA%E5%9B%BE%E2%80%94%E2%80%94%E5%8D%95%E7%9B%AE%E7%A8%A0%E5%AF%86%E9%87%8D%E5%BB%BA/" rel="next" title="建图——单目稠密重建">
+                  <i class="fa fa-chevron-left"></i> 建图——单目稠密重建
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/06/19/%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW/" rel="prev" title="词袋模型Bag-of-Words(BoW)">
+                  词袋模型Bag-of-Words(BoW) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-概述"><span class="nav-number">1.</span> <span class="nav-text">1 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-状态估计的概率解释"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 状态估计的概率解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-线性系统和KF"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 线性系统和KF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-非线性优化和EKF"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 非线性优化和EKF</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-BA与图优化"><span class="nav-number">2.</span> <span class="nav-text">2 BA与图优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-投影模型和BA代价函数"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 投影模型和BA代价函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-BA的求解"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 BA的求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-稀疏性和边缘化"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 稀疏性和边缘化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-鲁棒核函数"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 鲁棒核函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-小结"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-实践：g2o"><span class="nav-number">3.</span> <span class="nav-text">3 实践：g2o</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-BA数据集"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 BA数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-g2o求解BA"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 g2o求解BA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-求解"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-实践-Ceres"><span class="nav-number">4.</span> <span class="nav-text">4 实践:Ceres</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Ceres求解BA"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 Ceres求解BA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-求解"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-小结"><span class="nav-number">5.</span> <span class="nav-text">5 小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

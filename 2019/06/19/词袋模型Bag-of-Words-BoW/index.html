@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="词袋模型词袋模型（Bag-of-Words，BoW）把特征当成一个个单词，通过比较两张图片中出现的单词是否一致，来判断这两张图片是否是同一场景。使用一种 k 叉树来表达字典。它的思路很简单,类似于层次聚类,是 k-means 的直接扩展。假定我们有 N个特征点,希望构建一个深度为 d,每次分叉为 k 的树,那么做法如下:最终在叶子层构建了单词,而树结构中的中间节点仅供快速查找时使用。这样一个 k">
+<meta property="og:type" content="article">
+<meta property="og:title" content="词袋模型Bag-of-Words(BoW)">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;06&#x2F;19&#x2F;%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="词袋模型词袋模型（Bag-of-Words，BoW）把特征当成一个个单词，通过比较两张图片中出现的单词是否一致，来判断这两张图片是否是同一场景。使用一种 k 叉树来表达字典。它的思路很简单,类似于层次聚类,是 k-means 的直接扩展。假定我们有 N个特征点,希望构建一个深度为 d,每次分叉为 k 的树,那么做法如下:最终在叶子层构建了单词,而树结构中的中间节点仅供快速查找时使用。这样一个 k">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826195725181.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826195901841.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826205649506.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826205805881.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826212553385.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019082621295470.png#pic_center">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190827105320222.png#pic_center">
+<meta property="og:updated_time" content="2019-11-19T08:39:14.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826195725181.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/06/19/%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>词袋模型Bag-of-Words(BoW) | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/06/19/%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          词袋模型Bag-of-Words(BoW)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-19 16:37:57" itemprop="dateCreated datePublished" datetime="2019-06-19T16:37:57+08:00">2019-06-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 16:39:14" itemprop="dateModified" datetime="2019-11-19T16:39:14+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/VSLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">VSLAM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="词袋模型"><a href="#词袋模型" class="headerlink" title="词袋模型"></a>词袋模型</h1><p>词袋模型（Bag-of-Words，BoW）把特征当成一个个单词，通过比较两张图片中出现的单词是否一致，来判断这两张图片是否是同一场景。</p><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826195725181.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>使用一种 k 叉树来表达字典。它的思路很简单,类似于层次聚类,是 k-means 的直接扩展。假定我们有 N个特征点,希望构建一个深度为 d,每次分叉为 k 的树,那么做法如下:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826195901841.png#pic_center"><br>最终在叶子层构建了单词,而树结构中的中间节点仅供快速查找时使用。这样一个 k 分支,深度为 d 的树,可以容纳 k d 个单词。另一方面,在查找某个给定特征对应的单词时,只需将它与每个中间结点的聚类中心比较(一共 d 次),即可找到最后的单词,保证了对数级别的查找效率。</p><a id="more"></a>
+
+<h1 id="实践-创建字典"><a href="#实践-创建字典" class="headerlink" title="实践:创建字典"></a>实践:创建字典</h1><p><strong>训练字典</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***************************************************</span></span><br><span class="line"><span class="comment"> * 本节演示了如何根据data/目录下的十张图训练字典</span></span><br><span class="line"><span class="comment"> * ************************************************/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// read the image </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"reading images... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt; images; </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> path = <span class="string">"/home/xiaohu/slambook-master/ch12/data/"</span>+to_string(i+<span class="number">1</span>)+<span class="string">".png"</span>;</span><br><span class="line">        images.push_back( imread(path) );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// detect ORB features</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"detecting ORB features ... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    Ptr&lt; Feature2D &gt; detector = ORB::create();</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt; descriptors;</span><br><span class="line">    <span class="keyword">for</span> ( Mat&amp; image:images )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;KeyPoint&gt; keypoints; </span><br><span class="line">        Mat descriptor;</span><br><span class="line">        detector-&gt;detectAndCompute( image, Mat(), keypoints, descriptor );</span><br><span class="line">        descriptors.push_back( descriptor );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// create vocabulary </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"creating vocabulary ... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    DBoW3::Vocabulary vocab;</span><br><span class="line">    vocab.create( descriptors );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"vocabulary info: "</span>&lt;&lt;vocab&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    vocab.save( <span class="string">"vocabulary.yml.gz"</span> );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"done"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对十张目标图像提取 ORB 特征并存放至 vector容器中,然后调用 DBoW3 的字典生成接口即可。在 DBoW3::Vocabulary 对象的构造函数中,我们能够指定树的分叉数量以及深度,不过这里使用了默认构造函数,也就是 k =10, d = 5。这是一个小规模的字典,最大能容纳 10000 个单词。对于图像特征,我们亦使<br>用默认参数,即每张图像 500 个特征点。最后我们把字典存储为一个压缩文件。</p>
+<h1 id="相似度"><a href="#相似度" class="headerlink" title="相似度"></a>相似度</h1><p><strong>TF-IDF（Term Frequency / Inverse Document Frequency，译频率-逆文本频率）</strong><br>TF 部分的思想是,某单词在一个图像中经常出现,它的区分度就高。另一方面,IDF 的思想是,某单词在字典中出现的频率越低,则分类图像时区分度越高。</p>
+<p>在词袋模型中,在建立字典时可以考虑 IDF 部分。统计某个叶子节点 $w _i$中的特<br>征数量相对于所有特征数量的比例,作为 IDF 部分。假设所有特征数量为 n,$w_i$ 数量为$n_i$ ,那么该单词的 IDF 为:.<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826205649506.png#pic_center"><br>TF 部分则是指某个特征在单个图像中出现的频率。假设图像 A 中,单词$w_ i$ 出现了 $n_i$ 次,而一共出现的单词次数为 n,那么 TF 为<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826205805881.png#pic_center"><br>于是$w_ i$ 的权重等于 TF 乘 IDF 之积:<br>考虑权重以后,对于某个图像 A,它的特征点可对应到许多个单词,组成它的 Bag-of-Words:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190826212553385.png#pic_center"><br>单个向量$v_A$描述了一个图像 A。这个向量$v_A$是一个稀疏的向量,它的非零部分指示出图像 A 中含有哪些单词</p>
+<p><strong>计算相似度</strong><br>L 1 范数形式:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019082621295470.png#pic_center"><br><strong>相似性评分的处理</strong>：<br>取一个先验相似度 $s(v_t , v_{t−∆t})$,它表示某时刻关键帧图像与上一时刻的关键帧的相似性。然后,其他的分值都参照这个值进行归一化:<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190827105320222.png#pic_center"><br>如果当前帧与之前某关键帧的相似度,超过当前帧与上一个关键帧相似度的 3 倍,就认为可能存在回环。这个步骤避免了引入绝对的相似性阈值，使得算法能够适应更多的环境。</p>
+<h1 id="实践-相似度的计算"><a href="#实践-相似度的计算" class="headerlink" title="实践:相似度的计算"></a>实践:相似度的计算</h1><p>使用此字典,演示了两种比对方式:图像之间的直接比较以及图像与数据库之间的比较，生成 Bag-of-Words 并比较它们的差异</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"DBoW3/DBoW3.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/features2d/features2d.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/***************************************************</span></span><br><span class="line"><span class="comment"> * 本节演示了如何根据前面训练的字典计算相似性评分</span></span><br><span class="line"><span class="comment"> * ************************************************/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// read the images and database  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"reading database"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//DBoW3::Vocabulary vocab("./vocabulary.yml.gz");</span></span><br><span class="line">    DBoW3::<span class="function">Vocabulary <span class="title">vocab</span><span class="params">(<span class="string">"/home/xiaohu/slambook-master/ch12/vocab_larger.yml.gz"</span>)</span></span>;  <span class="comment">// use large vocab if you want: </span></span><br><span class="line">    <span class="keyword">if</span> ( vocab.empty() )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cerr</span>&lt;&lt;<span class="string">"Vocabulary does not exist."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"reading images... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt; images; </span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> path = <span class="string">"/home/xiaohu/slambook-master/ch12/data/"</span>+to_string(i+<span class="number">1</span>)+<span class="string">".png"</span>;</span><br><span class="line">        images.push_back( imread(path) );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// <span class="doctag">NOTE:</span> in this case we are comparing images with a vocabulary generated by themselves, this may leed to overfitting.  </span></span><br><span class="line">    <span class="comment">// detect ORB features</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"detecting ORB features ... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    Ptr&lt; Feature2D &gt; detector = ORB::create();</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt; descriptors;</span><br><span class="line">    <span class="keyword">for</span> ( Mat&amp; image:images )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;KeyPoint&gt; keypoints; </span><br><span class="line">        Mat descriptor;</span><br><span class="line">        detector-&gt;detectAndCompute( image, Mat(), keypoints, descriptor );</span><br><span class="line">        descriptors.push_back( descriptor );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// we can compare the images directly or we can compare one image to a database </span></span><br><span class="line">    <span class="comment">// images :</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"comparing images with images "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;images.size(); i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        DBoW3::BowVector v1;</span><br><span class="line">        vocab.transform( descriptors[i], v1 );</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> j=i; j&lt;images.size(); j++ )</span><br><span class="line">        &#123;</span><br><span class="line">            DBoW3::BowVector v2;</span><br><span class="line">            vocab.transform( descriptors[j], v2 );</span><br><span class="line">            <span class="keyword">double</span> score = vocab.score(v1, v2);</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="string">"image "</span>&lt;&lt;i&lt;&lt;<span class="string">" vs image "</span>&lt;&lt;j&lt;&lt;<span class="string">" : "</span>&lt;&lt;score&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// or with database </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"comparing images with database "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    DBoW3::<span class="function">Database <span class="title">db</span><span class="params">( vocab, <span class="literal">false</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;descriptors.size(); i++ )</span><br><span class="line">        db.add(descriptors[i]);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"database info: "</span>&lt;&lt;db&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;descriptors.size(); i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        DBoW3::QueryResults ret;</span><br><span class="line">        db.query( descriptors[i], ret, <span class="number">4</span>);      <span class="comment">// max result=4</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"searching for image "</span>&lt;&lt;i&lt;&lt;<span class="string">" returns "</span>&lt;&lt;ret&lt;&lt;<span class="built_in">endl</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"done."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="自行训练字典"><a href="#自行训练字典" class="headerlink" title="自行训练字典"></a>自行训练字典</h1><p>用rgbd_dataset_freiburg1_xyz训练字典<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"DBoW3/DBoW3.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/features2d/features2d.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> dataset_dir = argv[<span class="number">1</span>];</span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span> <span class="params">( dataset_dir+<span class="string">"/associate.txt"</span> )</span></span>;</span><br><span class="line">    <span class="keyword">if</span> ( !fin )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"please generate the associate file called associate.txt!"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; rgb_files, depth_files;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; rgb_times, depth_times;</span><br><span class="line">    <span class="keyword">while</span> ( !fin.eof() )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> rgb_time, rgb_file, depth_time, depth_file;</span><br><span class="line">        fin&gt;&gt;rgb_time&gt;&gt;rgb_file&gt;&gt;depth_time&gt;&gt;depth_file;</span><br><span class="line">        rgb_times.push_back ( atof ( rgb_time.c_str() ) );</span><br><span class="line">        depth_times.push_back ( atof ( depth_time.c_str() ) );</span><br><span class="line">        rgb_files.push_back ( dataset_dir+<span class="string">"/"</span>+rgb_file );</span><br><span class="line">        depth_files.push_back ( dataset_dir+<span class="string">"/"</span>+depth_file );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( fin.good() == <span class="literal">false</span> )</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fin.close();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"generating features ... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt; descriptors;</span><br><span class="line">    Ptr&lt; Feature2D &gt; detector = ORB::create();</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="built_in">string</span> rgb_file:rgb_files )</span><br><span class="line">    &#123;</span><br><span class="line">        Mat image = imread(rgb_file);</span><br><span class="line">        <span class="built_in">vector</span>&lt;KeyPoint&gt; keypoints; </span><br><span class="line">        Mat descriptor;</span><br><span class="line">        detector-&gt;detectAndCompute( image, Mat(), keypoints, descriptor );</span><br><span class="line">        descriptors.push_back( descriptor );</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"extracting features from image "</span> &lt;&lt; index++ &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"extract total "</span>&lt;&lt;descriptors.size()*<span class="number">500</span>&lt;&lt;<span class="string">" features."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// create vocabulary </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"creating vocabulary, please wait ... "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    DBoW3::Vocabulary vocab;</span><br><span class="line">    vocab.create( descriptors );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"vocabulary info: "</span>&lt;&lt;vocab&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    vocab.save( <span class="string">"vocab_larger_train.yml.gz"</span> );</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"done"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">generating features ... </span><br><span class="line">[ INFO:<span class="number">0</span>] Initialize OpenCL runtime...</span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">1</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">2</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">3</span></span><br><span class="line">......</span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">788</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">789</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">790</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">791</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">792</span></span><br><span class="line">extracting features <span class="keyword">from</span> image <span class="number">793</span></span><br><span class="line">extract total <span class="number">396500</span> features.</span><br><span class="line">creating vocabulary, please wait ... </span><br><span class="line">vocabulary info: Vocabulary: k = <span class="number">10</span>, L = <span class="number">5</span>, Weighting = tf-idf, Scoring = L1-norm, Number of words = <span class="number">88334</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/06/19/%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW/" title="词袋模型Bag-of-Words(BoW)">https://xiao-hu.com.cn/2019/06/19/%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8BBag-of-Words-BoW/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/05/28/%E8%A7%86%E8%A7%89slam%E5%8D%81%E5%9B%9B%E8%AE%B2-10-%E5%90%8E%E7%AB%AF%EF%BC%91/" rel="next" title="视觉slam十四讲 10.后端１">
+                  <i class="fa fa-chevron-left"></i> 视觉slam十四讲 10.后端１
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/06/19/CV%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/" rel="prev" title="CV学习资料">
+                  CV学习资料 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#词袋模型"><span class="nav-number">1.</span> <span class="nav-text">词袋模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实践-创建字典"><span class="nav-number">2.</span> <span class="nav-text">实践:创建字典</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相似度"><span class="nav-number">3.</span> <span class="nav-text">相似度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实践-相似度的计算"><span class="nav-number">4.</span> <span class="nav-text">实践:相似度的计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自行训练字典"><span class="nav-number">5.</span> <span class="nav-text">自行训练字典</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

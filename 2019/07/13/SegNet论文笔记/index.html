@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Abstract 论文提出了一个全新的全卷积的Semantic Segmentation模型：SegNet，用于逐个像素的语义分割。 模型主要由：编码网络(encoder network),解码网络(decoder network)和逐像素分类器(pixel-wise classification layer)组成。SegNet的新颖之处在于decoder阶段的上采样方式，具体来说，decoder">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SegNet论文笔记">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;13&#x2F;SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="Abstract 论文提出了一个全新的全卷积的Semantic Segmentation模型：SegNet，用于逐个像素的语义分割。 模型主要由：编码网络(encoder network),解码网络(decoder network)和逐像素分类器(pixel-wise classification layer)组成。SegNet的新颖之处在于decoder阶段的上采样方式，具体来说，decoder">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019071317214054.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190713181125846.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190713184537974.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T09:17:17.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019071317214054.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/13/SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SegNet论文笔记 | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/13/SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SegNet论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-13 17:16:21" itemprop="dateCreated datePublished" datetime="2019-07-13T17:16:21+08:00">2019-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 17:17:17" itemprop="dateModified" datetime="2019-11-19T17:17:17+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" itemprop="url" rel="index">
+                    <span itemprop="name">语义分割</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><ol>
+<li>论文提出了一个全新的全卷积的Semantic Segmentation模型：SegNet，用于逐个像素的语义分割。</li>
+<li>模型主要由：编码网络(encoder network),解码网络(decoder network)和逐像素分类器(pixel-wise classification layer)组成。SegNet的新颖之处在于decoder阶段的上采样方式，具体来说，decoder时上采样使用了encoder阶段下采样的最大池化的索引(indices)，这消除了上采样的学习需要。考虑到上采样是稀疏的，再配合滤波器产生最后的分割图。</li>
+</ol><a id="more"></a>
+<h1 id="1-IntroductionSemantic"><a href="#1-IntroductionSemantic" class="headerlink" title="1. IntroductionSemantic"></a>1. IntroductionSemantic</h1><ol>
+<li><p>Segmentation常用于道路场景分割，大多数像素属于大类，需要平滑的分割，模型要能够依据形状提取物体，这需要保留好的边界信息，从计算的角度来考虑，需要有效的存储量和计算时间。而现有的Semantic Segmentation的问题在于：最大池化和下采样会降低feature map的分辨率(即降低feature map分辨率会损失边界信息)，SegNet针对这一问题设计了将低分辨率feature map映射到高分辨率的方法(利用池化索引)，从而产生精确边界的分割结果。</p>
+</li>
+<li><p>SegNet的encoder部分使用的是VGG16的前13层(即使用预训练的VGG16做特征提取层)，核心在于decoder部分，解码器使用从相应的编码器接受的max-pooling indices来进行输入特征图的非线性upsampling，这样做有以下几个优点：</p>
+<blockquote>
+<ul>
+<li>改善边界描述</li>
+<li>减少end到end的训练参数</li>
+<li>这样的upsampling的形式形式可以仅需要少量的修改而用于多种encoder-decoder架构</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h1 id="2-LITERATURE-R-EVIEW"><a href="#2-LITERATURE-R-EVIEW" class="headerlink" title="2. LITERATURE R EVIEW"></a>2. LITERATURE R EVIEW</h1><ol>
+<li><p>传统的Semantic Segmentation方法：用随机森林(RF),Boosting等做类别的中心预测，用SfM提取特征，配合CRF提高预测精度。但是这些方法效果都不好，总结原因是这些方法都需要提高分类特征。</p>
+</li>
+<li><p>而近期深度卷积网络在分类问题上表现出色，考虑将深度网络应用到Semantic Segmentation上，例如：FCN，效果比传统方法好很多。有工作将RNN、条件随机场(CRF)引入配合decoder做预测，有助于提高边界描绘能力，并且指出了，CRF-RNN这一套可以附加到包括SegNet在内的任何深度分割模型。<br>现有的多尺度的深度神经网络架构的应用，常见两种形式：</p>
+<blockquote>
+<ul>
+<li>将输入放缩为多个尺度得到相应的feature map</li>
+<li>将一张图送到模型，得到不同层的feature map</li>
+</ul>
+</blockquote>
+</li>
+<li><p>这些方法的共同想法都是使用多尺度信息将高层的feature map包含的语义信息与底层的feature map包含的精度信息融合到一起。但是，这样方法参数多，比较难训练</p>
+<h1 id="3-ARCHITECTURE"><a href="#3-ARCHITECTURE" class="headerlink" title="3. ARCHITECTURE"></a>3. ARCHITECTURE</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/2019071317214054.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+</li>
+<li>SegNet由编码网络，解码网络后接一个像素分类层组成。</li>
+</ol>
+<ul>
+<li><strong>编码网络(encoder network)</strong>：由13个卷积层组成，与VGG16的前13层卷积相同，将VGG16在大型数据集上训练得到的权重值作为编码网络的权重初始值，删掉VGG16中的全连接层，有利于在最深的编码器输出处保留较高分辨率的特征图，可以大幅度减少encoder层中训练参数的数量（from 134M to 14.7M）</li>
+<li><strong>解码网络(decoder network)</strong>： 每一层encoder都对应着一层decoder，因此decoder网络也是13层，将低分辨率的feature map映射回和输入一样大小分类器(mask)</li>
+<li><strong>像素分类层(pixelwise classification layer)</strong>：在decoder网络输出后接一个多分类的soft-max分类器对每个像素生成类别概率。</li>
+</ul>
+<ol>
+<li><strong>Encoder network:</strong><br> encoder网络中的每一个编码器通过一组卷积核来产生一系列的feature maps，后接一层BN+RELU+Max-pooling(2x2,stride=2)，Max-pooling用于实现小空间移动上的空间不变性,同时，可以在feature map上有较大的感受野，但由于使用Max-pooling 导致分辨率上的损失。这种损失对边界界定产生不利的影响，因此encoder网络要在进行下采样前着重捕捉和保存边界信息。由于实际内存的限制，所以无法保存feature map 的全部信息。本文提出只保存max-pooling indices(在每个池化窗口maximum feature value的位置）。</li>
+<li><p><strong>Decoder network:</strong><br>在decoder端，采用的也是正常的卷积、bn、relu的操作，不同的地方在于最后加上了一个softmax用来整理输出的k个channel的概率图，k是指定的分割类别数目。不同的地方在于SegNet在上采样过程中解码器使用来自对应的编码器特征图的存储的最大池化索引来上采样其输入特征图,产生的sparse feature map，然后将这些特征图与可训练的解码器滤波器组卷积以产生密集的特征图，然后batch normalization产生多通道feature map，ecoder输出的高维度的特征表示被送入一个可训练的soft-max多分类器，对每个像素进行单独分类。</p>
+</li>
+<li><p>DeconvNet与U-Net有与SegNet相似的结构，但DeconvNet有更多的训练参数，需要更多的计算资源而且不利于进行end-to-end的训练。<br>U-Net不利用max-pooling index而是将整个feature map 送到decoder 拼接到上采样后的feature map，十分占用内存资源，因此U-Net中无法使用到conv5和max-pool5模块，而SegNet却可以利用VGG16全部预训练过的卷积层的权重值。</p>
+</li>
+</ol>
+<p>这么做会产生稀疏的feature maps。再对执行卷积操作产生密集feature maps。值得注意的是，在与encoder中第一层对应的decoder层中（即decoder的最后一层卷积)，与原图像为RGB的3通道不同，该层产生的是一个通道为K(类别数）的multi-channel feature maps，然后将其送入softmax分类器，做逐像素的分类处理。</p>
+<h2 id="3-1-Decoder-Variants"><a href="#3-1-Decoder-Variants" class="headerlink" title="3.1 Decoder Variants"></a>3.1 Decoder Variants</h2><ol>
+<li>SegNet-Basic: SegNet的较小版本，4个encoder和4个decoder</li>
+</ol>
+<ul>
+<li>encoder阶段是LRN + (Conv+BN +ReLU + - MaxPool)x4 论文给出的时卷积不使用bias</li>
+<li><p>decoder阶段是(UpPool+Conv+ BN)x4 + Conv(分割层)</p>
+<p> convolutional layer in both the encoder and decoder network. No biases are used after convolutions and no ReLU non-linearity is present in the decoder network.</p>
+</li>
+</ul>
+<ol>
+<li><p>对比SegNet和FCN实现Decoder的过程。SegNet保留pooling时的位置信息，upsampling时直接将数据放在原先的位置，而FCN采用transposed convolutions+双线性插值，每一个像素都是运算后的结果。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190713181125846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+</li>
+<li><p><strong>不同decoder实验分析</strong><br>为验证不同decoder结构的表现，作者针对SegNet以及FCN网络设计了不同的decoder结构，并进行了详细的实验分析<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190713184537974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">其中，解码网络结构如下：</p>
+<blockquote>
+<ul>
+<li>Bilinear-Interpolation : 双线性插值上采样。<br>SegNet-Basic: </li>
+<li>4<em>(encodes[conv+bn+relu+maxpooling] + decoders[conv+bn]) ，kenel size: 7</em>7。 </li>
+<li>SegNet-Basic-SingleChannelDecoder: decoder采用单通道滤波器，可以有效减少参数数量。</li>
+<li>SegNet-Basic-EncoderAddition: 将decoder与encoder对应的特征图相加。</li>
+<li>FCN-Basic:与SegNet-Basic具有相同的encoders，但是decoders采用FCN的反卷积方式。</li>
+<li>FCN-Basic-NoAddition:去掉特征图相加的步骤，只学习上采样的卷积核。</li>
+<li>FCN-Basic-NoDimReduction: 不进行降维。</li>
+</ul>
+</blockquote>
+<p>通过上表分析，可以得到如下分析结果：</p>
+<blockquote>
+<ul>
+<li>bilinear interpolation 表现最差，说明了在进行分割时，decoder学习的重要性。</li>
+<li>SegNet-Basic与FCN-Basic对比，均具有较好的精度，不同点在于SegNet存储空间消耗小，FCN-Basic由于feature map进行了降维，所以时间更短。</li>
+<li>SegNet-Basic与FCN-Basic-NoAddition对比，两者的decoder有很大相似之处，SegNet-Basic的精度更高，一方面是由于SegNet-Basic具有较大的decoder,同时说明了encoder过程中低层次feature map的重要性。</li>
+<li>FCN-Basic-NoAddition与SegNet-Basic-SingleChannelDecoder：证明了当面临存储消耗，精度和inference时间的妥协的时候，我们可以选择SegNet，当内存和inference时间不受限的时候，模型越大，表现越好。</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>总结：</strong></p>
+<blockquote>
+<ul>
+<li>encoder特征图全部存储时，性能最好。 这最明显地反映在语义轮廓描绘度量（BF）中。</li>
+<li>当限制存储时，可以使用适当的decoder（例如SegNet类型）来存储和使用encoder特征图（维数降低，max-pooling indices）的压缩形式来提高性能。</li>
+<li>更大的decoder提高了网络的性能。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h1 id="3-2-训练"><a href="#3-2-训练" class="headerlink" title="3.2 训练"></a>3.2 训练</h1><blockquote>
+<ul>
+<li>数据集：CamVid （训练：367张，测试：233，图片尺寸：360X480,11个类别）</li>
+<li>优化方法：SGD</li>
+<li>learning_rate:0.1</li>
+<li>momentum: 0.9</li>
+<li>mini-batch: 12</li>
+<li>loss: cross-entropy</li>
+</ul>
+</blockquote>
+<h1 id="3-3-分析"><a href="#3-3-分析" class="headerlink" title="3.3 分析"></a>3.3 分析</h1><p>使用三种评价指标：</p>
+<blockquote>
+<ul>
+<li>global accuracy 数据集中被正确分类的像素所占的比例。</li>
+<li>class average accuracy 每种类别准确率和取平均。</li>
+<li>mIoU 惩罚 FalsePositivate 的预测,在每个类别上计算IOU然后取平均值。</li>
+</ul>
+</blockquote>
+<p>实现性能最好的是当encoder 的feature map全部被保存，对于一个给定的encoder 网络，更大的decode网络可以提升性能，当inference 内存被限制时，encoder层压缩后的feature maps(降维,max-pooling indices) 可以进行保存并用适当的解码器来提升性能。</p>
+<p><a href="https://arxiv.org/abs/1511.00561" target="_blank" rel="noopener">论文英文原文</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/13/SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="SegNet论文笔记">https://xiao-hu.com.cn/2019/07/13/SegNet%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/10/R-FCN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="R-FCN论文笔记">
+                  <i class="fa fa-chevron-left"></i> R-FCN论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/13/SegNet-tensorflow%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95/" rel="prev" title="SegNet+tensorflow训练和测试">
+                  SegNet+tensorflow训练和测试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-IntroductionSemantic"><span class="nav-number">2.</span> <span class="nav-text">1. IntroductionSemantic</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-LITERATURE-R-EVIEW"><span class="nav-number">3.</span> <span class="nav-text">2. LITERATURE R EVIEW</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-ARCHITECTURE"><span class="nav-number">4.</span> <span class="nav-text">3. ARCHITECTURE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Decoder-Variants"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Decoder Variants</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-2-训练"><span class="nav-number">5.</span> <span class="nav-text">3.2 训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-3-分析"><span class="nav-number">6.</span> <span class="nav-text">3.3 分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

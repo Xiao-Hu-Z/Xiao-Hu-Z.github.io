@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <link rel="alternate" href="/atom.xml" title="xiaohu博客" type="application/atom+xml">
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "b7ba025a"
+    });
+  daovoice('update');
+  </script>
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: true,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="AlexNet特点AlexNet是在LeNet的基础上加深了网络的结构，学习更丰富更高维的图像特征。AlexNet的特点： 更深的网络结构 使用层叠的卷积层，即卷积层+卷积层+池化层来提取图像的特征 使用Dropout抑制过拟合 使用数据增强Data Augmentation抑制过拟合 使用Relu替换之前的sigmoid的作为激活函数 多GPU训练">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AlexNet">
+<meta property="og:url" content="https:&#x2F;&#x2F;xiao-hu.com.cn&#x2F;2019&#x2F;07&#x2F;06&#x2F;AlexNet&#x2F;index.html">
+<meta property="og:site_name" content="xiaohu博客">
+<meta property="og:description" content="AlexNet特点AlexNet是在LeNet的基础上加深了网络的结构，学习更丰富更高维的图像特征。AlexNet的特点： 更深的网络结构 使用层叠的卷积层，即卷积层+卷积层+池化层来提取图像的特征 使用Dropout抑制过拟合 使用数据增强Data Augmentation抑制过拟合 使用Relu替换之前的sigmoid的作为激活函数 多GPU训练">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704165718907.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704165732839.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704165954660.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704170622157.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704171157113.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704171225572.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704171344700.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704173956828.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-11-19T11:47:54.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190704165718907.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://xiao-hu.com.cn/2019/07/06/AlexNet/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>AlexNet | xiaohu博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiaohu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiao-hu.com.cn/2019/07/06/AlexNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="xiaohu">
+      <meta itemprop="description" content="博观而约取,厚积而薄发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaohu博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AlexNet
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-06 17:02:50" itemprop="dateCreated datePublished" datetime="2019-07-06T17:02:50+08:00">2019-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 19:47:54" itemprop="dateModified" datetime="2019-11-19T19:47:54+08:00">2019-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="AlexNet特点"><a href="#AlexNet特点" class="headerlink" title="AlexNet特点"></a>AlexNet特点</h1><p>AlexNet是在LeNet的基础上加深了网络的结构，学习更丰富更高维的图像特征。AlexNet的特点：</p><ul>
+<li>更深的网络结构</li>
+<li>使用层叠的卷积层，即卷积层+卷积层+池化层来提取图像的特征</li>
+<li>使用Dropout抑制过拟合<ul>
+<li>使用数据增强Data Augmentation抑制过拟合</li>
+<li>使用Relu替换之前的sigmoid的作为激活函数</li>
+<li>多GPU训练</li>
+</ul>
+</li>
+</ul><a id="more"></a>
+
+<h1 id="ReLu作为激活函数"><a href="#ReLu作为激活函数" class="headerlink" title="ReLu作为激活函数"></a>ReLu作为激活函数</h1><p>在最初的感知机模型中，输入和输出的关系如下：</p>
+<script type="math/tex; mode=display">y = \sum_i{w_ix_i} + b</script><p>只是单纯的线性关系，这样的网络结构有很大的局限性：即使用很多这样结构的网络层叠加，其输出和输入仍然是线性关系，无法处理有非线性关系的输入输出。因此，对每个神经元的输出做个非线性的转换也就是，将上面就加权求和$\sum_i{w_ix_i} + b$的结果输入到一个非线性函数，也就是激活函数中。 这样，由于激活函数的引入，多个网络层的叠加就不再是单纯的线性变换，而是具有更强的表现能力。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704165718907.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在最初，sigmoid和tanh函数最常用的激活函数。</p>
+<ol>
+<li>sigmoid<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704165732839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在网络层数较少时，sigmoid函数的特性能够很好的满足激活函数的作用：它把一个实数压缩至0到1之间，当输入的数字非常大的时候，结果会接近1；当输入非常大的负数时，则会得到接近0的结果。这种特性，能够很好的模拟神经元在受刺激后，是否被激活向后传递信息（输出为0，几乎不被激活；输出为1，完全被激活）。<br>sigmoid一个很大的问题就是梯度饱和。 观察sigmoid函数的曲线，当输入的数字较大（或较小）时，其函数值趋于不变，其导数变的非常的小。这样，在层数很多的的网络结构中，进行反向传播时，由于很多个很小的sigmoid导数累成，导致其结果趋于0，权值更新较慢。</li>
+<li><p>ReLu<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704165954660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>针对sigmoid梯度饱和导致训练收敛慢的问题，在AlexNet中引入了ReLU。ReLU是一个分段线性函数，小于等于0则输出为0；大于0的则恒等输出。相比于sigmoid，ReLU有以下有点：</p>
+<ul>
+<li><p>计算开销低。sigmoid的正向传播有指数运算，倒数运算，而ReLu是线性输出；反向传播中，sigmoid<br>有指数运算，而ReLU有输出的部分，导数始终为1.</p>
+<ul>
+<li>梯度饱和问题</li>
+<li>稀疏性。Relu会使一部分神经元的输出为0，这样就造成了网络的稀疏性，并且减少了参数的相互依存关系，缓解了过拟合问题的发生</li>
+</ul>
+<p>单个训练样本是线性变换，但是每个训练样本的线性变换是不一样的，这样整个训练样本集来说，就是非线性的变换。</p>
+</li>
+</ul>
+<h1 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h1><p>神经网络由于训练的参数多，表能能力强，所以需要比较多的数据量，不然很容易过拟合。当训练数据有限时，可以通过一些变换从已有的训练数据集中生成一些新的数据，以快速地扩充训练数据。对于图像数据集来说，可以对图像进行一些形变操作：</p>
+<ul>
+<li>翻转</li>
+<li>随机裁剪</li>
+<li>平移，颜色光照的变换</li>
+<li>…</li>
+</ul>
+<p>AlexNet中对数据做了以下操作：</p>
+<ul>
+<li>随机裁剪，对256×256的图片进行随机裁剪到227×227，然后进行水平翻转。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>测试的时候，对左上、右上、左下、右下、中间分别做了5次裁剪，然后翻转，共10个裁剪，之后对结果求平均。</li>
+<li>对RGB空间做PCA（主成分分析），然后对主成分做一个（0, 0.1）的高斯扰动，也就是对颜色、光照作变换，结果使错误率又下降了1%。</li>
+</ul>
+<h1 id="层叠池化"><a href="#层叠池化" class="headerlink" title="层叠池化"></a>层叠池化</h1><p>在LeNet中池化是不重叠的，即池化的窗口的大小和步长是相等的，如下<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704170622157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><br>在AlexNet中使用的池化（Pooling）却是可重叠的，也就是说，在池化的时候，每次移动的步长小于池化的窗口长度。AlexNet池化的大小为3×3的正方形，每次池化移动步长为2，这样就会出现重叠。重叠池化可以避免过拟合，这个策略贡献了0.3%的Top-5错误率。与非重叠方案s=2，z=2相比，输出的维度是相等的，并且能在一定程度上抑制过拟合。</p>
+<h1 id="局部相应归一化"><a href="#局部相应归一化" class="headerlink" title="局部相应归一化"></a>局部相应归一化</h1><p>ReLU具有让人满意的特性，它不需要通过输入归一化来防止饱和。如果至少一些训练样本对ReLU产生了正输入，那么那个神经元上将发生学习。然而，我们仍然发现接下来的局部响应归一化有助于泛化。aix,y表示神经元激活，通过在(x,y)位置应用核i，然后应用ReLU非线性来计算，响应归一化激活$b^i_{x,y}$通过下式给定：</p>
+<script type="math/tex; mode=display">b^i_{x,y} = a_{x,y}^i / \big( k + \alpha \sum _{j = max(0, i-n / 2)} ^{min(N-1, i+n / 2)} (a_{x,y}^j)^2 \big)^\beta</script><p>其中，N是卷积核的个数，也就是生成的FeatureMap的个数；$k,\alpha,\beta,n$是超参数，论文中使用的值是$k = 2 , n =5 ,\alpha = 10^{-4},\beta = 0.75$<br>输出$b^i_x,y$和输入$a^j_x,y$的上标表示的是当前值所在的通道，也即是叠加的方向是沿着通道进行。将要归一化的值$a^i_x,y$所在附近通道相同位置的值的平方累加起来$\sum _{j = max(0, i-n / 2)} ^{min(N-1, i+n / 2)} (a_{x,y}^j)^2$</p>
+<h1 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h1><p>引入Dropout主要是为了防止过拟合。在神经网络中Dropout通过修改神经网络本身结构来实现，对于某一层的神经元，通过定义的概率将神经元置为0，这个神经元就不参与前向和后向传播，就如同在网络中被删除了一样，同时保持输入层与输出层神经元的个数不变，然后按照神经网络的学习方法进行参数更新。在下一次迭代中，又重新随机删除一些神经元（置为0），直至训练结束。<br>Dropout应该算是AlexNet中一个很大的创新，现在神经网络中的必备结构之一。Dropout也可以看成是一种模型组合，每次生成的网络结构都不一样，通过组合多个模型的方式能够有效地减少过拟合，Dropout只需要两倍的训练时间即可实现模型组合（类似取平均）的效果，非常高效。<br><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704171157113.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<h1 id="Alex网络结构"><a href="#Alex网络结构" class="headerlink" title="Alex网络结构"></a>Alex网络结构</h1><p><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704171225572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704171344700.png"><img alt="在这里插入图片描述" data-src="https://img-blog.csdnimg.cn/20190704173956828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjkwNTE0MQ==,size_16,color_FFFFFF,t_70"></p>
+<p>AlexNet 不算池化层总共有 8 层，前 5 层为卷积层，其中第一、第二和第五层卷积都包含了一个最大池化层，后三层为全连接层。所以 AlexNet 的简略结构如下：<br>输入&gt;卷积&gt;池化&gt;卷积&gt;池化&gt;卷积&gt;卷积&gt;卷积&gt;池化&gt;全连接&gt;全连接&gt;全连接&gt;输出</p>
+<p>各层的结构和参数如下：</p>
+<ul>
+<li><p>卷积层C1<br>该层的处理流程是： 卷积—&gt;ReLU—&gt;归一化—&gt;池化。</p>
+<ul>
+<li>卷积，输入是227×227，使用96个11×11×3的卷积核，得到的FeatureMap为55×55×96<ul>
+<li>ReLU，将卷积层输出的FeatureMap输入到ReLU函数中。</li>
+<li>池化，使用3×3步长为2的池化单元（重叠池化，步长小于池化单元的宽度），输出为27×27×96（(55−3)/2+1=27)</li>
+<li>局部响应归一化，使用k=2,n=5,α=10−4,β=0.75进行局部归一化，输出的仍然为27×27×96，输出分为两组，每组的大小为27×27×48</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>卷积层C2<br>该层的处理流程是：卷积—&gt;ReLU—&gt;归一化—&gt;池化。</p>
+<ul>
+<li>卷积，输入是2组27×27×48。使用2组，每组128个尺寸为5×5×48的卷积核，并作了边缘填充padding=2，卷积的步长1. 则输出的FeatureMap为2组，每组的大小为27×27 times128. （(27+2∗2−5)/1+1=27）</li>
+<li>ReLU，将卷积层输出的FeatureMap输入到ReLU函数中</li>
+<li>池化运算的尺寸为3×3，步长为2，池化后图像的尺寸为(27−3)/2+1=13，输出为13×13×256局部响应归一化，使用k=2,n=5,α=10−4,β=0.75<ul>
+<li>进行局部归一化，输出的仍然为13×13×256，输出分为2组，每组的大小为13×13×128</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>卷积层C3<br>该层的处理流程是： 卷积—&gt;ReLU</p>
+<ul>
+<li>卷积，输入是13×13×256，使用2组共384尺寸为3×3×256的卷积核，做了边缘填充padding=1，卷积的步长为1.则输出的FeatureMap为13×13 times384<ul>
+<li>ReLU，将卷积层输出的FeatureMap输入到ReLU函数中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>卷积层C4<br>该层的处理流程是： 卷积—&gt;ReLU该层和C3类似。</p>
+<ul>
+<li>卷积，输入是13×13×384，分为两组，每组为13×13×192.使用2组，每组192个尺寸为3×3×192的卷积核，做了边缘填充padding=1，卷积的步长为1.则输出的FeatureMap为13×13 times384，分为两组，每组为13×13×192<ul>
+<li>ReLU，将卷积层输出的FeatureMap输入到ReLU函数中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>卷积层C5<br>该层处理流程为：卷积—&gt;ReLU—&gt;池化</p>
+<ul>
+<li>卷积，输入为13×13×384，分为两组，每组为13×13×192。使用2组，每组为128尺寸为3×3×192的卷积核，做了边缘填充padding=1，卷积的步长为1.则输出的FeatureMap为13×13×256<ul>
+<li>ReLU，将卷积层输出的FeatureMap输入到ReLU函数中<ul>
+<li>池化，池化运算的尺寸为3×3，步长为2，池化后图像的尺寸为 (13−3)/2+1=6<br>,即池化后的输出为6×6×256</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>全连接层FC6<br>该层的流程为：（卷积）全连接 —&gt;ReLU —&gt;Dropout</p>
+<ul>
+<li>卷积-&gt;全连接： 输入为6×6×256,该层有4096个卷积核，每个卷积核的大小为6×6×256。由于卷积核的尺寸刚好与待处理特征图（输入）的尺寸相同，即卷积核中的每个系数只与特征图（输入）尺寸的一个像素值相乘，一一对应，因此，该层被称为全连接层。由于卷积核与特征图的尺寸相同，卷积运算后只有一个值，因此，卷积后的像素层尺寸为4096×1×1，即有4096个神经元。<ul>
+<li>ReLU,这4096个运算结果通过ReLU激活函数生成4096个值</li>
+<li>Dropout,抑制过拟合，随机的断开某些神经元的连接或者是不激活某些神经元</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>全连接层FC7<br>流程为：全连接—&gt;ReLU—&gt;Dropout</p>
+<ul>
+<li>全连接，输入为4096的向量</li>
+<li>ReLU,这4096个运算结果通过ReLU激活函数生成4096个值<ul>
+<li>Dropout,抑制过拟合，随机的断开某些神经元的连接或者是不激活某些神经元</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>输出层</p>
+<ul>
+<li>第七层输出的4096个数据与第八层的1000个神经元进行全连接，经过训练后输出1000个float型的值，这就是预测结果</li>
+</ul>
+</li>
+</ul>
+<p>在论文中，输入图像大小为 224 x 224 x 3，实际为 227 x 227 x 3。各层输出采用 relu 进行激活。前五层卷积虽然计算量极大，但参数量并不如后三层的全连接层多，但前五层卷积层的作用却要比全连接层重要许多。</p>
+<h1 id="AlexNet参数数量"><a href="#AlexNet参数数量" class="headerlink" title="AlexNet参数数量"></a>AlexNet参数数量</h1><p>卷积层的参数 = 卷积核的数量 * 卷积核 + 偏置</p>
+<ul>
+<li>C1: 96个11×11×3的卷积核，96×11×11×3+96=34848</li>
+<li>C2: 2组，每组128个5×5×48的卷积核，(128×5×5×48+128)×2=307456</li>
+<li>C3: 384个3×3×256的卷积核，3×3×256×384+384=885120</li>
+<li>C4: 2组，每组192个3×3×192的卷积核，(3×3×192×192+192)×2=663936</li>
+<li>C5: 2组，每组128个3×3×192的卷积核，(3×3×192×128+128)×2=442624</li>
+<li>FC6: 4096个6×6×256的卷积核，6×6×256×4096+4096=37752832</li>
+<li>FC7: 4096∗4096+4096=16781312</li>
+<li>output: 4096∗1000=4096000</li>
+</ul>
+<p>卷积层 C2,C4,C5中的卷积核只和位于同一GPU的上一层的FeatureMap相连。从上面可以看出，参数大多数集中在全连接层，在卷积层由于权值共享，权值参数较少。</p>
+<p>原文链接：<a href="https://www.cnblogs.com/wangguchangqing/p/10333370.html" target="_blank" rel="noopener">https://www.cnblogs.com/wangguchangqing/p/10333370.html</a></p>
+
+    </div>
+    
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xiaohu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiao-hu.com.cn/2019/07/06/AlexNet/" title="AlexNet">https://xiao-hu.com.cn/2019/07/06/AlexNet/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/05/Faster-RCNN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="Faster RCNN论文笔记">
+                  <i class="fa fa-chevron-left"></i> Faster RCNN论文笔记
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/08/SSD%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="SSD论文笔记">
+                  SSD论文笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+
+  
+
+
+
+
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AlexNet特点"><span class="nav-number">1.</span> <span class="nav-text">AlexNet特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReLu作为激活函数"><span class="nav-number">2.</span> <span class="nav-text">ReLu作为激活函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据增强"><span class="nav-number">3.</span> <span class="nav-text">数据增强</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#层叠池化"><span class="nav-number">4.</span> <span class="nav-text">层叠池化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#局部相应归一化"><span class="nav-number">5.</span> <span class="nav-text">局部相应归一化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dropout"><span class="nav-number">6.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Alex网络结构"><span class="nav-number">7.</span> <span class="nav-text">Alex网络结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AlexNet参数数量"><span class="nav-number">8.</span> <span class="nav-text">AlexNet参数数量</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="xiaohu"
+    src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">xiaohu</p>
+  <div class="site-description" itemprop="description">博观而约取,厚积而薄发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Xiao-Hu-Z" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;Xiao-Hu-Z" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:znxxhn@gmail.com" title="E-Mail &amp;rarr; mailto:znxxhn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaohu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">554k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script><script src="/js/bookmark.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
